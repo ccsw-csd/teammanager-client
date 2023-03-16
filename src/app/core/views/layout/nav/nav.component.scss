@@ -1,0 +1,42 @@
+@import "./src/assets/scss/master";
+
+.nav{
+  background-color: $primary;
+  ::ng-deep .p-slidemenu {
+    background-color: $primary;
+    border:none;
+    width: 200px;
+    margin-left: 0px;
+    padding-left: 0px;
+
+    .p-submenu-icon, .p-slidemenu-backward{
+      color: white;
+    }
+    .p-menuitem {
+      .p-menuitem-link {
+        box-shadow: none;
+
+        .p-menuitem-text {
+          color: white;
+        }
+      }
+      .p-menuitem-link:not(.p-disabled):hover {
+        background-color: rgba(0,0,0,.04);
+
+        .p-menuitem-text, .p-submenu-icon, .p-slidemenu-backward {
+          color: white;
+          padding-left: 2px;
+        }
+      }
+      .p-menuitem-link-active {
+        background-color: transparent;
+        font-weight: bold;
+        border-left: 6px solid $background;
+     }
+    }   
+  }
+}
+
+::ng-deep .p-sidebar .p-sidebar-content {
+  padding: 0rem;
+}

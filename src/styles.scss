@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons+Outlined");
+
+@import 'assets/scss/master';
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: "Source Sans Pro", sans-serif; }
+
+.p-component {
+    font-family: Roboto,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
+    font-size: .85rem!important;
+    font-weight: 400
+}
+.flex-2{
+    flex-grow: 2;
+}

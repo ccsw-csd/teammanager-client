@@ -1,0 +1,50 @@
+.p-datatable .p-datatable-thead>tr>th, .p-datatable .p-datatable-thead>tr.filter>th {
+    text-align: left;
+    padding: 0.65rem;
+    border: 1px solid #babfc7;
+    border-width: 0 0 1px 0;
+    font-weight: 700;
+    color: #000000de;
+    background: #f8f8f8;
+    transition: none;
+}
+
+.p-datatable .p-datatable-thead>tr.filter>th {
+    padding: 0.4rem;
+}
+
+.h-1_5rem {
+    height: 1.5rem;
+}
+
+.h-2_5rem {
+    height: 2.5rem;
+}
+
+.p-datatable-scrollable .p-datatable-wrapper {
+    position: relative;
+    overflow: auto;
+    border: 1px solid #babfc7;
+}
+
+.p-datatable .p-sortable-column.p-highlight {
+    background: #f8f8f8;
+    color: #000000de;
+}
+
+.h-1rem {
+    height: 2rem!important;
+}
+
+.p-datatable.p-datatable-hoverable-rows .p-datatable-tbody > tr {
+    cursor: pointer;
+}
+
+.p-datatable.p-datatable-hoverable-rows .p-datatable-tbody > tr:not(.p-highlight):hover {
+    background: rgba(200, 200, 255, 0.5);
+}
+
+
+.p-multiselect-header {
+    display: none !important;
+}
