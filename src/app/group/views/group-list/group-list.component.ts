@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
+import { GroupEditComponent } from 'src/app/group/views/group-edit/group-edit.component';
 import { Group } from 'src/app/group/models/Group';
 import { GroupService } from 'src/app/group/services/group.service';
 
@@ -15,22 +16,22 @@ export class GroupListComponent implements OnInit {
   adminView: boolean = false;
   constructor(
     private ref: DynamicDialogRef,
-    private confirmationService:ConfirmationService,
     private dialogService: DialogService,
     private groupService: GroupService,
   ) { }
 
   ngOnInit(): void {  
-    this.adminView=false;  
-    this.getAllGroups();   
+    this.adminView=false; 
+    this.getAllGroups();        
   }
 
-  clickAdminView(e) {
+  clickAdminView(e) {    
     const adminView = e.checked;
      if (adminView) {
-      console.log('jsdhck');
       this.adminView = true;
       this.getAllGroupsAdmin();
+     }else{
+      this.getAllGroups(); 
      }
   }
 
@@ -50,17 +51,23 @@ export class GroupListComponent implements OnInit {
     });
   }
 
-  delete(id:number){
-    this.confirmationService.confirm({
-      message:'¿Deseas borrar este grupo?',
-      accept:()=>{
-        this.confirmationService.close();
+  editGroup(groupEdit:Group){
+    this.ref = this.dialogService.open(GroupEditComponent,{
+      height:"630px",
+      width:"1200px",
+      data:{
+        group: groupEdit
       },
-      reject:()=>{
-        this.confirmationService.close();
-      }
+      closable:false
     });
-    
+    this.onClose();
   }
 
+  onClose():void{
+    this.ref.onClose.subscribe(
+      (results:any) => {
+        this.ngOnInit();
+      }
+    )
+  }
 }

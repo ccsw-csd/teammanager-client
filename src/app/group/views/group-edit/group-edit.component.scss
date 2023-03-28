@@ -1,0 +1,19 @@
+.sizes {
+    .p-input {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        &:last-child {
+            margin-bottom: 10px;
+        }
+    }
+}
+
+.p-field * {
+    display: block;
+}
+
+.span > .p-inputtext:enabled:focus{
+    outline: none;
+}

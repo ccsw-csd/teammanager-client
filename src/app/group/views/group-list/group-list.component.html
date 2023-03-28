@@ -1,13 +1,13 @@
-<div class="flex flex-row justify-content-between">
-    <div class="mt-2" >
-        <span class="p-span-color"><strong>My Groups</strong></span>
+<div class="flex flex-row">
+    <div class="text-black-alpha-50 mt-3 p-span-color" >
+        <span><strong>My Groups</strong></span>
     </div>
-    <div class="flex-1 align-items-center justify-content-left">    
-        <button pButton class="p-button-create" label="Create new group"></button>   
+    <div class="flex-1">    
+        <button pButton class="bg-blue-400 m-2 mb-3  p-button-create" label="Create new group"></button>   
     </div>
     <div>
         <p-inputSwitch [(ngModel)]="adminView"
-                        (onChange)="clickAdminView($event)">
+                       (onChange)="clickAdminView($event)">
         </p-inputSwitch>
     </div>
 </div>
@@ -23,13 +23,13 @@
                 <th class="flex-2" pSortableColumn="manager" >
                     Administrators<p-sortIcon field="manager"></p-sortIcon>
                 </th>
-                <th class="flex-none w-1 align-items-center justify-content-center" pSortableColumn="members">
+                <th class="flex-none w-1" pSortableColumn="members">
                     Members<p-sortIcon field="members"></p-sortIcon>
                 </th>
-                <th class="flex-none w-1 align-items-center justify-content-center" pSortableColumn="subgroups">
+                <th class="flex-none w-1" pSortableColumn="subgroups">
                     Subgroups<p-sortIcon field="subgroups"></p-sortIcon>
                 </th>              
-                <th class="flex-none w-1 align-items-center justify-content-center">
+                <th class="flex-none w-1">
                     Actions
                 </th>  
             </tr>
@@ -46,26 +46,26 @@
                 <th class="flex-none w-1">
                     <p-columnFilter class="w-full" type="text" field="subgroups" matchMode="contains" [showMenu]="false"></p-columnFilter>
                 </th>                             
-                <th class="flex-none w-1 align-items-center justify-content-center"></th>            
+                <th class="flex-none w-1"></th>            
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-group let-columns="columns">
-            <tr *ngIf="adminView">
+        <ng-template  pTemplate="body" let-group let-columns="columns">
+            <tr>
                 <td class="flex-1">
                     {{group.name}}
                 </td>
                 <td class="flex-2">
                     {{group.manager}}
                 </td>
-                <td class="flex-none w-1 justify-content-center">
+                <td class="flex-none w-1">
                     {{group.members}}
                 </td>
-                <td pFrozenColumn class="flex-none w1 justify-content-center">
+                <td class="flex-none w1">
                     {{group.subgroups}}
                 </td>
-                <td pFrozenColumn class="flex-none w-1 justify-content-center">
-                    <div  class="flex flex-row justify-content-between">
-                        <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text"></button>
+                <td class="flex-none w-1">
+                    <div  class="flex flex-row">
+                        <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="editGroup(group)"></button>
                         <button *ngIf="group.externalId" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text"></button>
                     </div>
                 </td>
