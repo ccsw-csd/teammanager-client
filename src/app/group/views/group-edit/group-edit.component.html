@@ -1,8 +1,13 @@
 <div class="flex flex-column">
-    <h1>Edit Group </h1> 
-    <div class="flex flex-row flex-1 gap-2">   
+    <div class="text-black-alpha-50 text-3xl mt-0 mb-2">
+        <span><strong>Edit Group</strong></span>
+    </div>
+    <div class="text-black-alpha-50 mt-3">
+        <span>Group Name</span>
+    </div>
+    <div class="flex flex-row flex-1 gap-5">   
       <span class="flex-1 p-input-icon-left">
-        <input type="text" pInputText class="w-full" placeholder="Search"/>
+        <input type="text" [value]="group.name" pInputText class="w-full"/>
       </span> 
       <div>
         <p-inputSwitch></p-inputSwitch>
@@ -12,46 +17,67 @@
     </div>
     <div class="h-1rem">
     </div>  
-    <div class="flex flex-row flex-1 gap-2">   
+    <div class="mr-3 flex flex-row flex-1 gap-5">   
         <span class="flex-2">
-            <p-listbox [options]="groups" [group]="true" [(ngModel)]="selectedGroups" [filter]="true">
-                <input type="text" pInputText class="w-full" placeholder="Search"/>
-                <ng-template let-group pTemplate="group">
-            <div class="p-d-flex p-ai-center">
-                <span>{{group.name}}</span>
-            </div>
-            </ng-template>
+            <p-listbox placeholder="Members: search person" [options]="members" optionLabel="name" [(ngModel)]="selectedMember" [filter]="true">
+            <input type="text" pInputText class="w-full" placeholder="Search"/>
+                <ng-template let-member pTemplate="group">
+                    <div class="p-d-flex p-ai-center">
+                        <span>{{member.name}}</span>
+                    </div>
+                </ng-template>
             </p-listbox>
         </span> 
         <span class="flex-2">
-            <p-listbox placeholder="Members: search person" [options]="groups" [group]="true" [(ngModel)]="selectedGroups" [filter]="true">
-            <ng-template let-group pTemplate="group">
-            <div class="p-d-flex p-ai-center">
-                <span>{{group.name}}</span>
-            </div>
-            </ng-template>
+            <p-listbox placeholder="Administrators: search person" [options]="managers" optionLabel="manager" [(ngModel)]="selectedManager" [filter]="true">
+                <ng-template let-manager pTemplate="group">
+                <div class="p-d-flex p-ai-center">
+                    <span>{{manager.name}}</span>
+                </div>
+                </ng-template>
             </p-listbox>
         </span> 
     </div>
     <div class="h-4rem">
-    </div>  
-    <div class="flex flex-row flex-1 gap-2">  
-        <span class="flex-2 justify-content-end">
+    </div> 
+    <div class="mr-3 flex flex-row flex-1 gap-5">   
+        <span class="flex-2">
+            <p-listbox>
+                <ng-template let-group pTemplate="group">
+                    <div>
+                        <span>{{group.members}}</span>
+                    </div>
+                </ng-template>
+            </p-listbox>
         </span> 
-        <span class="flex-2 justify-content-end">
-            <p-listbox [options]="groups" [group]="true" [(ngModel)]="selectedGroups" [metaKeySelection]="false" [filter]="true">
-            <ng-template let-group pTemplate="group">
-            <div class="p-d-flex p-ai-center">
-                <span>{{group.name}}</span>
+        <span class="flex-2">
+            <p-listbox [options]="groups" [(ngModel)]="selectedGroup" optionLabel="manager"></p-listbox>
+                <ng-template let-group pTemplate="group">
+                    <div>
+                        <span>{{group.manager}}</span>
+                    </div>
+                </ng-template>
+        </span> 
+    </div>
+    <div class="h-4rem">
+    </div>       
+    <div class="mr-3 flex flex-row flex-1 gap-2">  
+        <span class="w-6 flex-2 justify-content-end">
+        </span> 
+        <span class="w-6 flex-2 justify-content-end">
+            <p-listbox [options]="subgroups" [(ngModel)]="selectedSubGroup" optionLabel="name" [metaKeySelection]="false" [filter]="true">
+            <ng-template let-subgroup pTemplate="group">
+            <div>
+                <span>{{subgroup.name}}</span>
             </div>
             </ng-template>
             </p-listbox>
-        </span>   
-    <div class="h-15rem">
-    </div>              
+        </span>               
+    </div> 
+    <div class="h-10rem">
     </div>  
-    <div class="flex flex-row justify-content-end gap-2">    
-      <button pButton pRipple styleClass="" label="Cancelar" icon="pi pi-times" class="bg-cyan-500 p-button bg-sky-400" (click)="onClose()"></button>
-      <button pButton pRipple p-button-label="10px" label="Guardar" class="bg-sky-400" icon="pi pi-check"></button>
+    <div class="mr-3 flex flex-row justify-content-end gap-2">    
+      <button pButton pRipple label="Close" icon="pi pi-times" class="bg-white text-blue-400 w-12rem m-2 mt-0" (click)="onClose()"></button>
+      <button pButton pRipple label="Save" class="bg-blue-400 w-12rem m-2 mt-0" icon="pi pi-check"></button>
     </div>
   </div>

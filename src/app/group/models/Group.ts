@@ -3,6 +3,6 @@ export class Group{
     name:string;
     manager:string;
     members: number;
-    subgroups:number;
-    externalId:string;
+    subgroups: number;
+    externalId: string;
 }

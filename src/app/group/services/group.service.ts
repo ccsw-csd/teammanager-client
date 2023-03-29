@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
 import { environment } from 'src/environments/environment';
 import { Group } from '../models/Group';
+import { Person } from '../models/Person';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +23,12 @@ export class GroupService {
   getGroup(id: number): Observable<Group>{
     return this.http.get<Group>(environment.server + "/grouplist/editgroup/"+ id);
   }
-  
+
+  getSubgroups(name: string): Observable<Group[]> {
+    return this.http.post<Group[]>(environment.server + '/grouplist/subgroups/', name);
+  }
+
+  getPersons(name: string): Observable<Person[]> {
+    return this.http.post<Person[]>(environment.server + '/grouplist/persons/', name);
+  }
 }
