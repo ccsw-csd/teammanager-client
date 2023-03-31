@@ -28,7 +28,6 @@ export class GroupListComponent implements OnInit {
   clickAdminView(e) {    
     const adminView = e.checked;
      if (adminView) {
-      this.adminView = true;
       this.getAllGroupsAdmin();
      }else{
       this.getAllGroups(); 

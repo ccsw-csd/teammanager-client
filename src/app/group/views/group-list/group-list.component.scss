@@ -1,9 +1,0 @@
-@import "./src/assets/scss/master";
-
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
-   border: 2px solid #29abe2;
-   border-width: 0 0 2px 0;
- }
- :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-   color: grey;
- }

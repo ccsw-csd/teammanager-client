@@ -13,32 +13,21 @@ import { GroupService } from 'src/app/group/services/group.service';
 })
 export class GroupEditComponent implements OnInit {
   group: Group;
-  subgroup: Group;
-  member: Person;
-  manager: Person;
   groups: Group[];
-  subgroups: Group[] = [];
-  managers: Person[] = [];
-  members: Person[] = [];
   selectedGroup: Group;
-  selectedSubGroup: Group;
-  selectedMember: Person;
-  selectedManager: Person;
 
   constructor(
     public ref: DynamicDialogRef,
     public dialogConf: DynamicDialogConfig,
     private groupService: GroupService
-  ) {
+  ) 
+  {
     this.group=this.dialogConf.data.group;
-   }
+  }
 
   ngOnInit(): void {
     if(this.group.id != undefined){
       this.getGroupById(this.group.id);  
-      this.getSubgroups(this.group.name); 
-      this.getMembers(this.group.name);
-      this.getManagers(this.group.name);
     }
   }
 
@@ -50,29 +39,6 @@ export class GroupEditComponent implements OnInit {
     });
   }
 
-  getSubgroups(name: string){
-    this.groupService.getSubgroups(name).subscribe({
-      next: (res: Group[]) => {
-        this.subgroups=res;
-      }
-    });
-  }
-
-  getMembers(name: string){
-    this.groupService.getPersons(name).subscribe({
-      next: (res: Person[]) => {
-        this.members=res;
-      }
-    });
-  }
-
-  getManagers(name: string){
-    this.groupService.getPersons(name).subscribe({
-      next: (res: Person[]) => {
-        this.managers=res;
-      }
-    });
-  }
   onClose(){
     this.ref.close();
   }
