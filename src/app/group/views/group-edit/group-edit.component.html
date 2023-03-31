@@ -1,1 +1,84 @@
-<p>group-edit works!</p>
+<div class="flex flex-column">
+    <div class="text-black-alpha-50 text-3xl mt-0 mb-3">
+        <span><strong>Edit Group</strong></span>        
+    </div>
+    <div class="flex flex-row flex-1 gap-5"> 
+      <span class="flex-1 p-input-icon-left">
+        <span class="p-float-label">Group Name</span>
+        <input type="text" [value]="group.name" pInputText class="w-full"/>
+      </span> 
+      <div class="justify-content-end mt-4 mr-1">
+        <p-inputSwitch>
+        </p-inputSwitch>
+        Visible for members
+      </div>
+      <span class="flex-2">
+      </span>  
+    </div>
+    <div class="h-1rem">
+    </div>  
+    <div class="flex flex-row flex-1 gap-5">   
+        <span class="flex-2">
+            <p-listbox placeholder="Members: search person" [options]="groups" optionLabel="name" [(ngModel)]="selectedGroup" [listStyle]="{'max-height':'50px'}" [filter]="true">
+                <input type="text" pInputText class="w-full" placeholder="Search"/>
+                    <ng-template let-group pTemplate="group">
+                        <div class="p-d-flex p-ai-center">
+                            <span>{{group.name}} </span>
+                        </div>
+                    </ng-template>
+            </p-listbox>
+        </span> 
+        <span class="flex-2">
+            <p-listbox placeholder="Members: search person" [options]="groups" optionLabel="name" [(ngModel)]="selectedGroup" [listStyle]="{'max-height':'50px'}" [filter]="true">
+                <input type="text" pInputText class="w-full" placeholder="Search"/>
+                    <ng-template let-group pTemplate="group">
+                        <div class="p-d-flex p-ai-center">
+                            <span>{{group.name}} </span>
+                        </div>
+                    </ng-template>
+            </p-listbox>
+        </span> 
+    </div>
+    <div class="flex flex-row flex-1 gap-5">   
+        <span class="w-6 flex-2 justify-content-end">
+            <p-listbox [options]="group.members"  [listStyle]="{'max-height':'140px'}">
+                <ng-template let-member pTemplate="group.members">
+                    <div class="p-d-flex p-ai-center">
+                        <span>{{member.name}}&nbsp;{{member.lastname}} </span>
+                    </div>
+                </ng-template>
+            </p-listbox>
+        </span>  
+        <span class="w-6 flex-2 justify-content-end">
+            <p-listbox [options]="group.managers" [listStyle]="{'max-height':'140px'}" >
+                <ng-template let-manager pTemplate="group.managers">
+                    <div class="p-d-flex p-ai-center">
+                        <span>{{manager.name}}&nbsp;{{manager.lastname}} </span>
+                    </div>
+                </ng-template>
+            </p-listbox>
+        </span> 
+    </div>
+    <div class="h-rem">
+    </div>
+    <div class="flex flex-row flex-1 gap-5">  
+        <span class="w-6 flex-2 justify-content-end">
+        </span> 
+        <span class="w-6 flex-2 justify-content-end">
+            <p-listbox placeholder="Members: search person" [options]="groups" optionLabel="name" [(ngModel)]="selectedGroup" [listStyle]="{'max-height':'50px'}" [filter]="true">
+                <input type="text" pInputText class="w-full" placeholder="Search"/>
+                    <ng-template let-group pTemplate="group">
+                        <div class="p-d-flex p-ai-center">
+                            <span>{{group.name}} </span>
+                        </div>
+                    </ng-template>
+            </p-listbox>
+        </span>               
+    </div> 
+    <div class="h-rem">
+    </div>
+    <div class="flex flex-row justify-content-end gap-2">    
+      <button pButton pRipple label="Close" class="bg-white text-blue-400 w-12rem m-2 mt-0" (click)="onClose()"></button>
+      <button pButton pRipple label="Save" class="bg-blue-400 w-12rem m-2 mt-0"></button>
+    </div>
+  </div>
