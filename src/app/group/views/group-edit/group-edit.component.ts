@@ -13,8 +13,7 @@ import { GroupService } from 'src/app/group/services/group.service';
   styleUrls: ['./group-edit.component.scss']
 })
 export class GroupEditComponent implements OnInit {
-  group: GroupEdit;
-  persons: Person[];
+  group: GroupEdit = new GroupEdit();
   groupPerson: any[] = [];  
   groupSubgroup: any[] = []; 
   selectedMember;
@@ -26,12 +25,11 @@ export class GroupEditComponent implements OnInit {
     private groupService: GroupService
   ) 
   {
-    this.group=this.dialogConf.data.group;
   }
 
   ngOnInit(): void {
-    if(this.group.id != undefined){
-      this.getGroupById(this.group.id);  
+    if(this.dialogConf.data.group.id != undefined){
+      this.getGroupById(this.dialogConf.data.group.id);  
     }
   }
 
