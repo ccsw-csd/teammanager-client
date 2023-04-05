@@ -24,4 +24,12 @@ export class GroupService {
     return this.http.get<Group>(environment.server + "/grouplist/editgroup/"+ id);
   }
 
+  searchGroup(filterName: string): Observable<Group[]> {
+    return this.http.post<Group[]>(environment.server + "/grouplist/subgroups/",filterName)
+  }
+
+  searchPerson(filterName: string): Observable<Person[]> {
+    return this.http.post<Person[]>(environment.server + "/grouplist/persons/",filterName)
+  }
+
 }
