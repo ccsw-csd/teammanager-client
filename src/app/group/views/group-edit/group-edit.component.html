@@ -20,14 +20,14 @@
     <div class="flex flex-row flex-1 gap-5">   
         <span class="flex-2 p-float-label">
             <p-autoComplete [suggestions]="groupPerson" [forceSelection]="true" [showEmptyMessage]="true"
-              [(ngModel)]="selectedPerson" (completeMethod)="searchPerson($event)"
+              [(ngModel)]="selectedMember" (completeMethod)="searchPerson($event)"
               (onSelect)="assignMember()" field="field">
             </p-autoComplete>
             <label>Members: search person</label>
         </span>
         <span class="flex-2 p-float-label">
             <p-autoComplete [suggestions]="groupPerson" [forceSelection]="true" [showEmptyMessage]="true"
-              [(ngModel)]="selectedPerson" (completeMethod)="searchPerson($event)"
+              [(ngModel)]="selectedManager" (completeMethod)="searchPerson($event)"
               (onSelect)="assignManager()" field="field">
             </p-autoComplete>
             <label>Managers: search person</label>

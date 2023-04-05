@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, Inject} from '@angular/core';
+import { Component, OnInit, Inject} from '@angular/core';
 import { SelectItemGroup } from "primeng/api";
 import { ConfirmationService} from 'primeng/api';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
+import { GroupEdit } from 'src/app/group/models/GroupEdit';
 import { Group } from 'src/app/group/models/Group';
 import { Person } from 'src/app/group/models/Person';
 import { GroupService } from 'src/app/group/services/group.service';
@@ -12,20 +13,13 @@ import { GroupService } from 'src/app/group/services/group.service';
   styleUrls: ['./group-edit.component.scss']
 })
 export class GroupEditComponent implements OnInit {
-  group: Group;
-  groups: Group[];
-  person: Person;
+  group: GroupEdit;
   persons: Person[];
-  selectedGroup: Group;
   groupPerson: any[] = [];  
   groupSubgroup: any[] = []; 
-  selectedPerson;
+  selectedMember;
+  selectedManager;
   selectedSubgroup;
-  selectedPersonList = [];
-  selectedGroupList = [];
-  members: Person[]=[];
-  managers: Person[]=[];
-  subgroups: Group[]=[];
   constructor(
     public ref: DynamicDialogRef,
     public dialogConf: DynamicDialogConfig,
@@ -39,13 +33,6 @@ export class GroupEditComponent implements OnInit {
     if(this.group.id != undefined){
       this.getGroupById(this.group.id);  
     }
-    this.selectedPersonList = this.mappingPerson(
-      this.persons.map((item) => item)
-    );
-
-    this.selectedGroupList = this.mappingGroup(
-      this.subgroups.map((item) => item)
-    );
   }
 
   getGroupById(id: number){
@@ -65,6 +52,15 @@ export class GroupEditComponent implements OnInit {
     });
   }
 
+  mappingGroup(groups: Group[]): any {
+    return groups.map(function (group) {
+      return {
+        field: group.name,
+        value: group,
+      };
+    });
+  }
+
   searchPerson($event) {
     if ($event.query != null) {
       this.groupService.searchPerson($event.query).subscribe({
@@ -75,45 +71,6 @@ export class GroupEditComponent implements OnInit {
         complete: () => {},
       });
     }
-  }
-
-  assignMember() {
-    if (
-      !this.selectedPersonList.some(
-        (item) => item.value.id == this.selectedPerson.value.id
-      )
-    ) {
-      this.persons.push(this.selectedPerson.value);
-      this.selectedPersonList = [
-        ...this.selectedPersonList,
-        this.selectedPerson,
-      ];
-    }
-    this.selectedPerson = '';
-  }
-
-  assignManager() {
-    if (
-      !this.selectedPersonList.some(
-        (item) => item.value.id == this.selectedPerson.value.id
-      )
-    ) {
-      this.persons.push(this.selectedPerson.value);
-      this.selectedPersonList = [
-        ...this.selectedPersonList,
-        this.selectedPerson,
-      ];
-    }
-    this.selectedPerson = '';
-  }
-
-  mappingGroup(groups: Group[]): any {
-    return groups.map(function (group) {
-      return {
-        field: group.name,
-        value: group,
-      };
-    });
   }
 
   searchSubgroup($event) {
@@ -128,39 +85,47 @@ export class GroupEditComponent implements OnInit {
     }
   }
 
+  assignMember() {
+    this.group.members = [
+      ...this.group.members,
+      this.selectedMember.value,
+    ];
+    this.selectedMember = '';
+  }
+
+  assignManager() {
+    this.group.managers = [
+      ...this.group.managers,
+      this.selectedManager.value,
+    ];
+    this.selectedManager = '';
+  }
+
   assignSubgroup() {
-    if (
-      !this.selectedGroupList.some(
-        (item) => item.value.id == this.selectedSubgroup.value.id
-      )
-    ) {
-      this.subgroups.push(this.selectedSubgroup.value);
-      this.selectedGroupList = [
-        ...this.selectedGroupList,
-        this.selectedGroup,
-      ];
-    }
+    this.group.subgroups = [
+      ...this.group.subgroups,
+      this.selectedSubgroup.value,
+    ];
     this.selectedSubgroup = '';
   }
   
   deleteMember(member: Person){
-    if (this.members.indexOf(member) !== -1){
-      this.members.splice(this.members.indexOf(member), 1);
+    if (this.group.members.indexOf(member) !== -1){
+      this.group.members.splice(this.group.members.indexOf(member), 1);
     }
   }
 
   deleteManager(manager: Person){
-    if (this.managers.indexOf(manager) !== -1){
-      this.managers.splice(this.managers.indexOf(manager), 1);
+    if (this.group.managers.indexOf(manager) !== -1){
+      this.group.managers.splice(this.group.managers.indexOf(manager), 1);
     }
    }
 
   deleteSubGroup(group: Group){
-    if (this.subgroups.indexOf(group) !== -1){
-      this.subgroups.splice(this.subgroups.indexOf(group), 1);
+    if (this.group.subgroups.indexOf(group) !== -1){
+      this.group.subgroups.splice(this.group.subgroups.indexOf(group), 1);
     }
   }
-
 
   onClose(){
     this.ref.close();
