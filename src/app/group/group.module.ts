@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { GroupListComponent } from './views/group-list/group-list.component';
 import { GroupEditComponent } from './views/group-edit/group-edit.component';
 
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DynamicDialogModule } from "primeng/dynamicdialog";
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { ListboxModule } from 'primeng/listbox';
@@ -23,6 +24,7 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
   ],
   imports: [
     CommonModule,
+    AutoCompleteModule,
     ListboxModule,
     TableModule,
     ToastModule,
