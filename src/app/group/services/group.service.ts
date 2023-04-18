@@ -32,4 +32,8 @@ export class GroupService {
     return this.http.post<Person[]>(environment.server + "/grouplist/persons/",filterName)
   }
 
+  save(group: Group):Observable<Group>{
+    return this.http.put<Group>(environment.server + "/grouplist/",group);
+  }
+
 }
