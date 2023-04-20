@@ -125,6 +125,16 @@ export class GroupEditComponent implements OnInit {
     }
   }
 
+  save(group: Group){
+    this.groupService.save(group).subscribe({
+      next: () => {
+        this.onClose();
+      },
+      error: () => {
+      }
+    })
+  }
+
   onClose(){
     this.ref.close();
   }

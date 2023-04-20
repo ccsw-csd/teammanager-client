@@ -5,7 +5,7 @@
     <div class="flex flex-row flex-1 gap-5"> 
       <span class="flex-1 p-input-icon-left">
         <span class="p-float-label">Group Name</span>
-        <input type="text" [value]="group.name" pInputText class="w-full"/>
+        <input type="text" [(ngModel)]="group.name" pInputText class="w-full"/>
       </span> 
       <div class="justify-content-end mt-4 mr-1">
         <p-inputSwitch>
@@ -93,6 +93,6 @@
     <div class="mb-3"></div>
     <div class="flex justify-content-end gap-2">    
       <button pButton pRipple label="Close" class="bg-white text-blue-400 w-12rem m-2 mt-0" (click)="onClose()"></button>
-      <button pButton pRipple label="Save" class="bg-blue-400 w-12rem m-2 mt-0"></button>
+      <button pButton pRipple label="Save" class="bg-blue-400 w-12rem m-2 mt-0" (click)="save(this.group)"></button>
     </div>
   </div>
