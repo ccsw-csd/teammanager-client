@@ -13,27 +13,27 @@ export class GroupService {
   constructor(private http:HttpClient) { }
 
   getAllGroupsAdmin():Observable<Group[]>{
-    return this.http.get<Group[]>(environment.server+"/grouplist/?adminView=true");
+    return this.http.get<Group[]>(environment.server+"/group/?adminView=true");
   }
 
   getAllGroups():Observable<Group[]>{
-    return this.http.get<Group[]>(environment.server+"/grouplist/");
+    return this.http.get<Group[]>(environment.server+"/group/");
   }
 
   getGroup(id: number): Observable<Group>{
-    return this.http.get<Group>(environment.server + "/grouplist/editgroup/"+ id);
+    return this.http.get<Group>(environment.server + "/group/"+ id);
   }
 
   searchGroup(filterName: string): Observable<Group[]> {
-    return this.http.post<Group[]>(environment.server + "/grouplist/subgroups/",filterName)
+    return this.http.get<Group[]>(environment.server + "/group/find/"+filterName);
   }
 
   searchPerson(filterName: string): Observable<Person[]> {
-    return this.http.post<Person[]>(environment.server + "/grouplist/persons/",filterName)
+    return this.http.get<Person[]>(environment.server + "/person/find/"+filterName);
   }
 
   save(group: Group):Observable<Group>{
-    return this.http.put<Group>(environment.server + "/grouplist/",group);
+    return this.http.put<Group>(environment.server + "/group/",group);
   }
 
 }

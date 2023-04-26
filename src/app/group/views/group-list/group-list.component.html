@@ -13,66 +13,64 @@
     </div>
 </div>
 
-<p-scrollPanel>
-    <p-table [style]="{'height':'calc(100vh - 200px)'}" scrollHeight="flex" selectionMode="single" 
-    [value]="groups" styleClass="p-datatable-striped" [paginator]="true" [rows]="20" sortField="name" [sortOrder]="1" >
-        <ng-template pTemplate="header">
-            <tr>
-                <th class="flex-1 text-black-alpha-50" pSortableColumn="name" >
-                    Group Name<p-sortIcon field="name"></p-sortIcon>
-                </th>
-                <th class="flex-2 text-black-alpha-50" pSortableColumn="manager" >
-                    Administrators<p-sortIcon field="manager"></p-sortIcon>
-                </th>
-                <th class="flex-none w-1 text-black-alpha-50" pSortableColumn="members">
-                    Members<p-sortIcon field="members"></p-sortIcon>
-                </th>
-                <th class="flex-none w-1 text-black-alpha-50" pSortableColumn="subgroups">
-                    Subgroups<p-sortIcon field="subgroups"></p-sortIcon>
-                </th>              
-                <th class="flex-none w-1 text-black-alpha-50">
-                    Actions
-                </th>  
-            </tr>
-            <tr>
-                <th class="flex-1 text-black-alpha-50">
-                    <p-columnFilter class="w-full" type="text" field="name" matchMode="contains" [showMenu]="false"></p-columnFilter>
-                </th>
-                <th class="flex-2 text-black-alpha-50" >
-                    <p-columnFilter class="w-full" type="text" field="manager" matchMode="contains" [showMenu]="false"></p-columnFilter>
-                </th>
-                <th class="flex-none w-1 text-black-alpha-50">
-                    <p-columnFilter class="w-full" type="text" field="members" matchMode="contains" [showMenu]="false"></p-columnFilter>
-                </th>
-                <th class="flex-none w-1 text-black-alpha-50">
-                    <p-columnFilter class="w-full" type="text" field="subgroups" matchMode="contains" [showMenu]="false"></p-columnFilter>
-                </th>                             
-                <th class="flex-none w-1 text-black-alpha-50"></th>            
-            </tr>
-        </ng-template>
-        <ng-template  pTemplate="body" let-group let-columns="columns">
-            <tr>
-                <td class="flex-1">
-                    {{group.name}}
-                </td>
-                <td class="flex-2">
-                    {{group.manager}}
-                </td>
-                <td class="flex-none w-1">
-                    {{group.members}}
-                </td>
-                <td class="flex-none w1">
-                    {{group.subgroups}}
-                </td>
-                <td class="flex-none w-1">
-                    <div  class="flex flex-row">
-                        <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="editGroup(group)"></button>
-                        <button *ngIf="group.externalId!=null" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text"></button>
-                    </div>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-</p-scrollPanel>
+<p-table [style]="{'height':'calc(100vh - 240px)'}" [scrollable]="true" scrollHeight="calc(92vh - 190px)" selectionMode="single" 
+    [value]="groups" [responsive]="true" styleClass="p-datatable-striped" [paginator]="true" [rows]="20" sortField="name" [sortOrder]="1" >
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="flex-1 text-black-alpha-50" pSortableColumn="name" >
+                Group Name<p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th class="flex-2 text-black-alpha-50" pSortableColumn="manager" >
+                Administrators<p-sortIcon field="manager"></p-sortIcon>
+            </th>
+            <th class="flex-none w-10rem text-black-alpha-50" pSortableColumn="members">
+                Members<p-sortIcon field="members"></p-sortIcon>
+            </th>
+            <th class="flex-none w-10rem text-black-alpha-50" pSortableColumn="subgroups">
+                Subgroups<p-sortIcon field="subgroups"></p-sortIcon>
+            </th>              
+            <th class="flex-none w-1 text-black-alpha-50">
+                Actions
+            </th>  
+        </tr>
+        <tr>
+            <th class="flex-1 text-black-alpha-50">
+                <p-columnFilter class="w-full" type="text" field="name" matchMode="contains" [showMenu]="false"></p-columnFilter>
+            </th>
+            <th class="flex-2 text-black-alpha-50" >
+                <p-columnFilter class="w-full" type="text" field="manager" matchMode="contains" [showMenu]="false"></p-columnFilter>
+            </th>
+            <th class="flex-none w-10rem text-black-alpha-50">
+                <p-columnFilter class="w-full" type="text" field="members" matchMode="contains" [showMenu]="false"></p-columnFilter>
+            </th>
+            <th class="flex-none w-10rem text-black-alpha-50">
+                <p-columnFilter class="w-full" type="text" field="subgroups" matchMode="contains" [showMenu]="false"></p-columnFilter>
+            </th>                             
+            <th class="flex-none w-1 text-black-alpha-50"></th>            
+        </tr>
+    </ng-template>
+    <ng-template  pTemplate="body" let-group let-columns="columns">
+        <tr>
+            <td class="flex-1">
+                {{group.name}}
+            </td>
+            <td class="flex-2">
+                {{group.manager}}
+            </td>
+            <td class="flex-none w-10rem">
+                <p class="ml-8">{{group.members}}</p>
+            </td>
+            <td class="flex-none w-10rem">
+                <p class="ml-8">{{group.subgroups}}</p> 
+            </td>
+            <td class="flex-none w-1">
+                <div  class="flex-row">
+                    <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="editGroup(group)"></button>
+                    <button *ngIf="group.externalId==null" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text"></button>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
 <p-toast position="top-center"></p-toast>
 <p-confirmDialog header="Confirmación" icon="pi pi-exclamation-triangle" #confirmDialog></p-confirmDialog>
