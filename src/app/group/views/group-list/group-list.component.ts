@@ -52,8 +52,10 @@ export class GroupListComponent implements OnInit {
 
   editGroup(groupEdit:Group){
     this.ref = this.dialogService.open(GroupEditComponent,{
-      height:"630px",
-      width:"1200px",
+      height:'calc(100vh - 1px)',
+      width:'1200px',
+      baseZIndex: 10000,
+      contentStyle: { overflow: 'auto' },
       data:{
         group: groupEdit
       },
