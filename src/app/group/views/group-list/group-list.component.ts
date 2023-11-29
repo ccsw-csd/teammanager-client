@@ -38,7 +38,7 @@ export class GroupListComponent implements OnInit {
       subgroups: 1,
       externalId: 'ext3'
     }];
-    
+
   adminView: boolean = false;
 
   constructor(
@@ -75,6 +75,21 @@ export class GroupListComponent implements OnInit {
         this.groups = res;
       },
     });
+  }
+
+  createGroup() {
+    this.ref = this.dialogService.open(GroupEditComponent, {
+      height: 'calc(100vh - 1px)',
+      width: '1200px',
+      baseZIndex: 10000,
+      contentStyle: { overflow: 'auto' },
+      data: {
+        group: new Group()
+      },
+      closable: false
+    });
+
+    this.onClose(); // Podrías decidir si quieres recargar la lista después de cerrar la ventana de edición
   }
 
   editGroup(groupEdit: Group) {
