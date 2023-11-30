@@ -1,6 +1,6 @@
 <div class="flex flex-row">
     <div class="text-black-alpha-50 mt-4">
-        <span><strong style="font-size: 2rem;">My Groups</strong></span>
+        <span><h3 class="p-0 m-0 mb-2">My Groups</h3></span>
     </div>
     <div class="flex-1 ml-2 mt-2 ">
         <button pButton class="bg-blue-400 m-2 mb-3" label="Create new group" (click)="createGroup()"></button>
@@ -67,18 +67,6 @@
             <td class="flex-none w-10rem">
                 <p class="ml-8">{{group.subgroups}}</p>
             </td>
-            <!-- <td class="flex-none w-1">
-                <div class="flex-row p-2 font-size: 0,8rem">
-                    <div *ngIf="group.managers!='LDAP'; then thenBlock else elseBlock"></div>
-                    <ng-template #thenBlock><button pButton pRipple type="button" icon="pi pi-pencil"
-                            class="p-button-rounded p-button-text" (click)="editGroup(group)"></button></ng-template>
-                    <ng-template #elseBlock><button *ngIf="group.managers=='LDAP'" pButton pRipple type="button"
-                            icon="pi pi-eye"
-                            class="p-button-rounded p-button-text p-button-text"></button></ng-template>
-                    <button *ngIf="group.externalId==null" pButton pRipple type="button" icon="pi pi-trash"
-                        class="p-button-sm p-button-rounded p-button-text" ></button>
-                </div>
-            </td> -->
             <td class="flex-none w-1">
                 <div class="flex-row p-2 font-size: 0,8rem">
                   <button *ngIf="group.managers!='LDAP'" pButton pRipple type="button" icon="pi pi-pencil"
