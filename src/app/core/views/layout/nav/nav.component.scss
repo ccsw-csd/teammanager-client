@@ -1,9 +1,9 @@
 @import "./src/assets/scss/master";
 
 .nav{
-  background-color: $primary;
+  background-color: #f2f2f2;
   ::ng-deep .p-slidemenu {
-    background-color: $primary;
+    background-color: #f2f2f2;
     border:none;
     width: 200px;
     margin-left: 0px;
@@ -17,26 +17,28 @@
         box-shadow: none;
 
         .p-menuitem-text {
-          color: white;
+          color: #15011d ;
         }
       }
       .p-menuitem-link:not(.p-disabled):hover {
-        background-color: rgba(0,0,0,.04);
+        background-color: #f2f2f2;
 
         .p-menuitem-text, .p-submenu-icon, .p-slidemenu-backward {
-          color: white;
+          color: #0070AD;
           padding-left: 2px;
         }
       }
       .p-menuitem-link-active {
         background-color: transparent;
-        font-weight: bold;
-        border-left: 6px solid $background;
+        font-weight: 700;
+        border-left: 6px solid #0070AD ;
      }
     }   
   }
 }
 
-::ng-deep .p-sidebar .p-sidebar-content {
+::ng-deep .p-sidebar .p-sidebar-content .p-sidebar-header {
   padding: 0rem;
+  background-color: #f2f2f2;
 }
+

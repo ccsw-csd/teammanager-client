@@ -13,47 +13,7 @@ import { GroupService } from 'src/app/group/services/group.service';
 })
 export class GroupListComponent implements OnInit {
 
-  groups: Group[] = [
-    {
-      id: 1,
-      name: 'Group 1',
-      managers: 'Manager 1',
-      members: 10,
-      subgroups: 2,
-      externalId: 'ext1'
-    },
-    {
-      id: 2,
-      name: 'Group 2',
-      managers: 'Manager 2',
-      members: 15,
-      subgroups: 3,
-      externalId: 'ext2'
-    },
-    {
-      id: 3,
-      name: 'Group 3',
-      managers: 'Manager 3',
-      members: 8,
-      subgroups: 1,
-      externalId: 'ext3'
-    },
-    {
-      id: 4,
-      name: 'Group4',
-      managers: 'LDAP',
-      members: 15,
-      subgroups: 3,
-      externalId: 'ext4'
-    },
-    {
-      id: 5,
-      name: 'Group5',
-      managers: 'Manager 5',
-      members: 15,
-      subgroups: 3,
-      externalId: null
-    }];
+  groups: Group[] = [];
 
   adminView: boolean = false;
 
