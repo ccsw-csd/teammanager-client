@@ -1,80 +1,97 @@
-<div class="flex flex-row">
-    <div class="text-black-alpha-50 mt-4" >
-        <span><strong>My Groups</strong></span>
+<div class="flex flex-row justify-content-between">
+    <div class="flex justify-content-start">
+        <h3 class="p-0 m-0 mb-2">
+            My Groups
+        </h3>
     </div>
-    <div class="flex-1 mt-1">    
-        <button pButton class="bg-blue-400 m-2 mb-3" label="Create new group"></button>   
+</div>
+
+<div class="flex flex-row justify-content-between">
+    <div class="flex w-9rem h-2rem gap-2 border-round-2xl align-items-center mt-3" style="background-color:#e7edef">
+        <div class="pl-3">
+            <i class="pi pi-users text-xl text-primary"></i>
+        </div>
+        <div class="flex flex-row align-items-center gap-1 text-sm">
+            <p>Grupos</p>
+        </div>
     </div>
-    <div class="justify-content-end mt-4 mr-1">        
-        <p-inputSwitch [(ngModel)]="adminView"
-                       (onChange)="clickAdminView($event)" label="Admin View">
+    <div class="flex flex-row align-items-left gap-1 text-sm">
+        <button tooltipPosition="top" pButton pRipple type="button" icon="pi pi-user-plus"
+            class="p-button-lg m-2 p-button-outlined" pTooltip="Añadir grupo" (click)="createGroup()"></button>
+    </div>
+    <div class="justify-content-end mt-4 mr-1">
+        <p-inputSwitch [(ngModel)]="adminView" (onChange)="clickAdminView($event)" label="Admin View">
         </p-inputSwitch>
         Admin View
     </div>
 </div>
 
-<p-table [style]="{'height':'calc(100vh - 240px)'}" [scrollable]="true" scrollHeight="calc(92vh - 190px)" selectionMode="single" 
-    [value]="groups" [responsive]="true" styleClass="p-datatable-striped" [paginator]="true" [rows]="20" sortField="name" [sortOrder]="1" >
+<p-table [style]="{'height':'calc(100vh - 240px)'}" [scrollable]="true" scrollHeight="calc(92vh - 190px)"
+    selectionMode="single" [value]="groups" [responsive]="true" styleClass="p-datatable-striped" [paginator]="true"
+    [rows]="20" sortField="name" [sortOrder]="1">
     <ng-template pTemplate="header">
         <tr>
-            <th class="flex-1 text-black-alpha-50" pSortableColumn="name" >
+            <th class="flex-1 text-black-alpha-50 p-2" pSortableColumn="name">
                 Group Name<p-sortIcon field="name"></p-sortIcon>
             </th>
-            <th class="flex-2 text-black-alpha-50" pSortableColumn="manager" >
+            <th class="flex-2 text-black-alpha-50 p-2" pSortableColumn="manager">
                 Administrators<p-sortIcon field="manager"></p-sortIcon>
             </th>
-            <th class="flex-none w-10rem text-black-alpha-50" pSortableColumn="members">
+            <th class="flex-none w-10rem text-black-alpha-50 p-2" pSortableColumn="members">
                 Members<p-sortIcon field="members"></p-sortIcon>
             </th>
-            <th class="flex-none w-10rem text-black-alpha-50" pSortableColumn="subgroups">
+            <th class="flex-none w-10rem text-black-alpha-50 p-2" pSortableColumn="subgroups">
                 Subgroups<p-sortIcon field="subgroups"></p-sortIcon>
-            </th>              
-            <th class="flex-none w-1 text-black-alpha-50">
+            </th>
+            <th class="flex-none w-1 text-black-alpha-50 p-2">
                 Actions
-            </th>  
+            </th>
         </tr>
         <tr>
             <th class="flex-1 text-black-alpha-50">
-                <p-columnFilter class="w-full" type="text" field="name" matchMode="contains" [showMenu]="false"></p-columnFilter>
+                <p-columnFilter class="w-full" type="text" field="name" matchMode="contains"
+                    [showMenu]="false"></p-columnFilter>
             </th>
-            <th class="flex-2 text-black-alpha-50" >
-                <p-columnFilter class="w-full" type="text" field="manager" matchMode="contains" [showMenu]="false"></p-columnFilter>
+            <th class="flex-2 text-black-alpha-50">
+                <p-columnFilter class="w-full" type="text" field="manager" matchMode="contains"
+                    [showMenu]="false"></p-columnFilter>
             </th>
             <th class="flex-none w-10rem text-black-alpha-50">
-                <p-columnFilter class="w-full" type="text" field="members" matchMode="contains" [showMenu]="false"></p-columnFilter>
+                <p-columnFilter class="w-full" type="text" field="members" matchMode="contains"
+                    [showMenu]="false"></p-columnFilter>
             </th>
             <th class="flex-none w-10rem text-black-alpha-50">
-                <p-columnFilter class="w-full" type="text" field="subgroups" matchMode="contains" [showMenu]="false"></p-columnFilter>
-            </th>                             
-            <th class="flex-none w-1 text-black-alpha-50"></th>            
+                <p-columnFilter class="w-full" type="text" field="subgroups" matchMode="contains"
+                    [showMenu]="false"></p-columnFilter>
+            </th>
+            <th class="flex-none w-1 text-black-alpha-50"></th>
         </tr>
     </ng-template>
-    <ng-template  pTemplate="body" let-group let-columns="columns">
+    <ng-template pTemplate="body" let-group let-columns="columns">
         <tr>
             <td class="flex-1">
                 {{group.name}}
             </td>
             <td class="flex-2">
-                {{group.manager}}
+                {{group.managers}}
             </td>
             <td class="flex-none w-10rem">
                 <p class="ml-8">{{group.members}}</p>
             </td>
             <td class="flex-none w-10rem">
-                <p class="ml-8">{{group.subgroups}}</p> 
+                <p class="ml-8">{{group.subgroups}}</p>
             </td>
-            <td class="flex-none w-1">
-                <div class="flex-row p-2 font-size: 0,8rem">
-                  <button *ngIf="group.managers!='LDAP'" pButton pRipple type="button" icon="pi pi-pencil"
-                    class="p-button-rounded p-button-text" (click)="editGroup(group)"></button>
-              
-                  <button *ngIf="group.managers=='LDAP'" pButton pRipple type="button" icon="pi pi-eye"
-                    class="p-button-rounded p-button-text p-button-text" (click)="viewGroup(group)"></button>
-              
-                  <button *ngIf="group.externalId==null" pButton pRipple type="button" icon="pi pi-trash"
-                    class="p-button-sm p-button-rounded p-button-text" (click)="deleteGroup(group)"></button>
-                </div>
-              </td>
+            <td class="flex-none w-10rem">
+                    <button *ngIf="group.managers !== 'LDAP'" pButton pRipple type="button" icon="pi pi-pencil"
+                        class="p-button-rounded p-button-text" pTooltip="Editar" (click)="editGroup(group)"></button>
+            
+                    <button *ngIf="group.managers === 'LDAP'" pButton pRipple type="button" icon="pi pi-eye"
+                        class="p-button-rounded p-button-text p-button-text" pTooltip="Visualizar" (click)="viewGroup(group)"></button>
+            
+                    <button *ngIf="group.externalId === null" pButton pRipple type="button" icon="pi pi-trash"
+                        class="p-button-sm p-button-rounded p-button-text" pTooltip="Eliminar" (click)="deleteGroup(group)"></button>
+            </td>
+            
         </tr>
     </ng-template>
 </p-table>
