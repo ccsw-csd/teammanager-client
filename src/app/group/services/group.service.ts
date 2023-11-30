@@ -36,4 +36,9 @@ export class GroupService {
     return this.http.put<Group>(environment.server + "/group/",group);
   }
 
+  deleteGroup(groupId: number): Observable<void> {
+    const url = `${environment.server}/group/${groupId}`;
+    return this.http.delete<void>(url);
+  }
+
 }

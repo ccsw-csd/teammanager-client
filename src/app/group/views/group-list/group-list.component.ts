@@ -37,6 +37,22 @@ export class GroupListComponent implements OnInit {
       members: 8,
       subgroups: 1,
       externalId: 'ext3'
+    },
+    {
+      id: 4,
+      name: 'Group4',
+      managers: 'LDAP',
+      members: 15,
+      subgroups: 3,
+      externalId: 'ext4'
+    },
+    {
+      id: 5,
+      name: 'Group5',
+      managers: 'Manager 5',
+      members: 15,
+      subgroups: 3,
+      externalId: null
     }];
 
   adminView: boolean = false;
@@ -45,6 +61,7 @@ export class GroupListComponent implements OnInit {
     private ref: DynamicDialogRef,
     private dialogService: DialogService,
     private groupService: GroupService,
+    private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -104,6 +121,42 @@ export class GroupListComponent implements OnInit {
       closable: false
     });
     this.onClose();
+  }
+
+  viewGroup(group: Group) {
+    this.ref = this.dialogService.open(GroupEditComponent, {
+      height: 'calc(100vh - 1px)',
+      width: '1200px',
+      baseZIndex: 10000,
+      contentStyle: { overflow: 'auto' },
+      data: {
+        group: group,
+        readonly: true
+      },
+      closable: false
+    });
+    this.onClose();
+  }
+
+  deleteGroup(group: Group) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the group?',
+      header: 'Confirmation',
+      acceptLabel: 'Yes',
+      rejectLabel: 'No',
+      accept: () => {
+        this.groupService.deleteGroup(group.id).subscribe({
+          next: () => {
+            this.getAllGroups();
+          },
+          error: () => {
+          }
+        });
+      },
+      reject: () => {
+      }
+    });
+
   }
 
   onClose(): void {
