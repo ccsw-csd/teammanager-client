@@ -1,39 +1,48 @@
 @import "./src/assets/scss/master";
 
-.nav{
+.nav {
   background-color: #f2f2f2;
+
   ::ng-deep .p-slidemenu {
     background-color: #f2f2f2;
-    border:none;
+    border: none;
     width: 200px;
     margin-left: 0px;
-    padding-left: 0px;
 
-    .p-submenu-icon, .p-slidemenu-backward{
-      color: white;
+    .p-submenu-icon,
+    .p-slidemenu-backward {
+      color: f2f2f2;
     }
+
     .p-menuitem {
+      height: 40px;
+
       .p-menuitem-link {
         box-shadow: none;
 
         .p-menuitem-text {
-          color: #15011d ;
+          color: #15011d;
+          font-weight: 700;
         }
       }
+
       .p-menuitem-link:not(.p-disabled):hover {
         background-color: #f2f2f2;
 
-        .p-menuitem-text, .p-submenu-icon, .p-slidemenu-backward {
+        .p-menuitem-text,
+        .p-submenu-icon,
+        .p-slidemenu-backward {
           color: #0070AD;
           padding-left: 2px;
         }
       }
+
       .p-menuitem-link-active {
         background-color: transparent;
         font-weight: 700;
-        border-left: 6px solid #0070AD ;
-     }
-    }   
+        border-left: 6px solid #0070AD;
+      }
+    }
   }
 }
 
@@ -41,4 +50,3 @@
   padding: 0rem;
   background-color: #f2f2f2;
 }
-
