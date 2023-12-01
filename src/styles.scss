@@ -1,14 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
-@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Ubuntu:400,600,700&display=swap");
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons+Outlined");
-@import url("https://fonts.googleapis.com/css?family=Ubuntu:400,600,700&display=swap");
 
 @import 'assets/scss/master';
 
 
 html, body { height: 100%; }
-
 body { 
     margin: 0; 
     font-family: "Ubuntu", sans-serif; 
@@ -16,6 +14,7 @@ body {
     font-weight: 400;    
     overflow: hidden;
 }
+
 
 .p-component {
     font-family: "Ubuntu",Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
@@ -66,6 +65,7 @@ p-autocomplete {
         input { width: 100%; }
     }
 }
+
 
 .p-menuitem-link {
     height: 30px;

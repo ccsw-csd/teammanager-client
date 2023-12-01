@@ -86,10 +86,10 @@
                         class="p-button-rounded p-button-text" pTooltip="Editar" (click)="editGroup(group)"></button>
             
                     <button *ngIf="group.managers === 'LDAP'" pButton pRipple type="button" icon="pi pi-eye"
-                        class="p-button-rounded p-button-text p-button-text" pTooltip="Visualizar" (click)="viewGroup(group)"></button>
+                        class="p-button-rounded p-button-text" pTooltip="Visualizar" (click)="viewGroup(group)"></button>
             
                     <button *ngIf="group.externalId === null" pButton pRipple type="button" icon="pi pi-trash"
-                        class="p-button-sm p-button-rounded p-button-text" pTooltip="Eliminar" (click)="deleteGroup(group)"></button>
+                        class="p-button-rounded p-button-danger p-button-text" pTooltip="Eliminar" (click)="deleteGroup(group)"></button>
             </td>
             
         </tr>
