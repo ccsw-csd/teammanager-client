@@ -22,12 +22,13 @@
     "@auth0/angular-jwt": "^5.0.2",
     "cptable-fixed-xlsx-style": "^0.8.20",
     "file-saver": "^2.0.5",
+    "jspdf": "^2.5.1",
     "moment": "^2.29.4",
     "primeflex": "^3.2.1",
     "primeicons": "^5.0.0",
     "primeng": "^13.4.1",
     "rxjs": "~7.5.0",
-    "tslib": "^2.3.0",
+    "tslib": "^2.6.2",
     "xlsx": "^0.18.5",
     "xlsx-js-style": "^1.2.0",
     "zone.js": "~0.11.4"
@@ -36,6 +37,7 @@
     "@angular-devkit/build-angular": "^13.3.10",
     "@angular/cli": "~13.2.6",
     "@angular/compiler-cli": "~13.2.0",
+    "@types/html2canvas": "^1.0.0",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
     "jasmine-core": "~4.0.0",
@@ -50,5 +52,9 @@
     "fs": false,
     "os": false,
     "path": false
-  }
+  },
+  "description": "This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.5.",
+  "main": "karma.conf.js",
+  "author": "",
+  "license": "ISC"
 }
