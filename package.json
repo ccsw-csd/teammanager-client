@@ -21,6 +21,7 @@
     "@angular/router": "~13.2.0",
     "@auth0/angular-jwt": "^5.0.2",
     "cptable-fixed-xlsx-style": "^0.8.20",
+    "date-holidays": "^3.23.2",
     "file-saver": "^2.0.5",
     "jspdf": "^2.5.1",
     "moment": "^2.29.4",
