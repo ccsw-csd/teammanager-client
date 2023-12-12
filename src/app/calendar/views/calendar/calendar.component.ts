@@ -3,8 +3,6 @@ import { ScheduleType } from '../model/schedule-type';
 import { MetadataDay } from '../model/metadata-day';
 import { DropdownEntry } from '../model/dropdown-entry';
 
-import HD from 'date-holidays';
-
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ConfirmationService } from 'primeng/api';
 
@@ -18,18 +16,14 @@ export class CalendarComponent {
   @ViewChild('calendarsDiv') calendarsDiv: ElementRef;
 
   //ATRIBUTOS
-  isLoading: boolean = true;
-  horasLaborales: number = 0;
-  diasFestivos: number = 0;
+
+ 
   scheduleTypes: ScheduleType[];
   selectedType: ScheduleType;
   selectedYear: DropdownEntry;
   selectedYearAux: DropdownEntry;
   selectedCalendar: Map<String, MetadataDay>;
-  selectedCenter: DropdownEntry;
-  selectedCollective: DropdownEntry;
-  centers: DropdownEntry[];
-  collectives: DropdownEntry[];
+
   years: DropdownEntry[] = [];
   calendars: Map<String, Map<String, MetadataDay>>;
 
@@ -91,8 +85,6 @@ export class CalendarComponent {
   }
 
   private generateDefaultCalendar(): Map<String, MetadataDay> {
-
-   
     const metadataDay = new Map<String, MetadataDay>();
     const normalDay = this.scheduleTypes[1];
 
@@ -101,9 +93,6 @@ export class CalendarComponent {
         const date = new Date(parseInt(this.selectedYearAux.code), month, day);
         if (date.getMonth() == month) {
           const isWeekend = date.getDay() == 0 || date.getDay() == 6;
-          
-
-       
 
           let type = normalDay;
 
@@ -111,7 +100,7 @@ export class CalendarComponent {
             type = this.scheduleTypes.find(
               (type) => type.name === 'Fin de semana'
             );
-            }
+          }
 
           const metadata = new MetadataDay({
             day: day,
