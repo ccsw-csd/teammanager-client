@@ -8,7 +8,7 @@ import { LoginModule } from './login/login.module';
 import { DatePipe, registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { GroupModule } from './group/group.module';
-import { CalendarModule } from './calendar/calendar.module';
+import {  WorkCalendarModule } from './calendar/WorkCalendarModule';
 import { ForecastModule } from './forecast/forecast.module';
 import { HolidayModule } from './holiday/holiday.module';
 
@@ -25,7 +25,7 @@ registerLocaleData(localeEs,'es');
     BrowserAnimationsModule,
     CoreModule,
     LoginModule,
-    CalendarModule,
+    WorkCalendarModule,
     GroupModule,
     ForecastModule,
     HolidayModule

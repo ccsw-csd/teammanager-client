@@ -1,0 +1,36 @@
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Asegura el alineamiento vertical */
+}
+.year-selector {
+  padding: 10px;
+  margin: 0 auto 20px;
+  position: relative;
+  top: -30px;
+  font-size: 18px;
+  text-align: center; 
+  font-family:  Helvetica;
+  width: 200px; /* Ajusta el ancho si es necesario */
+}
+
+.legend {
+  width: 24px;
+  height: 16px;
+  margin: 2px 10px 0px 0px;
+  border: 1px solid #bebebe;
+  font-family: Helvetica;
+  font-size: 10px;
+}
+
+.legend-day {
+  width: 24px;
+  height: 16px;
+  margin: 0px 10px 0px 0px;
+  font-style: italic;
+}
+
+.calendar-item {
+  margin: 5px; /* Esto agrega un espacio de 5 píxeles alrededor de cada calendario */
+}

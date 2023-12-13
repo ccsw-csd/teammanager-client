@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CalendarComponent } from './calendar/views/calendar/calendar.component';
+
 import { AuthGuard } from './core/services/auth.guard';
 import { RefreshTokenResolverService } from './core/services/refresh-token-resolver.service';
 import { LayoutComponent } from './core/views/layout/layout.component';
@@ -9,6 +9,9 @@ import { ForecastListComponent } from './forecast/views/forecast-list/forecast-l
 import { GroupListComponent } from './group/views/group-list/group-list.component';
 import { HolidayListComponent } from './holiday/views/holiday-list/holiday-list.component';
 import { LoginComponent } from './login/views/login/login.component';
+import { CalendarComponent } from './calendar/views/calendar/calendar.component';
+
+
 
 /*
 , data:{role:['GESTOR', 'ADMIN']}
@@ -23,7 +26,7 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
     resolve: {credentials: RefreshTokenResolverService},
     children: [
-      { path: 'calendar', component: CalendarComponent},
+      { path: 'calendar', component:CalendarComponent},
       { path: 'groups', component: GroupListComponent,},
       { path: 'forecast', component: ForecastListComponent,},
       { path: 'forecast-detail', component: ForecastDetailComponent,},

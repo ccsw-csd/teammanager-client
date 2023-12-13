@@ -1,1 +1,72 @@
-<p>calendar works!</p>
+<div style="display: flex; flex-direction: column">
+  <!-- Mensaje en la esquina superior derecha -->
+  <div style="align-self: flex-end; text-align: right">
+    <i>* Inactivities are read from PON every 3 hours.</i>
+  </div>
+
+  <!-- Leyendas en la esquina superior izquierda -->
+  <div class="center" style="align-self: flex-start">
+    <div style="display: flex; flex-direction: row">
+      <div style="display: flex; flex-direction: column; width: 135px">
+        <div style="display: flex; flex-direction: row">
+          <div class="legend" style="background-color: #aae3ff"></div>
+          <div>Public Holidays</div>
+        </div>
+        <div style="display: flex; flex-direction: row">
+          <div class="legend" style="background-color: #ffffaa"></div>
+          <div>Vacations</div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; width: 125px">
+        <div style="display: flex; flex-direction: row">
+          <div
+            class="legend"
+            style="background-color: rgb(194, 194, 204)"
+          ></div>
+          <div>Weekend</div>
+        </div>
+        <div style="display: flex; flex-direction: row">
+          <div class="legend" style="background-color: #f7bd46"></div>
+          <div>Others</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selector de años centrado -->
+  <div class="year-selector">
+    <p>Selected Year</p>
+    <select [(ngModel)]="selectedYearAux.code" (change)="onChangeYear()">
+      <option *ngFor="let year of years" [value]="year.code">
+        {{ year.name }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Calendario debajo de los elementos anteriores -->
+  <div class="calendar">
+    <div
+      id="calendarsDiv"
+      #calendarsDiv
+      style="
+        display: flex;
+        flex-direction: row;
+        flex-grow: 4;
+        flex-wrap: wrap;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0px;
+        margin: 0px;
+      "
+    >
+      <app-component-calendar
+        *ngFor="let month of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+        [year]="1 * this.selectedYearAux.code"
+        [month]="month"
+        [metadataDay]="selectedCalendar"
+        (clickEvent)="selectDate($event)"
+        class="calendar-item"
+      ></app-component-calendar>
+    </div>
+  </div>
+</div>
