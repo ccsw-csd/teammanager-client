@@ -1,1 +1,49 @@
-<p>holiday-list works!</p>
+<div class="flex flex-row">
+    <div class="text-black-alpha-50 mt-4" >
+        <span><strong>Holiday List</strong></span>
+    </div>
+</div>
+
+<p-table [style]="{'height':'calc(100vh - 240px)'}" [scrollable]="true" scrollHeight="calc(92vh - 190px)" selectionMode="single" 
+    [value]="centers"  styleClass="p-datatable-striped">
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="flex-1 text-black-alpha-50" pSortableColumn="name" >
+                Center Name
+            </th>
+        <!--
+            <th class="flex-2 text-black-alpha-50" pSortableColumn="current" >
+                Public Holidays current year
+            </th>
+            <th class="flex-3 text-black-alpha-50" pSortableColumn="next">
+                Public Holidays next year
+            </th>             
+            <th class="flex-none w-1 text-black-alpha-50">
+                Actions
+            </th>  
+
+        -->
+        </tr>
+    </ng-template>
+    <ng-template  pTemplate="body" let-center let-columns="columns">
+        <tr>
+            <td class="flex-1">
+                {{center.name}}
+            </td>
+        <!--
+            <td class="flex-2">
+               {{center.current}}   
+            </td>
+            <td class="flex-3">
+               {{center.next}} 
+            </td>
+
+        -->
+            <td class="flex-none w-1">
+                <div  class="flex-row">
+                    <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="editCenter(center)"></button>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
