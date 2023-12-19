@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
-import { Center } from 'src/app/holiday/model/Center';
+import { CenterWithFestives } from 'src/app/holiday/model/CenterWithFestives';
 import { HolidayService } from '../../holiday.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { HolidayService } from '../../holiday.service';
 })
 export class HolidayListComponent implements OnInit {
 
-  centers: Center[];
+  centers: CenterWithFestives[];
   constructor(
     private ref: DynamicDialogRef,
     private dialogService: DialogService,
@@ -25,7 +25,7 @@ export class HolidayListComponent implements OnInit {
 
   getAllCenters() {
     this.holidayService.getAllCenters().subscribe({
-      next: (res: Center[]) => {
+      next: (res: CenterWithFestives[]) => {
         this.centers = res;
       },
     });

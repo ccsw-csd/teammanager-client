@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Center } from './model/Center';
+import { CenterWithFestives } from './model/CenterWithFestives';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class HolidayService {
 
   constructor(private http:HttpClient) { }
 
-  getAllCenters(): Observable<Center[]> {
-    return this.http.get<Center[]>(environment.server+"/center/");
+  getAllCenters(): Observable<CenterWithFestives[]> {
+    return this.http.get<CenterWithFestives[]>(environment.server+"/v_center_with_festives/");
   }
 }

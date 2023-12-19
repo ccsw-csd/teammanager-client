@@ -11,7 +11,6 @@
             <th class="flex-1 text-black-alpha-50" pSortableColumn="name" >
                 Center Name
             </th>
-        <!--
             <th class="flex-2 text-black-alpha-50" pSortableColumn="current" >
                 Public Holidays current year
             </th>
@@ -21,24 +20,19 @@
             <th class="flex-none w-1 text-black-alpha-50">
                 Actions
             </th>  
-
-        -->
         </tr>
     </ng-template>
     <ng-template  pTemplate="body" let-center let-columns="columns">
         <tr>
             <td class="flex-1">
                 {{center.name}}
-            </td>
-        <!--
+            </td>  
             <td class="flex-2">
-               {{center.current}}   
+               {{center.festiveActualYear}}   
             </td>
             <td class="flex-3">
-               {{center.next}} 
+               {{center.festiveNextYear}} 
             </td>
-
-        -->
             <td class="flex-none w-1">
                 <div  class="flex-row">
                     <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="editCenter(center)"></button>
