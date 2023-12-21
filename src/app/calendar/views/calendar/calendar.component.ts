@@ -2,8 +2,8 @@ import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { ScheduleType } from '../model/schedule-type';
 import { MetadataDay } from '../model/metadata-day';
 import { DropdownEntry } from '../model/dropdown-entry';
-
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Festive } from 'src/app/holiday/model/Festive';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
 import { ConfirmationService } from 'primeng/api';
 
 @Component({
@@ -12,7 +12,7 @@ import { ConfirmationService } from 'primeng/api';
   styleUrls: ['./calendar.component.scss'],
   providers: [DynamicDialogRef, ConfirmationService],
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnInit{
   @ViewChild('calendarsDiv') calendarsDiv: ElementRef;
 
   //ATRIBUTOS
@@ -27,11 +27,22 @@ export class CalendarComponent {
   years: DropdownEntry[] = [];
   calendars: Map<String, Map<String, MetadataDay>>;
 
-  constructor() {
+  constructor(public dialogConf: DynamicDialogConfig,) {
     this.calendars = new Map();
+    
 
+    /*
     const actualYear = new Date().getFullYear() + 1;
     for (let i = actualYear + 1; i >= 2022; i--) {
+      this.years.push(
+        new DropdownEntry({ code: i.toString(), name: i.toString() })
+      );
+    }
+
+    */
+
+    const actualYear = new Date().getFullYear() ;
+    for (let i = actualYear -2; i <= (actualYear + 2); i++) {
       this.years.push(
         new DropdownEntry({ code: i.toString(), name: i.toString() })
       );
@@ -47,7 +58,7 @@ export class CalendarComponent {
         id: 1,
         name: 'Festivo',
         absence: true,
-        color: '#aaaaff',
+        color: '#aae3ff',
       }),
       new ScheduleType({
         id: 2,
@@ -76,6 +87,17 @@ export class CalendarComponent {
     this.selectedType = this.scheduleTypes[0];
     this.selectedCalendar = this.generateDefaultCalendar();
   }
+
+  ngOnInit(): void {
+    if(this.dialogConf.data.festivesData != undefined){
+      this.loadFestives(this.dialogConf.data.festivesData);  
+    }
+  }
+
+  loadFestives(festives: Festive[]):void{
+
+  }
+
   onChangeYear(): void {
     this.selectedCalendar = this.generateDefaultCalendar();
   }
