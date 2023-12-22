@@ -12,7 +12,7 @@ import { ConfirmationService } from 'primeng/api';
   styleUrls: ['./calendar.component.scss'],
   providers: [DynamicDialogRef, ConfirmationService],
 })
-export class CalendarComponent implements OnInit{
+export class CalendarComponent{
   @ViewChild('calendarsDiv') calendarsDiv: ElementRef;
 
   //ATRIBUTOS
@@ -26,6 +26,8 @@ export class CalendarComponent implements OnInit{
 
   years: DropdownEntry[] = [];
   calendars: Map<String, Map<String, MetadataDay>>;
+  festives: Festive[];
+
 
   constructor(public dialogConf: DynamicDialogConfig,) {
     this.calendars = new Map();
@@ -88,16 +90,6 @@ export class CalendarComponent implements OnInit{
     this.selectedCalendar = this.generateDefaultCalendar();
   }
 
-  ngOnInit(): void {
-    if(this.dialogConf.data.festivesData != undefined){
-      this.loadFestives(this.dialogConf.data.festivesData);  
-    }
-  }
-
-  loadFestives(festives: Festive[]):void{
-
-  }
-
   onChangeYear(): void {
     this.selectedCalendar = this.generateDefaultCalendar();
   }
@@ -110,6 +102,10 @@ export class CalendarComponent implements OnInit{
     const metadataDay = new Map<String, MetadataDay>();
     const normalDay = this.scheduleTypes[1];
 
+    if(this.dialogConf.data.festivesData != undefined){
+      this.festives = this.dialogConf.data.festivesData;
+    }
+
     for (let month = 0; month < 12; month++) {
       for (let day = 1; day <= 31; day++) {
         const date = new Date(parseInt(this.selectedYearAux.code), month, day);
@@ -118,6 +114,22 @@ export class CalendarComponent implements OnInit{
 
           let type = normalDay;
 
+          const isFestive = this.festives.some(festive => {
+            let date = String(festive.date).slice(-2);
+            let festiveDay = parseInt(date, 10);
+            if (festive.year === Number(this.selectedYearAux.code) &&
+                festive.month === month + 1 &&
+                festiveDay === day ){              
+              return true;
+            }
+          
+            return false;
+          });
+
+          if (isFestive) {
+            type = this.scheduleTypes.find(type => type.name === 'Festivo');
+          }
+          
           if (isWeekend) {
             type = this.scheduleTypes.find(
               (type) => type.name === 'Fin de semana'

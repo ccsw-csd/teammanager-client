@@ -22,7 +22,6 @@ export class HolidayService {
     let id = center.id;
     //return this.http.get<Festive[]>(environment.server+"/festive/");
     const url = `${environment.server}/festive/?center_id=${id}`;
-    console.log('URL:', url);
     return this.http.get<Festive[]>(url);
   }
 }

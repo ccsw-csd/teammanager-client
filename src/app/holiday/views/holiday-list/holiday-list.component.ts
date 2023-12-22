@@ -36,23 +36,22 @@ export class HolidayListComponent implements OnInit {
 
   }
 
-  editCenter(center:CenterWithFestives){
-    
+  editCenter(center: CenterWithFestives) {
     this.holidayService.getCenterFestives(center).subscribe({
       next: (res: Festive[]) => {
         this.festives = res;
-      },
-    });
 
-    this.ref = this.dialogService.open(CalendarComponent,{
-      height:'calc(100vh - 1px)',
-      width:'1200px',
-      baseZIndex: 10000,
-      contentStyle: { overflow: 'auto' },
-      data:{
-        festivesData: this.festives
+        this.ref = this.dialogService.open(CalendarComponent, {
+          height: 'calc(100vh - 1px)',
+          width: '1200px',
+          baseZIndex: 10000,
+          contentStyle: { overflow: 'auto' },
+          data: {
+            festivesData: this.festives
+          },
+          closable: true
+        });
       },
-      closable:true
     });
   }
 
