@@ -4,6 +4,7 @@ import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dy
 import { GroupEditComponent } from 'src/app/group/views/group-edit/group-edit.component';
 import { Group } from 'src/app/group/models/Group';
 import { GroupService } from 'src/app/group/services/group.service';
+import { NavigatorService } from 'src/app/core/services/navigator.service';
 
 @Component({
   selector: 'app-group-list',
@@ -16,17 +17,25 @@ export class GroupListComponent implements OnInit {
   groups: Group[] = [];
 
   adminView: boolean = false;
+  tableWidth: string;
 
   constructor(
     private ref: DynamicDialogRef,
     private dialogService: DialogService,
     private groupService: GroupService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private navigatorService: NavigatorService,
   ) { }
 
   ngOnInit(): void {
     this.adminView = false;
     this.getAllGroups();
+    this.resizeTable();
+    
+    this.navigatorService.getNavivagorChangeEmitter().subscribe((menuVisible) => {
+      if (menuVisible) this.tableWidth = 'calc(100vw - 255px)';
+      else this.tableWidth = 'calc(100vw - 55px)';
+    }); 
   }
 
   clickAdminView(e) {
@@ -96,6 +105,14 @@ export class GroupListComponent implements OnInit {
       closable: false
     });
     this.onClose();
+  }
+
+  resizeTable() {
+    if (document.getElementById('p-slideMenu')) {
+      this.tableWidth = 'calc(100vw - 255px)';
+    } else {
+      this.tableWidth = 'calc(100vw - 55px)';
+    }
   }
 
   deleteGroup(group: Group) {
