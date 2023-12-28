@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, Output, EventEmitter } from '@angular/core';
 import { ScheduleType } from '../model/schedule-type';
 import { MetadataDay } from '../model/metadata-day';
 import { DropdownEntry } from '../model/dropdown-entry';
@@ -15,6 +15,8 @@ import { ConfirmationService } from 'primeng/api';
 export class CalendarComponent{
   @ViewChild('calendarsDiv') calendarsDiv: ElementRef;
 
+
+  @Output() clickEvent = new EventEmitter<MetadataDay>();
   //ATRIBUTOS
 
  
@@ -29,7 +31,7 @@ export class CalendarComponent{
   festives: Festive[];
 
 
-  constructor(public dialogConf: DynamicDialogConfig,) {
+  constructor(public dialogConf: DynamicDialogConfig) {
     this.calendars = new Map();
     
 
@@ -44,7 +46,7 @@ export class CalendarComponent{
     */
 
     const actualYear = new Date().getFullYear() ;
-    for (let i = actualYear -2; i <= (actualYear + 2); i++) {
+    for (let i = actualYear -2; i <= actualYear + 2; i++) {
       this.years.push(
         new DropdownEntry({ code: i.toString(), name: i.toString() })
       );
@@ -151,5 +153,22 @@ export class CalendarComponent{
     }
 
     return metadataDay;
+  }
+
+  selectDate(day:MetadataDay){
+
+    if(day){
+      const isFestive = day.type.name === "Festivo";
+
+      if(isFestive){
+        day.originalType = day.type;
+        day.type = this.scheduleTypes.find(type => type.name === 'Jornada normal (8h 25min)');
+      }else{
+        day.originalType = day.type;
+        day.type = this.scheduleTypes.find(type => type.name === 'Festivo');
+      }
+
+      this.clickEvent.emit(day);
+    }
   }
 }
