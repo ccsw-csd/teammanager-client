@@ -1,89 +1,90 @@
-<div class="text-black-alpha-50 text-3xl mb-10 mb-2">
-    <span><strong>{{ isReadOnly ? 'View Group' : 'Edit Group' }}</strong></span>
-</div>
 
-<div class="flex flex-row flex-1">
-    <span class="flex-1 p-float-label">
-        <input type="text" [(ngModel)]="group.name" pInputText required [readonly]="isReadOnly" />
-        <label>Group Name</label>
-        <p-inputSwitch class="ml-5" [readonly]="isReadOnly"></p-inputSwitch>
-        Visible for members
-    </span>
-</div>
+<div class="max flex flex-column mt-1 gap-3">
+   
+    <div class="flex flex-row flex-1 gap-5">
+        <span class="flex-2 p-float-label">
+            <input type="text" style="width: 365px;" [(ngModel)]="group.name" pInputText required [readonly]="isReadOnly" />
+            <label>Group Name</label>
+            <p-inputSwitch class="flex-none ml-5" [readonly]="isReadOnly"></p-inputSwitch>
+            Visible for members
+        </span>
+    </div>
 
-<div class="mb-3"></div>
-
-<div class="flex flex-row flex-1 gap-5">
-    <span class="flex-2 p-float-label">
-        <p-autoComplete [suggestions]="groupPerson" [forceSelection]="true" [showEmptyMessage]="true"
-            [(ngModel)]="selectedMember" (completeMethod)="searchPerson($event)" (onSelect)="assignMember()"
-            field="field" [readonly]="isReadOnly">
-        </p-autoComplete>
-        <label>Members: search person</label>
-    </span>
-    <span class="flex-2 p-float-label">
-        <p-autoComplete [suggestions]="groupPerson" [forceSelection]="true" [showEmptyMessage]="true"
-            [(ngModel)]="selectedManager" (completeMethod)="searchPerson($event)" (onSelect)="assignManager()"
-            field="field" [readonly]="isReadOnly">
-        </p-autoComplete>
-        <label>Managers: search person</label>
-    </span>
-</div>
-
-<div class="flex flex-row flex-1 gap-5">
-    <span class="w-6 flex-2 justify-content-end">
-        <p-listbox [options]="group.members" [listStyle]="{'max-height':'410px'}" [readonly]="isReadOnly">
-            <ng-template let-member pTemplate="group.members">
-                <div>
-                    <button *ngIf="!isReadOnly" (click)="deleteMember(member)" pButton pRipple type="button"
-                        icon="pi pi-trash" class="mt-0 p-button-text"></button>
-                </div>
-                <div>
-                    <span>{{member.name}}&nbsp;{{member.lastname}}</span>
-                </div>
-            </ng-template>
-        </p-listbox>
-    </span>
-    <span class="w-6 flex-2 justify-content-end">
-        <p-listbox [options]="group.managers" [listStyle]="{'max-height':'200px'}" [readonly]="isReadOnly">
-            <ng-template let-manager pTemplate="group.managers">
-                <div>
-                    <button *ngIf="!isReadOnly" (click)="deleteManager(manager)" pButton pRipple type="button"
-                        icon="pi pi-trash" class="mt-0 p-button-text"></button>
-                </div>
-                <div>
-                    <span>{{manager.name}}&nbsp;{{manager.lastname}}</span>
-                </div>
-            </ng-template>
-        </p-listbox>
-        <div class="mb-3"></div>
-        <span class="w-6 flex-2 p-float-label">
-            <p-autoComplete [suggestions]="groupSubgroup" [forceSelection]="true" [showEmptyMessage]="true"
-                [(ngModel)]="selectedSubgroup" (completeMethod)="searchSubgroup($event)" (onSelect)="assignSubgroup()"
+   
+    <div class="flex flex-row flex-1 gap-5">
+        <span class="flex-2 p-float-label">
+            <p-autoComplete [suggestions]="groupPerson" [forceSelection]="true" [showEmptyMessage]="true"
+                [(ngModel)]="selectedMember" (completeMethod)="searchPerson($event)" (onSelect)="assignMember()"
                 field="field" [readonly]="isReadOnly">
             </p-autoComplete>
-            <label>Subgroups: search groups</label>
+            <label>Members: search person</label>
         </span>
-        <span class="w-6 flex-2 justify-content-end">
-            <p-listbox [options]="group.subgroups" [listStyle]="{'max-height':'140px'}" [readonly]="isReadOnly">
-                <ng-template let-subgroup pTemplate="group.subgroups">
+        <span class="flex-2 p-float-label">
+            <p-autoComplete [suggestions]="groupPerson" [forceSelection]="true" [showEmptyMessage]="true"
+                [(ngModel)]="selectedManager" (completeMethod)="searchPerson($event)" (onSelect)="assignManager()"
+                field="field" [readonly]="isReadOnly">
+            </p-autoComplete>
+            <label>Managers: search person</label>
+        </span>
+    </div>
+
+    <div class="flex flex-row flex-1 gap-5"> 
+        <span class="flex-2 p-float-label">
+            <p-listbox [options]="group.members" [listStyle]="{'max-height':'410px'}" [readonly]="isReadOnly">
+                <ng-template let-member pTemplate="group.members">
                     <div>
-                        <button *ngIf="!isReadOnly" (click)="deleteSubGroup(subgroup)" pButton pRipple type="button"
+                        <button *ngIf="!isReadOnly" (click)="deleteMember(member)" pButton pRipple type="button"
                             icon="pi pi-trash" class="mt-0 p-button-text"></button>
                     </div>
                     <div>
-                        <span>{{subgroup.name}}</span>
+                        <span>{{member.name}}&nbsp;{{member.lastname}}</span>
                     </div>
                 </ng-template>
             </p-listbox>
         </span>
+        
+        <span class="flex-2 p-float-label">
+            <p-listbox [options]="group.managers" [listStyle]="{'max-height':'200px'}" [readonly]="isReadOnly">
+                <ng-template let-manager pTemplate="group.managers">
+                    <div>
+                        <button *ngIf="!isReadOnly" (click)="deleteManager(manager)" pButton pRipple type="button"
+                            icon="pi pi-trash" class="mt-0 p-button-text"></button>
+                    </div>
+                    <div>
+                        <span>{{manager.name}}&nbsp;{{manager.lastname}}</span>
+                    </div>
+                </ng-template>
+            </p-listbox>
+        </span>
+    </div>
+    
+    <div class="flex flex-row flex-1 gap-5">
+        <span style="width: 365px;" class="flex-none p-float-label">
+            <p-autoComplete  [suggestions]="groupSubgroup" [forceSelection]="true" [showEmptyMessage]="true"
+                [(ngModel)]="selectedSubgroup" (completeMethod)="searchSubgroup($event)" (onSelect)="assignSubgroup()"
+                field="field" [readonly]="isReadOnly">
+            </p-autoComplete>
+            <label >Subgroups: search groups</label>
+        </span>
 
-
-        <div class="mb-3"></div>
-
-        <div class="flex justify-content-end gap-2">
-            <button pButton pRipple label="Close" class="p-button p-button-secondary p-button-outlined"
-                (click)="onClose()"></button>
-            <button *ngIf="!isReadOnly" pButton pRipple label="Save" class="p-button p-button-primary p-button-outlined"
-                [disabled]="!isFormValid()" (click)="save(group)"></button>
-        </div>
+    </div>
+    <div class="flex flex-row flex-1 gap-5">
+        <p-listbox style="width: 365px;" [options]="group.subgroups" [listStyle]="{'max-height':'200px'}" [readonly]="isReadOnly">
+            <ng-template let-subgroup pTemplate="group.subgroups">
+                <div>
+                    <button *ngIf="!isReadOnly" (click)="deleteSubGroup(subgroup)" pButton pRipple type="button"
+                        icon="pi pi-trash" class="mt-0 p-button-text"></button>
+                </div>
+                <div>
+                    <span>{{subgroup.name}}</span>
+                </div>
+            </ng-template>
+        </p-listbox>
+    </div>
+    <div class="flex justify-content-end gap-2">
+        <button pButton pRipple label="Close" class="p-button p-button-secondary p-button-outlined"
+            (click)="onClose()"></button>
+        <button *ngIf="!isReadOnly" pButton pRipple label="Save" class="p-button p-button-primary p-button-outlined"
+            [disabled]="!isFormValid()" (click)="save(group)"></button>
+    </div>             
+</div>    

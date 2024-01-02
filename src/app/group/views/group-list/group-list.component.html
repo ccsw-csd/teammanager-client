@@ -24,7 +24,7 @@
 
 
 
-<p-table [style]="{'height':'calc(100vh - 240px)','width':tableWidth}" 
+<p-table [style]="{'height':'calc(100vh - 175px)','width':tableWidth}" 
 [scrollable]="true" 
 scrollHeight="flex"
 selectionMode="single" 
@@ -81,7 +81,7 @@ sortField="name"
                     </p-columnFilter>
                 </div>
             </th>
-            <th class="flex flex-column align-items-center justify-content-center" >
+            <th class="flex w-1 flex-column align-items-center justify-content-center" >
                 <div  class="flex flex-row w-full top-header" pSortableColumn="subgroups">
                     <span class="flex flex-1 justify-content-center">Subgroups</span>
                     <p-sortIcon field="subgroups"></p-sortIcon>
@@ -106,13 +106,13 @@ sortField="name"
             <td class="flex-1">
                 {{group.name}}
             </td>
-            <td class="flex-1">
-                    {{group.managers}}
+            <td class="flex-1"><div>{{group.managers}}</div>
+                    
             </td>
-            <td class="flex-none w-2 align-items-center ">
+            <td class="flex-1 ">
                 <p class="ml-8">{{group.members}}</p>
             </td>
-            <td class="flex-none w-2 align-items-center">
+            <td class="flex-1">
                 <p class="ml-8">{{group.subgroups}}</p>
             </td>
             <td class="flex-none" style="width: 125px;" >

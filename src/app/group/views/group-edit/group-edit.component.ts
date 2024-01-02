@@ -27,12 +27,12 @@ export class GroupEditComponent implements OnInit {
   ) {
   }
 
-  isReadOnly: boolean = false;
+  isReadOnly: boolean = true;
 
   ngOnInit(): void {
     const groupId = this.dialogConf.data.group?.id;
     if (groupId) {
-      this.isReadOnly = true;
+      
       this.getGroupById(groupId);
     } else {
       this.group = new GroupEdit();

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, Header } from 'primeng/api';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
 import { GroupEditComponent } from 'src/app/group/views/group-edit/group-edit.component';
 import { Group } from 'src/app/group/models/Group';
@@ -31,7 +31,11 @@ export class GroupListComponent implements OnInit {
     this.adminView = false;
     this.getAllGroups();
     this.resizeTable();
-    
+    this.groups = [
+      { id:1, name: 'Grupo de Prueba', managers: 'Manager de Prueba', members: 5, subgroups: 1,externalId:'prueba'},
+      { id:2, name: 'Grupo de Prueba2', managers: 'Manager de Prueba2', members: 55, subgroups: 1,externalId:null}
+      
+    ];
     this.navigatorService.getNavivagorChangeEmitter().subscribe((menuVisible) => {
       if (menuVisible) this.tableWidth = 'calc(100vw - 255px)';
       else this.tableWidth = 'calc(100vw - 55px)';
@@ -64,45 +68,50 @@ export class GroupListComponent implements OnInit {
   }
 
   createGroup() {
+    let header = 'New Group'
     this.ref = this.dialogService.open(GroupEditComponent, {
-      height: 'calc(100vh - 1px)',
-      width: '1200px',
-      baseZIndex: 10000,
+      width: '800px',
       contentStyle: { overflow: 'auto' },
       data: {
-        group: new Group()
+        group: new Group(),
+        //isReadOnly: false
       },
-      closable: false
+      closable: false,
+      header: header,
     });
 
     this.onClose(); // Podrías decidir si quieres recargar la lista después de cerrar la ventana de edición
   }
 
   editGroup(groupEdit: Group) {
+    let header = 'Edit Group'
     this.ref = this.dialogService.open(GroupEditComponent, {
-      height: 'calc(100vh - 1px)',
-      width: '1200px',
-      baseZIndex: 10000,
-      contentStyle: { overflow: 'auto' },
+      width: '800px',
       data: {
-        group: groupEdit
+        group: groupEdit,
+        //isReadOnly: false
       },
-      closable: false
+      closable: false,
+      showHeader: true,
+      header: header,
+      
+    
     });
     this.onClose();
   }
 
   viewGroup(group: Group) {
+    let header = 'View Group'
     this.ref = this.dialogService.open(GroupEditComponent, {
-      height: 'calc(100vh - 1px)',
-      width: '1200px',
-      baseZIndex: 10000,
+      width: '800px',
       contentStyle: { overflow: 'auto' },
       data: {
         group: group,
-        readonly: true
+        //isReadOnly: true
+      
       },
-      closable: false
+      closable: false,
+      header: header,
     });
     this.onClose();
   }
