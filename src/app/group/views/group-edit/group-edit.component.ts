@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject} from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { SelectItemGroup } from "primeng/api";
-import { ConfirmationService} from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
 import { GroupEdit } from 'src/app/group/models/GroupEdit';
 import { Group } from 'src/app/group/models/Group';
@@ -14,26 +14,32 @@ import { GroupService } from 'src/app/group/services/group.service';
 })
 export class GroupEditComponent implements OnInit {
   group: GroupEdit = new GroupEdit();
-  groupPerson: any[] = [];  
-  groupSubgroup: any[] = []; 
+  groupPerson: any[] = [];
+  groupSubgroup: any[] = [];
   selectedMember;
   selectedManager;
   selectedSubgroup;
+
   constructor(
     public ref: DynamicDialogRef,
     public dialogConf: DynamicDialogConfig,
     private groupService: GroupService
-  ) 
-  {
+  ) {
   }
 
+  isReadOnly: boolean = true;
+
   ngOnInit(): void {
-    if(this.dialogConf.data.group.id != undefined){
-      this.getGroupById(this.dialogConf.data.group.id);  
+    const groupId = this.dialogConf.data.group?.id;
+    if (groupId) {
+      
+      this.getGroupById(groupId);
+    } else {
+      this.group = new GroupEdit();
     }
   }
 
-  getGroupById(id: number){
+  getGroupById(id: number) {
     this.groupService.getGroup(id).subscribe({
       next: (res) => {
         this.group = res;
@@ -65,8 +71,8 @@ export class GroupEditComponent implements OnInit {
         next: (res: Person[]) => {
           this.groupPerson = this.mappingPerson(res);
         },
-        error: () => {},
-        complete: () => {},
+        error: () => { },
+        complete: () => { },
       });
     }
   }
@@ -77,8 +83,8 @@ export class GroupEditComponent implements OnInit {
         next: (res: Group[]) => {
           this.groupSubgroup = this.mappingGroup(res);
         },
-        error: () => {},
-        complete: () => {},
+        error: () => { },
+        complete: () => { },
       });
     }
   }
@@ -106,26 +112,26 @@ export class GroupEditComponent implements OnInit {
     ];
     this.selectedSubgroup = '';
   }
-  
-  deleteMember(member: Person){
-    if (this.group.members.indexOf(member) !== -1){
+
+  deleteMember(member: Person) {
+    if (this.group.members.indexOf(member) !== -1) {
       this.group.members.splice(this.group.members.indexOf(member), 1);
     }
   }
 
-  deleteManager(manager: Person){
-    if (this.group.managers.indexOf(manager) !== -1){
+  deleteManager(manager: Person) {
+    if (this.group.managers.indexOf(manager) !== -1) {
       this.group.managers.splice(this.group.managers.indexOf(manager), 1);
     }
-   }
+  }
 
-  deleteSubGroup(group: Group){
-    if (this.group.subgroups.indexOf(group) !== -1){
+  deleteSubGroup(group: Group) {
+    if (this.group.subgroups.indexOf(group) !== -1) {
       this.group.subgroups.splice(this.group.subgroups.indexOf(group), 1);
     }
   }
 
-  save(group: Group){
+  save(group: Group) {
     this.groupService.save(group).subscribe({
       next: () => {
         this.onClose();
@@ -135,7 +141,11 @@ export class GroupEditComponent implements OnInit {
     })
   }
 
-  onClose(){
+  isFormValid(): boolean {
+    return !!this.group.name;
+  }
+
+  onClose() {
     this.ref.close();
   }
 }
