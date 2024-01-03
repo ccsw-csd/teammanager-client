@@ -2,10 +2,13 @@
 
 ::ng-deep {
     .toolbar-header {
-        height: 56px;
+        height: 42px;
         .p-toolbar {
             background-color: #272936;
             border-radius: 0px !important;
+            
+            padding-top: 5px;
+            padding-bottom: 6px;;
           
         }
     }

@@ -18,7 +18,7 @@
         </div>
     </div>
     <button tooltipPosition="top" pButton pRipple type="button" icon="pi pi-user-plus"
-            class="p-button-lg m-2 p-button-outlined" pTooltip="Añadir grupo" (click)="createGroup()"></button>
+            class="p-button-lg m-2 p-button-outlined" pTooltip="Añadir grupo" (click)="createGroup('crear')"></button>
     
 </div>
 
@@ -117,10 +117,10 @@ sortField="name"
             </td>
             <td class="flex-none" style="width: 125px;" >
                 <button *ngIf="group.externalId !== null" pButton pRipple type="button" icon="pi pi-eye"
-                    class="p-button-rounded p-button-text" pTooltip="Visualizar" (click)="viewGroup(group)"></button>
+                    class="p-button-rounded p-button-text" pTooltip="Visualizar" (click)="viewGroup(group,'visualizar')"></button>
 
                 <button *ngIf="group.externalId === null" pButton pRipple type="button" icon="pi pi-pencil"
-                    class="p-button-rounded p-button-text" pTooltip="Editar" (click)="editGroup(group)"></button>
+                    class="p-button-rounded p-button-text" pTooltip="Editar" (click)="editGroup(group,'editar')"></button>
 
                 <button *ngIf="group.externalId === null" pButton pRipple type="button" icon="pi pi-trash"
                     class="p-button-rounded p-button-danger p-button-text" pTooltip="Eliminar"

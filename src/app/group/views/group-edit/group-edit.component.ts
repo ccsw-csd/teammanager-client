@@ -1,6 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { SelectItemGroup } from "primeng/api";
-import { ConfirmationService } from 'primeng/api';
+import { Component, OnInit} from '@angular/core';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
 import { GroupEdit } from 'src/app/group/models/GroupEdit';
 import { Group } from 'src/app/group/models/Group';
@@ -13,24 +11,32 @@ import { GroupService } from 'src/app/group/services/group.service';
   styleUrls: ['./group-edit.component.scss']
 })
 export class GroupEditComponent implements OnInit {
+  isReadOnly: boolean;
+  mode: 'editar' | 'crear' | 'visualizar';
   group: GroupEdit = new GroupEdit();
   groupPerson: any[] = [];
   groupSubgroup: any[] = [];
   selectedMember;
   selectedManager;
   selectedSubgroup;
+  
 
   constructor(
     public ref: DynamicDialogRef,
     public dialogConf: DynamicDialogConfig,
-    private groupService: GroupService
+    private groupService: GroupService,
+    public config: DynamicDialogConfig
   ) {
+    this.group = this.config.data.group;
+    this.mode = this.config.data.mode;
+    this.isReadOnly = this.mode === 'visualizar';
   }
 
-  isReadOnly: boolean = true;
+  
 
   ngOnInit(): void {
     const groupId = this.dialogConf.data.group?.id;
+    
     if (groupId) {
       
       this.getGroupById(groupId);

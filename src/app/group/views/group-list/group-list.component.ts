@@ -31,11 +31,7 @@ export class GroupListComponent implements OnInit {
     this.adminView = false;
     this.getAllGroups();
     this.resizeTable();
-    this.groups = [
-      { id:1, name: 'Grupo de Prueba', managers: 'Manager de Prueba', members: 5, subgroups: 1,externalId:'prueba'},
-      { id:2, name: 'Grupo de Prueba2', managers: 'Manager de Prueba2', members: 55, subgroups: 1,externalId:null}
-      
-    ];
+    
     this.navigatorService.getNavivagorChangeEmitter().subscribe((menuVisible) => {
       if (menuVisible) this.tableWidth = 'calc(100vw - 255px)';
       else this.tableWidth = 'calc(100vw - 55px)';
@@ -67,14 +63,15 @@ export class GroupListComponent implements OnInit {
     });
   }
 
-  createGroup() {
+  createGroup(mode: 'editar' | 'crear' | 'visualizar') {
     let header = 'New Group'
     this.ref = this.dialogService.open(GroupEditComponent, {
       width: '800px',
+      height: '420px',
       contentStyle: { overflow: 'auto' },
       data: {
         group: new Group(),
-        //isReadOnly: false
+        mode: mode
       },
       closable: false,
       header: header,
@@ -83,13 +80,14 @@ export class GroupListComponent implements OnInit {
     this.onClose(); // Podrías decidir si quieres recargar la lista después de cerrar la ventana de edición
   }
 
-  editGroup(groupEdit: Group) {
+  editGroup(groupEdit: Group, mode: 'editar' | 'crear' | 'visualizar') {
     let header = 'Edit Group'
     this.ref = this.dialogService.open(GroupEditComponent, {
       width: '800px',
+      height: '420px',
       data: {
         group: groupEdit,
-        //isReadOnly: false
+        mode: mode
       },
       closable: false,
       showHeader: true,
@@ -100,14 +98,15 @@ export class GroupListComponent implements OnInit {
     this.onClose();
   }
 
-  viewGroup(group: Group) {
+  viewGroup(group: Group, mode: 'editar' | 'crear' | 'visualizar') {
     let header = 'View Group'
     this.ref = this.dialogService.open(GroupEditComponent, {
       width: '800px',
+      height: '420px',
       contentStyle: { overflow: 'auto' },
       data: {
         group: group,
-        //isReadOnly: true
+        mode: mode
       
       },
       closable: false,
