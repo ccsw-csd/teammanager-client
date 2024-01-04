@@ -21,7 +21,7 @@
             </div>
 
             <p-listbox [options]="group.members" [listStyle]="{'height':'calc(90vh - 225px - 50px)'}"  styleClass="p-datatable-striped">
-                <ng-template let-member pTemplate="group.members" let-odd="odd">
+                <ng-template let-member pTemplate="group.members">
                     <div class="flex flex-row align-items-center">
                         <div>
                             <button *ngIf="!isReadOnly" (click)="deleteMember(member)" pButton pRipple type="button" icon="pi pi-trash" class="mt-0 p-button-text"></button>                            

@@ -37,8 +37,12 @@ export class GroupEditComponent implements OnInit {
   ngOnInit(): void {
     const groupId = this.dialogConf.data.group?.id;
     
-    if (groupId) {
-      
+    this.group = new GroupEdit();
+    this.group.members = [];
+    this.group.managers = [];
+    this.group.subgroups = [];
+
+    if (groupId) {      
       this.getGroupById(groupId);
     } else {
       this.group = new GroupEdit();
