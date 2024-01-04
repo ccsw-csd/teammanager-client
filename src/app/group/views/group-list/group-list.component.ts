@@ -29,22 +29,27 @@ export class GroupListComponent implements OnInit {
 
   ngOnInit(): void {
     this.adminView = false;
-    this.getAllGroups();
     this.resizeTable();
     
     this.navigatorService.getNavivagorChangeEmitter().subscribe((menuVisible) => {
       if (menuVisible) this.tableWidth = 'calc(100vw - 255px)';
       else this.tableWidth = 'calc(100vw - 55px)';
     }); 
+
+    this.loadData();
   }
 
-  clickAdminView(e) {
-    const adminView = e.checked;
-    if (adminView) {
+  loadData() : void {
+    if (this.adminView) {
       this.getAllGroupsAdmin();
     } else {
       this.getAllGroups();
     }
+  }
+
+  clickAdminView(e) {
+    this.adminView = e.checked;
+    this.loadData();
   }
 
   getAllGroupsAdmin() {
@@ -63,14 +68,14 @@ export class GroupListComponent implements OnInit {
     });
   }
 
-  createGroup(mode: 'editar' | 'crear' | 'visualizar') {
-    let header = 'New Group'
+  openModal(header: string, group: Group, mode: 'editar' | 'crear' | 'visualizar') {
+
     this.ref = this.dialogService.open(GroupEditComponent, {
-      width: '90%',
-      height: '80vw',
+      width: '90vw',
+      height: '90vh',
       contentStyle: { overflow: 'auto' },
       data: {
-        group: new Group(),
+        group: group,
         mode: mode
       },
       closable: false,
@@ -80,39 +85,17 @@ export class GroupListComponent implements OnInit {
     this.onClose(); // Podrías decidir si quieres recargar la lista después de cerrar la ventana de edición
   }
 
+
+  createGroup(mode: 'editar' | 'crear' | 'visualizar') {
+    this.openModal('New Group', new Group(), mode);
+  }
+
   editGroup(groupEdit: Group, mode: 'editar' | 'crear' | 'visualizar') {
-    let header = 'Edit Group'
-    this.ref = this.dialogService.open(GroupEditComponent, {
-      width: '90%',
-      height: '80vw',
-      data: {
-        group: groupEdit,
-        mode: mode
-      },
-      closable: false,
-      showHeader: true,
-      header: header,
-      
-    
-    });
-    this.onClose();
+    this.openModal('Edit Group', groupEdit, mode);
   }
 
   viewGroup(group: Group, mode: 'editar' | 'crear' | 'visualizar') {
-    let header = 'View Group'
-    this.ref = this.dialogService.open(GroupEditComponent, {
-      width: '800px',
-      height: '420px',
-      contentStyle: { overflow: 'auto' },
-      data: {
-        group: group,
-        mode: mode
-      
-      },
-      closable: false,
-      header: header,
-    });
-    this.onClose();
+    this.openModal('Edit Group', group, mode);
   }
 
   resizeTable() {
@@ -147,7 +130,8 @@ export class GroupListComponent implements OnInit {
   onClose(): void {
     this.ref.onClose.subscribe(
       (results: any) => {
-        this.ngOnInit();
+        if (results)
+        this.loadData();
       }
     )
   }

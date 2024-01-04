@@ -2,89 +2,83 @@
 <div class="max flex flex-column mt-1 gap-3">
    
     <div class="flex flex-row flex-1 gap-5">
-        <span class="flex-2 p-float-label">
-            <input type="text" style="width: 365px;" [(ngModel)]="group.name" pInputText required  />
+        <div class="flex-1 p-float-label">
+            <input type="text" style="width: 100%;" [(ngModel)]="group.name" pInputText required  />
             <label>Group Name</label>
-            <p-inputSwitch class="flex-none ml-5" ></p-inputSwitch>
+        </div>
+        <div class="flex flex-1 align-items-center gap-2">
+            <p-inputSwitch class="flex-none" ></p-inputSwitch>
             Visible for members
-        </span>
+        </div>
     </div>
 
-   
-    <div class="flex flex-row flex-1 gap-5">
-        <span class="flex-2 p-float-label">
-            <p-autoComplete [suggestions]="groupPerson" [forceSelection]="true" [showEmptyMessage]="true"
-                [(ngModel)]="selectedMember" (completeMethod)="searchPerson($event)" (onSelect)="assignMember()"
-                field="field" >
-            </p-autoComplete>
-            <label>Members: search person</label>
-        </span>
-        <span class="flex-2 p-float-label">
-            <p-autoComplete [suggestions]="groupPerson" [forceSelection]="true" [showEmptyMessage]="true"
-                [(ngModel)]="selectedManager" (completeMethod)="searchPerson($event)" (onSelect)="assignManager()"
-                field="field" >
-            </p-autoComplete>
-            <label>Managers: search person</label>
-        </span>
-    </div>
+    <div class="flex flex-row gap-5"> 
+        <div class="flex flex-1 flex-column gap-2">
+            <div class="p-float-label">
+                <p-autoComplete [suggestions]="groupPerson" [forceSelection]="true" [showEmptyMessage]="true" [(ngModel)]="selectedMember" (completeMethod)="searchPerson($event)" (onSelect)="assignMember()" field="field" >
+                </p-autoComplete>
+                <label>Members: search person</label>
+            </div>
 
-    <div class="flex flex-row flex-1 gap-5"> 
-        <span class="flex-2 p-float-label">
-            <p-listbox [options]="group.members" [listStyle]="{'max-height':'410px'}" >
-                <ng-template let-member pTemplate="group.members">
-                    <div>
-                        <button *ngIf="!isReadOnly" (click)="deleteMember(member)" pButton pRipple type="button"
-                            icon="pi pi-trash" class="mt-0 p-button-text"></button>
-                    </div>
-                    <div>
-                        <span>{{member.name}}&nbsp;{{member.lastname}}</span>
+            <p-listbox [options]="group.members" [listStyle]="{'height':'calc(90vh - 225px - 50px)'}"  styleClass="p-datatable-striped">
+                <ng-template let-member pTemplate="group.members" let-odd="odd">
+                    <div class="flex flex-row align-items-center">
+                        <div>
+                            <button *ngIf="!isReadOnly" (click)="deleteMember(member)" pButton pRipple type="button" icon="pi pi-trash" class="mt-0 p-button-text"></button>                            
+                        </div>
+                        <div>
+                            <span>{{member.name}}&nbsp;{{member.lastname}}</span>
+                        </div>
                     </div>
                 </ng-template>
             </p-listbox>
-        </span>
+        </div>
         
-        <span class="flex-2 p-float-label">
-            <p-listbox [options]="group.managers" [listStyle]="{'max-height':'200px'}" >
-                <ng-template let-manager pTemplate="group.managers">
-                    <div>
-                        <button *ngIf="!isReadOnly" (click)="deleteManager(manager)" pButton pRipple type="button"
-                            icon="pi pi-trash" class="mt-0 p-button-text"></button>
-                    </div>
-                    <div>
-                        <span>{{manager.name}}&nbsp;{{manager.lastname}}</span>
-                    </div>
-                </ng-template>
-            </p-listbox>
-        </span>
+        <div class="flex flex-1 flex-column gap-5">
+
+            <div class="flex flex-column gap-2">
+                <div class="flex-1 p-float-label">
+                    <p-autoComplete [suggestions]="groupPerson" [forceSelection]="true" [showEmptyMessage]="true" [(ngModel)]="selectedManager" (completeMethod)="searchPerson($event)" (onSelect)="assignManager()" field="field" >
+                    </p-autoComplete>
+                    <label>Managers: search person</label>
+                </div>
+        
+                <p-listbox [options]="group.managers" [listStyle]="{'height':'calc((90vh - 360px)/2)'}">
+                    <ng-template let-manager pTemplate="group.managers">
+                        <div>
+                            <button *ngIf="!isReadOnly" (click)="deleteManager(manager)" pButton pRipple type="button" icon="pi pi-trash" class="mt-0 p-button-text"></button>
+                        </div>
+                        <div>
+                            <span>{{manager.name}}&nbsp;{{manager.lastname}}</span>
+                        </div>
+                    </ng-template>
+                </p-listbox>
+            </div>
+            
+
+            <div class="flex flex-column gap-2">
+                <div class="flex-1 p-float-label">
+                    <p-autoComplete  [suggestions]="groupSubgroup" [forceSelection]="true" [showEmptyMessage]="true" [(ngModel)]="selectedSubgroup" (completeMethod)="searchSubgroup($event)" (onSelect)="assignSubgroup()" field="field">
+                    </p-autoComplete>
+                    <label >Subgroups: search groups</label>
+                </div>
+            
+                <p-listbox [options]="group.subgroups" [listStyle]="{'height':'calc((90vh - 360px)/2)'}">
+                    <ng-template let-subgroup pTemplate="group.subgroups">
+                        <div>
+                            <button *ngIf="!isReadOnly" (click)="deleteSubGroup(subgroup)" pButton pRipple type="button" icon="pi pi-trash" class="mt-0 p-button-text"></button>
+                        </div>
+                        <div>
+                            <span>{{subgroup.name}}</span>
+                        </div>
+                    </ng-template>
+                </p-listbox>
+            </div>
+        </div>
     </div>
     
-    <div class="flex flex-row flex-1 gap-5 justify-content-end">
-        <span style="width: 365px;" class="flex-none p-float-label">
-            <p-autoComplete  [suggestions]="groupSubgroup" [forceSelection]="true" [showEmptyMessage]="true"
-                [(ngModel)]="selectedSubgroup" (completeMethod)="searchSubgroup($event)" (onSelect)="assignSubgroup()"
-                field="field">
-            </p-autoComplete>
-            <label >Subgroups: search groups</label>
-        </span>
-
-    </div>
-    <div class="flex flex-row flex-1 gap-5 justify-content-end">
-        <p-listbox style="width: 365px;" [options]="group.subgroups" [listStyle]="{'max-height':'200px'}">
-            <ng-template let-subgroup pTemplate="group.subgroups">
-                <div>
-                    <button *ngIf="!isReadOnly" (click)="deleteSubGroup(subgroup)" pButton pRipple type="button"
-                        icon="pi pi-trash" class="mt-0 p-button-text"></button>
-                </div>
-                <div>
-                    <span>{{subgroup.name}}</span>
-                </div>
-            </ng-template>
-        </p-listbox>
-    </div>
-    <div class="flex justify-content-end gap-2" style="margin-bottom: 5px; margin-top: 70px;">
-        <button pButton pRipple label="Close" class="p-button p-button-secondary p-button-outlined"
-            (click)="onClose()"></button>
-        <button *ngIf="!isReadOnly" pButton pRipple label="Save" class="p-button p-button-primary p-button-outlined"
-            [disabled]="!isFormValid()" (click)="save(group)"></button>
+    <div class="flex justify-content-end gap-2 pt-2">
+        <button pButton pRipple label="Close" class="p-button p-button-secondary p-button-outlined" (click)="onClose(false)"></button>
+        <button *ngIf="!isReadOnly" pButton pRipple label="Save" class="p-button p-button-primary p-button-outlined" [disabled]="!isFormValid()" (click)="save(group)"></button>
     </div>             
 </div>    

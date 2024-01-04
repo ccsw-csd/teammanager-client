@@ -86,3 +86,14 @@
 .p-datatable.p-datatable-hoverable-rows .p-datatable-tbody>tr:not(.p-highlight):hover {
     background: rgba(200, 200, 255, 0.5);
 }
+
+
+.p-listbox-item {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    min-height: 45px;
+}
+
+.p-listbox-item:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.04);
+}

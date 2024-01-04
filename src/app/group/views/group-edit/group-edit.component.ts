@@ -140,7 +140,7 @@ export class GroupEditComponent implements OnInit {
   save(group: Group) {
     this.groupService.save(group).subscribe({
       next: () => {
-        this.onClose();
+        this.onClose(true);
       },
       error: () => {
       }
@@ -151,7 +151,7 @@ export class GroupEditComponent implements OnInit {
     return !!this.group.name;
   }
 
-  onClose() {
-    this.ref.close();
+  onClose(isChange: boolean) {
+    this.ref.close(isChange);
   }
 }
