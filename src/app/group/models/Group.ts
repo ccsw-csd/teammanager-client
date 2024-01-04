@@ -1,7 +1,7 @@
 export class Group{
     id:number;
     name:string;
-    managers:string;
+    manager:string;
     members: number;
     subgroups: number;
     externalId: string;
