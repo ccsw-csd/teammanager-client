@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { environment } from 'src/environments/environment';
 import { Group } from '../models/Group';
 import { Person } from '../models/Person';
+import { GroupEdit } from '../models/GroupEdit';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +21,8 @@ export class GroupService {
     return this.http.get<Group[]>(environment.server+"/group/");
   }
 
-  getGroup(id: number): Observable<Group>{
-    return this.http.get<Group>(environment.server + "/group/"+ id);
+  getGroup(id: number): Observable<GroupEdit>{
+    return this.http.get<GroupEdit>(environment.server + "/group/"+ id);
   }
 
   searchGroup(filterName: string): Observable<Group[]> {

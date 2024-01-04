@@ -66,8 +66,8 @@ export class GroupListComponent implements OnInit {
   createGroup(mode: 'editar' | 'crear' | 'visualizar') {
     let header = 'New Group'
     this.ref = this.dialogService.open(GroupEditComponent, {
-      width: '800px',
-      height: '420px',
+      width: '90%',
+      height: '80vw',
       contentStyle: { overflow: 'auto' },
       data: {
         group: new Group(),
@@ -83,8 +83,8 @@ export class GroupListComponent implements OnInit {
   editGroup(groupEdit: Group, mode: 'editar' | 'crear' | 'visualizar') {
     let header = 'Edit Group'
     this.ref = this.dialogService.open(GroupEditComponent, {
-      width: '800px',
-      height: '420px',
+      width: '90%',
+      height: '80vw',
       data: {
         group: groupEdit,
         mode: mode

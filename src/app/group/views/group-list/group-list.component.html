@@ -24,26 +24,15 @@
 
 
 
-<p-table [style]="{'height':'calc(100vh - 175px)','width':tableWidth}" 
-[scrollable]="true" 
-scrollHeight="flex"
-selectionMode="single" 
-[value]="groups" 
-[responsive]="true" 
-styleClass="p-datatable-striped" 
-[paginator]="true"
-[rows]="20" 
-sortField="name" 
-[sortOrder]="1">
+<p-table [style]="{'height':'calc(100vh - 175px)','width':tableWidth}" [scrollable]="true" scrollHeight="flex" selectionMode="single" [value]="groups" 
+    [responsive]="true" styleClass="p-datatable-striped" [paginator]="true" [rows]="20" sortField="name" [sortOrder]="1">
     <ng-template pTemplate="header">
        <tr>
             <th class="flex flex-column align-items-center justify-content-center" >
-
                 <div class="flex flex-row w-full top-header" pSortableColumn="name">
                     <span class="flex flex-1 justify-content-center">Group Name</span>
                     <p-sortIcon field="name"></p-sortIcon>
-                </div>
-                
+                </div>                
                 <div class="w-full foot-header">
                     <p-columnFilter class="w-full" type="text" field="name" matchMode="contains" [showMenu]="false" [showClearButton]="false">
                         <ng-template pTemplate="filter" let-value let-filter="filterCallback">
@@ -52,13 +41,12 @@ sortField="name"
                     </p-columnFilter>
                 </div>
             </th>
-            <th class="flex flex-column align-items-center justify-content-center">
-                
+
+            <th class="flex-none flex-column align-items-center justify-content-center" style="width: 800px">
                 <div class="flex flex-row w-full top-header" pSortableColumn="admin">
                     <span class="flex flex-1 justify-content-center">Administrators</span>
                     <p-sortIcon field="admin"></p-sortIcon>
                 </div >
-
                 <div class="w-full foot-header">
                     <p-columnFilter class="w-full" type="text" field="admin" matchMode="contains" [showMenu]="false" [showClearButton]="false">
                         <ng-template pTemplate="filter" let-value let-filter="filterCallback">
@@ -67,12 +55,12 @@ sortField="name"
                     </p-columnFilter>
                 </div>
             </th>
-            <th class="flex flex-column align-items-center justify-content-center" >
+
+            <th class="flex-none w-7rem flex-column align-items-center justify-content-center" >
                 <div class="flex flex-row w-full top-header" pSortableColumn="members">
-                    <span class="flex flex-1 justify-content-center">Members</span>
+                    <span class="flex flex-1 justify-content-center"># Member</span>
                     <p-sortIcon field="members"></p-sortIcon>
-                </div>
-                    
+                </div>                    
                 <div class="w-full foot-header">
                     <p-columnFilter class="w-full" type="text" field="members" matchMode="contains" [showMenu]="false" [showClearButton]="false">
                         <ng-template pTemplate="filter" let-value let-filter="filterCallback">
@@ -81,12 +69,12 @@ sortField="name"
                     </p-columnFilter>
                 </div>
             </th>
-            <th class="flex w-1 flex-column align-items-center justify-content-center" >
+
+            <th class="flex-none w-7rem flex-column align-items-center justify-content-center" >
                 <div  class="flex flex-row w-full top-header" pSortableColumn="subgroups">
-                    <span class="flex flex-1 justify-content-center">Subgroups</span>
+                    <span class="flex flex-1 justify-content-center"># Subgroup</span>
                     <p-sortIcon field="subgroups"></p-sortIcon>
-                </div>
-                
+                </div>                
                 <div class="w-full foot-header">
                     <p-columnFilter class="w-full" type="text" field="subgroups" matchMode="contains" [showMenu]="false" [showClearButton]="false">
                         <ng-template pTemplate="filter" let-value let-filter="filterCallback">
@@ -94,8 +82,9 @@ sortField="name"
                         </ng-template>
                     </p-columnFilter>
                 </div>
-            </th>              
-            <th class="buttons flex-none flex-column" style="width: 125px;">
+            </th>     
+
+            <th class="buttons flex-none w-6rem flex-column">
                 <div class="flex flex-row w-full top-header"></div>
                 <div class="w-full foot-header"></div>
             </th>  
@@ -103,19 +92,19 @@ sortField="name"
     </ng-template>
     <ng-template pTemplate="body" let-group let-columns="columns">
         <tr>
-            <td class="flex-1">
+            <td class="flex">
                 {{group.name}}
             </td>
-            <td class="flex-1"><div>{{group.managers}}</div>
+            <td class="flex-none" style="width: 800px"><div class="white-space-nowrap overflow-hidden text-overflow-ellipsis">{{group.manager}}</div>
                     
             </td>
-            <td class="flex-1 ">
+            <td class="flex-none w-7rem justify-content-end">
                 <p class="ml-8">{{group.members}}</p>
             </td>
-            <td class="flex-1">
+            <td class="flex-none w-7rem justify-content-end">
                 <p class="ml-8">{{group.subgroups}}</p>
             </td>
-            <td class="flex-none" style="width: 125px;" >
+            <td class="flex-none w-6rem">
                 <button *ngIf="group.externalId !== null" pButton pRipple type="button" icon="pi pi-eye"
                     class="p-button-rounded p-button-text" pTooltip="Visualizar" (click)="viewGroup(group,'visualizar')"></button>
 
