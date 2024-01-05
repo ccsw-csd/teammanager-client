@@ -5,6 +5,7 @@ import { DropdownEntry } from '../model/dropdown-entry';
 import { Festive } from 'src/app/holiday/model/Festive';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
 import { ConfirmationService } from 'primeng/api';
+import { CalendarService } from '../../calendar.service';
 
 @Component({
   selector: 'app-edit-calendar',
@@ -34,7 +35,9 @@ export class CalendarComponent{
   selectedCenter: number;
 
 
-  constructor(public dialogConf: DynamicDialogConfig) {
+  constructor(public dialogConf: DynamicDialogConfig,
+              private calendarService: CalendarService, 
+              public ref: DynamicDialogRef) {
     this.calendars = new Map();
     
 
@@ -192,8 +195,8 @@ export class CalendarComponent{
           this.oldFestives.includes(day)
         ){
           //Quitar del array de eliminación el dia que ya estaba dado de alta en la BD
-            const index = this.oldFestives.indexOf(day);
-            this.oldFestives.splice(index,1);
+          const index = this.oldFestives.indexOf(day);
+          this.oldFestives.splice(index,1);
         }else{
           if(!this.newFestives.includes(day)){
             this.newFestives.push(day);
@@ -208,10 +211,12 @@ export class CalendarComponent{
   close(){
     console.log("Nuevos festivos: ", this.newFestives);
     console.log("Festivos antiguos a eliminar: ", this.oldFestives);
+    this.ref.close();
   }
 
   update():void{
-    
+    this.calendarService.update(this.newFestives);
+    this.calendarService.delete(this.oldFestives);
   }
 
   private isSameDate(festive: Festive, newDate: Date): boolean {

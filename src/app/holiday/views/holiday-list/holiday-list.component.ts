@@ -41,7 +41,7 @@ export class HolidayListComponent implements OnInit {
       next: (res: Festive[]) => {
         this.festives = res;
 
-        this.ref = this.dialogService.open(CalendarComponent, {
+        const dialogRef = this.dialogService.open(CalendarComponent, {
           height: 'calc(100vh - 1px)',
           width: '1200px',
           baseZIndex: 10000,
