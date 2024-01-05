@@ -34,3 +34,26 @@
 .calendar-item {
   margin: 5px; /* Esto agrega un espacio de 5 píxeles alrededor de cada calendario */
 }
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+.button {
+  min-width: 150px;
+  height: 45px;
+  cursor: pointer;
+}
+
+.button-close {
+  background-color: white;
+  border: 1px solid #ff5770;
+  color: #ff5770;
+}
+
+.button-update {
+  background-color: #0070ad;
+  color: white;
+}

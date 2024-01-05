@@ -29,6 +29,9 @@ export class CalendarComponent{
   years: DropdownEntry[] = [];
   calendars: Map<String, Map<String, MetadataDay>>;
   festives: Festive[];
+  oldFestives: MetadataDay[] = [];
+  newFestives: MetadataDay[] = [];
+  selectedCenter: number;
 
 
   constructor(public dialogConf: DynamicDialogConfig) {
@@ -106,6 +109,7 @@ export class CalendarComponent{
 
     if(this.dialogConf.data.festivesData != undefined){
       this.festives = this.dialogConf.data.festivesData;
+      this.selectedCenter = this.festives[0].centerId;
     }
 
     for (let month = 0; month < 12; month++) {
@@ -157,18 +161,68 @@ export class CalendarComponent{
 
   selectDate(day:MetadataDay){
 
-    if(day){
+    if(day && day.type.name != 'Fin de semana'){
       const isFestive = day.type.name === "Festivo";
 
+      const newDate = new Date();
+      newDate.setDate(day.day);
+      newDate.setMonth(day.month+1);
+      newDate.setFullYear(day.year);
       if(isFestive){
         day.originalType = day.type;
         day.type = this.scheduleTypes.find(type => type.name === 'Jornada normal (8h 25min)');
+        if(this.festives.some(festive => this.isSameDate(festive, newDate)) &&
+          !this.oldFestives.includes(day)
+        ){
+          this.oldFestives.push(day);
+        }else{
+          //Comprobar que el nuevo dia festivo no esté en el array de nuevos dias festivos
+          //Si lo está, se elimina
+          if(this.newFestives.includes(day)){
+            const index = this.newFestives.indexOf(day);
+            this.newFestives.splice(index,1);
+          }
+        }
       }else{
         day.originalType = day.type;
         day.type = this.scheduleTypes.find(type => type.name === 'Festivo');
+
+        //Comprobar si es un dia festivo que ya existia pero se habia puesto en la cola de eliminación
+        if(this.festives.some(festive => this.isSameDate(festive, newDate)) &&
+          this.oldFestives.includes(day)
+        ){
+          //Quitar del array de eliminación el dia que ya estaba dado de alta en la BD
+            const index = this.oldFestives.indexOf(day);
+            this.oldFestives.splice(index,1);
+        }else{
+          if(!this.newFestives.includes(day)){
+            this.newFestives.push(day);
+          }
+        }
       }
 
       this.clickEvent.emit(day);
     }
+  }
+
+  close(){
+    console.log("Nuevos festivos: ", this.newFestives);
+    console.log("Festivos antiguos a eliminar: ", this.oldFestives);
+  }
+
+  update():void{
+    
+  }
+
+  private isSameDate(festive: Festive, newDate: Date): boolean {
+    let date = String(festive.date).slice(-2);
+    let festiveDay = parseInt(date, 10);
+    if (festive.year === newDate.getFullYear() &&
+        festive.month === newDate.getMonth() &&
+        festiveDay === newDate.getDate() ){              
+          return true;
+    }
+
+    return false;
   }
 }
