@@ -27,9 +27,9 @@ export class CalendarService {
         element.month = metadataDay.month+1;
         element.year = metadataDay.year;
         if(element.month < 10){
-          date = new Date(""+metadataDay.year+"-0"+element.month+"-"+metadataDay.day);
+          date = new Date(metadataDay.year+"-0"+element.month+"-"+metadataDay.day);
         }else{
-          date = new Date(""+metadataDay.year+"-"+element.month+"-"+metadataDay.day);
+          date = new Date(metadataDay.year+"-"+element.month+"-"+metadataDay.day);
         }
         
         element.date = date;

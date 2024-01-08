@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
 import { CenterWithFestives } from 'src/app/holiday/model/CenterWithFestives';
-import { Center } from 'src/app/holiday/model/Center';
 import { Festive } from 'src/app/holiday/model/Festive';
 import { HolidayService } from '../../holiday.service';
+import { HolidayEditComponent } from '../holiday-edit/holiday-edit.component';
 import { CalendarComponent } from 'src/app/calendar/views/calendar/calendar.component';
 
 @Component({
@@ -41,7 +41,7 @@ export class HolidayListComponent implements OnInit {
       next: (res: Festive[]) => {
         this.festives = res;
 
-        const dialogRef = this.dialogService.open(CalendarComponent, {
+        const dialogRef = this.dialogService.open(HolidayEditComponent, {
           height: 'calc(100vh - 1px)',
           width: '1200px',
           baseZIndex: 10000,
@@ -49,7 +49,7 @@ export class HolidayListComponent implements OnInit {
           data: {
             festivesData: this.festives
           },
-          closable: true
+          closable: false
         });
       },
     });

@@ -1,0 +1,60 @@
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; 
+  }
+  .year-selector {
+    padding: 10px;
+    margin: 0 auto 20px;
+    position: relative;
+    top: -30px;
+    font-size: 18px;
+    text-align: center; 
+    font-family:  Helvetica;
+    width: 200px; 
+  }
+  
+  .legend {
+    width: 24px;
+    height: 16px;
+    margin: 2px 10px 0px 0px;
+    border: 1px solid #bebebe;
+    font-family: Helvetica;
+    font-size: 10px;
+  }
+  
+  .legend-day {
+    width: 24px;
+    height: 16px;
+    margin: 0px 10px 0px 0px;
+    font-style: italic;
+  }
+  
+  .calendar-item {
+    margin: 5px; 
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+  }
+  
+  .button {
+    min-width: 150px;
+    height: 45px;
+    cursor: pointer;
+  }
+  
+  .button-close {
+    background-color: white;
+    border: 1px solid #ff5770;
+    color: #ff5770;
+  }
+  
+  .button-update {
+    background-color: #0070ad;
+    color: white;
+  }
+  

@@ -16,14 +16,21 @@ import { PaginatorModule } from "primeng/paginator";
 import { TabViewModule } from 'primeng/tabview';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { HolidayEditcalendarComponent } from './views/holiday-editcalendar/holiday-editcalendar.component';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CalendarModule } from 'primeng/calendar';
+import {  DropdownModule } from 'primeng/dropdown';
 @NgModule({
   declarations: [
     HolidayListComponent,
-    HolidayEditComponent
+    HolidayEditComponent,
+    HolidayEditcalendarComponent
   ],
   imports: [
     CommonModule,
+    DropdownModule,
     AutoCompleteModule,
     ListboxModule,
     TableModule,
@@ -39,6 +46,10 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
     TabViewModule,
     InputSwitchModule,
     ScrollPanelModule,
+    CalendarModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ProgressSpinnerModule,
   ]
 })
 export class HolidayModule { }
