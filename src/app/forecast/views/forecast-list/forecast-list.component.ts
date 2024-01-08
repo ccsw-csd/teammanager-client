@@ -1,73 +1,87 @@
-import { Component, OnInit } from '@angular/core';
-import { Group } from 'src/app/group/models/Group';
-import { GroupService } from 'src/app/group/services/group.service';
-import { ConfirmationService } from 'primeng/api';
-import { DialogService, DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ConfirmationService, SortEvent } from 'primeng/api';
 import { NavigatorService } from 'src/app/core/services/navigator.service';
-import { Forecast } from '../../model/forecast';
-import { FilterService, PrimeNGConfig, SortEvent } from 'primeng/api';
+import { Group } from 'src/app/group/models/Group';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
+import { GroupService } from 'src/app/group/services/group.service';
+import { Table } from 'primeng/table';
+
 
 @Component({
   selector: 'app-forecast-list',
   templateUrl: './forecast-list.component.html',
   styleUrls: ['./forecast-list.component.scss'],
   providers: [DialogService, DynamicDialogRef, DynamicDialogConfig, ConfirmationService]
+
 })
 export class ForecastListComponent implements OnInit {
+  @ViewChild(Table) table: Table;
   groups: Group[] = [];
-  columnNames: any[];
-  selectedColumnNames : any[];
   adminView: boolean = false;
   tableWidth: string;
-  forecast: Forecast[];
   defaultFilters: any = { };
-  
+  columnNames: any[];
+  selectedColumnNames : any[];
+  totalGroups: number;
+
   constructor(
+    
     private ref: DynamicDialogRef,
     private dialogService: DialogService,
     private groupService: GroupService,
     private confirmationService: ConfirmationService,
     private navigatorService: NavigatorService,
   ) { }
-  
-
 
   ngOnInit(): void {
     this.adminView = false;
     this.resizeTable();
-    this.navigatorService.getNavivagorChangeEmitter().subscribe(menuVisible => {
+    this.navigatorService.getNavivagorChangeEmitter().subscribe((menuVisible) => {
       if (menuVisible) this.tableWidth = 'calc(100vw - 255px)';
       else this.tableWidth = 'calc(100vw - 55px)';
     });
+
     this.columnNames = [
-      { header: 'Group Name', composeField: 'name',field: 'name', filterType: 'input' },
-      { header: 'Administrators', composeField: 'manager',field: 'manager', filterType: 'input' },
-      { header: 'Members', composeField: 'members',field: 'members', filterType: 'input' },
-      { header: 'Subgroups', composeField: 'manager',field: 'manager', filterType: 'input' }
+      { header: 'Group Name',     composeField: 'name',           field: 'name',            filterType: 'input' },
+      { header: 'Administrators', composeField: 'manager',        field: 'manager',  filterType: 'input' },
+      { header: 'Members',        composeField: 'members',        field: 'members',         filterType: 'input' },
+      { header: 'Subgroups',      composeField: 'subgroups',       field: 'subgroups',        filterType: 'input' },
     ];
 
     this.selectedColumnNames = this.loadSelected();
     this.loadData();
   }
 
-  onColReorder(event): void {
-    this.saveSelected(this.selectedColumnNames);
-  }
-
-  saveSelected(selectedColumnNames: any[]) {
-    localStorage.setItem('internListColumns', JSON.stringify(selectedColumnNames.map(e => e.header)));
-  }
-
   loadData() : void {
     if (this.adminView) {
       this.getAllGroupsAdmin();
     } else {
-      this.getAllGroups();
+      this.getAllGroups(true);
     }
+  }
+  getAllGroupsAdmin() {
+    this.groupService.getAllGroupsAdmin().subscribe({
+      next: (res: Group[]) => {
+        console.log(res)
+        this.groups = res;
+      },
+    });
+  }
+
+  getAllGroups(defaultFilters : boolean) {
+    this.groupService.getAllGroups().subscribe({
+      next: (res: Group[]) => {
+        console.log(res)
+        this.groups = res;
+        this.totalGroups = this.groups.length;
+        if (defaultFilters) this.setDefaultFilters();
+      },
+    });
+    
   }
 
   loadSelected(): any[] {
-    let selectedColumnNames: any = localStorage.getItem('internListColumns');
+    let selectedColumnNames: any = localStorage.getItem('forecastListColumns');
     if (selectedColumnNames == null) return this.columnNames;
 
     selectedColumnNames = JSON.parse(selectedColumnNames);
@@ -81,34 +95,32 @@ export class ForecastListComponent implements OnInit {
     return columns;
   }  
 
-  clickAdminView(e) {
-    this.adminView = e.checked;
-    this.loadData();
-  }
-
-  getAllGroupsAdmin() {
-    this.groupService.getAllGroupsAdmin().subscribe({
-      next: (res: Group[]) => {
-        this.groups = res;
-      },
-    });
-  }
-
-  getAllGroups() {
-    this.groupService.getAllGroups().subscribe({
-      next: (res: Group[]) => {
-        this.groups = res;
-      },
-    });
-  }
-
-  resizeTable(){
-    if(document.getElementById("p-slideMenu")){
+  resizeTable() {
+    if (document.getElementById('p-slideMenu')) {
       this.tableWidth = 'calc(100vw - 255px)';
-    }else{
+    } else {
       this.tableWidth = 'calc(100vw - 55px)';
     }
   }
+
+  onColReorder(event): void {
+    this.saveSelected(this.selectedColumnNames);
+  }
+
+  saveSelected(selectedColumnNames: any[]) {
+    localStorage.setItem('forecastListColumns', JSON.stringify(selectedColumnNames.map(e => e.header)));
+  }
+
+  setDefaultFilters() {
+    this.defaultFilters = {};
+  
+    this.columnNames.forEach((column) => {
+      if (column.filterType === 'input') {
+        this.defaultFilters[column.composeField] = { value: '' };
+      }
+    });
+  }
+  
 
   customSort(event: SortEvent) {
     event.data.sort((data1, data2) => {
@@ -128,5 +140,12 @@ export class ForecastListComponent implements OnInit {
         return event.order * result;
     });
   }
+
+  clickAdminView(e) {
+    this.adminView = e.checked;
+    this.loadData();
+  }
+
+  
 
 }
