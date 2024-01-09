@@ -102,7 +102,7 @@ export class HolidayEditComponent{
 
     const metadataDay = new Map<String, MetadataDay>();
     const normalDay = this.scheduleTypes[1];
-
+    let idF = 0;
     if(this.dialogConf.data.festivesData != undefined){
       this.festives = this.dialogConf.data.festivesData;
       this.selectedCenter = this.festives[0].centerId;
@@ -121,7 +121,8 @@ export class HolidayEditComponent{
             let festiveDay = parseInt(date, 10);
             if (festive.year === Number(this.selectedYearAux.code) &&
                 festive.month === month + 1 &&
-                festiveDay === day ){              
+                festiveDay === day ){     
+              idF = festive.id;         
               return true;
             }
           
@@ -144,6 +145,7 @@ export class HolidayEditComponent{
             year: parseInt(this.selectedYearAux.code),
             originalType: type,
             type: type,
+            id: idF,
           });
 
           const key = month + '_' + day;
@@ -220,7 +222,7 @@ export class HolidayEditComponent{
     if(this.oldFestives.length > 0){
       const festive = new Festive();
       for (const md of this.oldFestives) {
-        this.holidayService.delete(md.id);
+        this.holidayService.delete(md.id).subscribe();
       }
     }
 
@@ -229,21 +231,6 @@ export class HolidayEditComponent{
 
   formatDate(metadataDay:MetadataDay):Date{
     let date: Date;
-    /*
-    if(metadataDay.month < 10){
-      if(metadataDay.day < 10){
-        date = new Date(""+metadataDay.year+"-0"+(metadataDay.month+1)+"-0"+metadataDay.day);
-      }else{
-        date = new Date(""+metadataDay.year+"-0"+(metadataDay.month+1)+"-"+metadataDay.day);
-      }
-    }else{
-      if(metadataDay.day < 10){
-        date = new Date(""+metadataDay.year+"-"+(metadataDay.month+1)+"-0"+metadataDay.day);
-      }else{
-        date = new Date(""+metadataDay.year+"-"+(metadataDay.month+1)+"-"+metadataDay.day);
-      }
-    }
-    */
     date = new Date(""+metadataDay.year+"-"+(metadataDay.month+1)+"-"+metadataDay.day);
     return date;
   }
