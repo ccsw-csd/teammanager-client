@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { CenterWithFestives } from './model/CenterWithFestives';
 import { environment } from 'src/environments/environment';
 import { Festive } from './model/Festive';
-import { MetadataDay } from './model/metadata-day';
 
 @Injectable({
   providedIn: 'root'

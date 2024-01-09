@@ -5,7 +5,6 @@ import { CenterWithFestives } from 'src/app/holiday/model/CenterWithFestives';
 import { Festive } from 'src/app/holiday/model/Festive';
 import { HolidayService } from '../../holiday.service';
 import { HolidayEditComponent } from '../holiday-edit/holiday-edit.component';
-import { CalendarComponent } from 'src/app/calendar/views/calendar/calendar.component';
 
 @Component({
   selector: 'app-holiday-list',
