@@ -25,6 +25,7 @@ export class HolidayListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllCenters();
+    
   }
 
   getAllCenters() {
@@ -50,6 +51,10 @@ export class HolidayListComponent implements OnInit {
             festivesData: this.festives
           },
           closable: false
+        });
+
+        dialogRef.onClose.subscribe((result: any) => {
+          this.getAllCenters();
         });
       },
     });
