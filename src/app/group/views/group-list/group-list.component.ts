@@ -71,8 +71,8 @@ export class GroupListComponent implements OnInit {
   openModal(header: string, group: Group, mode: 'editar' | 'crear' | 'visualizar') {
 
     this.ref = this.dialogService.open(GroupEditComponent, {
-      width: '90vw',
-      height: '90vh',
+      width: '1000px',
+      height: '750px',
       contentStyle: { overflow: 'auto' },
       data: {
         group: group,

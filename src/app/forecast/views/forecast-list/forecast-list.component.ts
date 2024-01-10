@@ -5,6 +5,7 @@ import { Group } from 'src/app/group/models/Group';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
 import { GroupService } from 'src/app/group/services/group.service';
 import { Table } from 'primeng/table';
+import { ForecastDetailComponent } from '../forecast-detail/forecast-detail.component';
 
 
 @Component({
@@ -138,6 +139,19 @@ export class ForecastListComponent implements OnInit {
         else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
 
         return event.order * result;
+    });
+  }
+
+  viewGroup(group:Group, header: string){
+    this.ref = this.dialogService.open(ForecastDetailComponent,{
+      width: '1000px',
+      height: '750px',
+      contentStyle: { overflow: 'auto' },
+      data: {
+        group: group,
+      },
+      closable: false,
+      header: header,
     });
   }
 
