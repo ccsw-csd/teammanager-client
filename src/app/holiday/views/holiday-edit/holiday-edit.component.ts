@@ -32,6 +32,7 @@ export class HolidayEditComponent{
   oldFestives: MetadataDay[] = [];
   newFestives: MetadataDay[] = [];
   selectedCenter: number;
+  centerName: String;
 
 
   constructor(public dialogConf: DynamicDialogConfig,
@@ -41,10 +42,12 @@ export class HolidayEditComponent{
   }
 
   ngOnInit(): void {
+
+    this.centerName = this.dialogConf.data.centerName;
     this.calendars = new Map();
 
     const actualYear = new Date().getFullYear() ;
-    for (let i = actualYear -2; i <= actualYear + 2; i++) {
+    for (let i = actualYear; i <= actualYear + 1; i++) {
       this.years.push(
         new DropdownEntry({ code: i.toString(), name: i.toString() })
       );
@@ -146,7 +149,7 @@ export class HolidayEditComponent{
             originalType: type,
             type: type,
             id: idF,
-          });
+          });          
 
           const key = month + '_' + day;
           metadataDay.set(key, metadata);
@@ -161,11 +164,11 @@ export class HolidayEditComponent{
 
     if(day && day.type.name != 'Fin de semana'){
       const isFestive = day.type.name === "Festivo";
-
       const newDate = new Date();
       newDate.setDate(day.day);
-      newDate.setMonth(day.month+1);
+      newDate.setMonth(day.month /*+1*/);
       newDate.setFullYear(day.year);
+
       if(isFestive){
         day.originalType = day.type;
         day.type = this.scheduleTypes.find(type => type.name === 'Jornada normal (8h 25min)');
@@ -238,8 +241,9 @@ export class HolidayEditComponent{
   private isSameDate(festive: Festive, newDate: Date): boolean {
     let date = String(festive.date).slice(-2);
     let festiveDay = parseInt(date, 10);
+
     if (festive.year === newDate.getFullYear() &&
-        festive.month === newDate.getMonth() &&
+        festive.month -1 === newDate.getMonth() &&
         festiveDay === newDate.getDate() ){              
           return true;
     }

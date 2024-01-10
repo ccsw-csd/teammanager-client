@@ -5,14 +5,19 @@
     flex-direction: column; 
   }
   .year-selector {
-    padding: 10px;
-    margin: 0 auto 20px;
-    position: relative;
+    justify-content: flex-start;
     top: -30px;
     font-size: 18px;
     text-align: center; 
     font-family:  Helvetica;
     width: 200px; 
+    display: flex;
+    align-items: center;
+  }
+
+  .year-selector p{
+    margin-right: 15px;
+
   }
   
   .legend {

@@ -47,7 +47,8 @@ export class HolidayListComponent implements OnInit {
           baseZIndex: 10000,
           contentStyle: { overflow: 'auto' },
           data: {
-            festivesData: this.festives
+            festivesData: this.festives,
+            centerName: center.name
           },
           closable: false
         });
