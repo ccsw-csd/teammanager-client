@@ -8,13 +8,6 @@
   <!-- Selector de años -->
   <div class="year-selector">
     <p>Selected Year</p>
-  <!--
-    <select [(ngModel)]="selectedYearAux.code" (change)="onChangeYear()">
-      <option *ngFor="let year of years" [value]="year.code">
-        {{ year.name }}
-      </option>
-    </select>
-  -->
 
   <p-dropdown [(ngModel)]="selectedYearAux" (onChange)="onChangeYear($event)" 
     [options]="years"  optionLabel="name">
