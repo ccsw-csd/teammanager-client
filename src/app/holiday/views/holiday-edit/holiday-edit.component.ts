@@ -105,6 +105,7 @@ export class HolidayEditComponent{
 
     const metadataDay = new Map<String, MetadataDay>();
     const normalDay = this.scheduleTypes[1];
+    const weekendDay = this.scheduleTypes[3];
     let idF = 0;
     if(this.dialogConf.data.festivesData != undefined){
       this.festives = this.dialogConf.data.festivesData;
@@ -118,6 +119,7 @@ export class HolidayEditComponent{
           const isWeekend = date.getDay() == 0 || date.getDay() == 6;
 
           let type = normalDay;
+          let originalType = normalDay;
 
           const isFestive = this.festives.some(festive => {
             let date = String(festive.date).slice(-2);
@@ -132,21 +134,29 @@ export class HolidayEditComponent{
             return false;
           });
 
-          if (isFestive) {
-            type = this.scheduleTypes.find(type => type.name === 'Festivo');
-          }
-          
           if (isWeekend) {
             type = this.scheduleTypes.find(
               (type) => type.name === 'Fin de semana'
             );
+
+            originalType = type;
           }
+
+          if (isFestive) {
+            type = this.scheduleTypes.find(type => type.name === 'Festivo');
+            originalType = type;
+            if (isWeekend) {
+              originalType = weekendDay;
+            }
+          }
+          
+          
 
           const metadata = new MetadataDay({
             day: day,
             month: month,
             year: parseInt(this.selectedYearAux.code),
-            originalType: type,
+            originalType: originalType,
             type: type,
             id: idF,
           });          
@@ -162,7 +172,7 @@ export class HolidayEditComponent{
 
   selectDate(day:MetadataDay){
 
-    if(day && day.type.name != 'Fin de semana'){
+    if(day){
       const isFestive = day.type.name === "Festivo";
       const newDate = new Date();
       newDate.setDate(day.day);
@@ -170,8 +180,13 @@ export class HolidayEditComponent{
       newDate.setFullYear(day.year);
 
       if(isFestive){
-        day.originalType = day.type;
-        day.type = this.scheduleTypes.find(type => type.name === 'Jornada normal (8h 25min)');
+        //day.originalType = day.type;
+        if(day.originalType == this.scheduleTypes.find(type => type.name === 'Fin de semana')){
+          day.type = this.scheduleTypes.find(type => type.name === 'Fin de semana');
+        }else{
+          day.type = this.scheduleTypes.find(type => type.name === 'Jornada normal (8h 25min)');
+        }
+        
         if(this.festives.some(festive => this.isSameDate(festive, newDate)) &&
           !this.oldFestives.includes(day)
         ){
@@ -185,7 +200,8 @@ export class HolidayEditComponent{
           }
         }
       }else{
-        day.originalType = day.type;
+        //day.originalType = day.type;
+        
         day.type = this.scheduleTypes.find(type => type.name === 'Festivo');
 
         //Comprobar si es un dia festivo que ya existia pero se habia puesto en la cola de eliminación

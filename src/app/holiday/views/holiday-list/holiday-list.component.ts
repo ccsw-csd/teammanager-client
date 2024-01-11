@@ -42,7 +42,7 @@ export class HolidayListComponent implements OnInit {
         this.festives = res;
 
         const dialogRef = this.dialogService.open(HolidayEditComponent, {
-          height: 'calc(100vh - 1px)',
+          height: '100vh',
           width: '1200px',
           baseZIndex: 10000,
           contentStyle: { overflow: 'auto' },

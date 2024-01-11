@@ -1,39 +1,25 @@
-.center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column; 
-  }
-  .year-selector {
-    justify-content: flex-start;
-    top: -30px;
-    font-size: 18px;
-    text-align: center; 
-    font-family:  Helvetica;
-    width: 200px; 
-    display: flex;
-    align-items: center;
-  }
 
-  .year-selector p{
-    margin-right: 15px;
+.year-selector {
 
-  }
-  
-  .legend {
-    width: 24px;
-    height: 16px;
-    margin: 2px 10px 0px 0px;
-    border: 1px solid #bebebe;
-    font-family: Helvetica;
-    font-size: 10px;
-  }
-  
-  .legend-day {
-    width: 24px;
-    height: 16px;
-    margin: 0px 10px 0px 0px;
-    font-style: italic;
+  justify-content: flex-start;
+  top: -30px;
+  font-size: 18px;
+  text-align: center; 
+  font-family:  Helvetica;
+  width: 200px; 
+  display: flex;
+  align-items: center;
+}
+
+.year-selector p{
+  margin-right: 15px;
+
+}
+
+  .calendar {
+    flex-grow: 4;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto; 
   }
   
   .calendar-item {
