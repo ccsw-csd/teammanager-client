@@ -63,7 +63,6 @@ export class ForecastListComponent implements OnInit {
   getAllGroupsAdmin() {
     this.groupService.getAllGroupsAdmin().subscribe({
       next: (res: Group[]) => {
-        console.log(res)
         this.groups = res;
       },
     });
@@ -72,7 +71,6 @@ export class ForecastListComponent implements OnInit {
   getAllGroups(defaultFilters : boolean) {
     this.groupService.getAllGroups().subscribe({
       next: (res: Group[]) => {
-        console.log(res)
         this.groups = res;
         this.totalGroups = this.groups.length;
         if (defaultFilters) this.setDefaultFilters();
