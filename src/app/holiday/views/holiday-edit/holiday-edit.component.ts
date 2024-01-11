@@ -93,7 +93,7 @@ export class HolidayEditComponent{
     this.selectedCalendar = this.generateDefaultCalendar();
   }
 
-  onChangeYear(): void {
+  onChangeYear(event): void {
     this.selectedCalendar = this.generateDefaultCalendar();
   }
 
@@ -245,7 +245,10 @@ export class HolidayEditComponent{
       }
     }
 
-    this.ref.close();
+    setTimeout(() => {
+      this.ref.close();
+    }, 100);
+    
   }
 
   formatDate(metadataDay:MetadataDay):Date{
