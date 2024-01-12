@@ -1,0 +1,51 @@
+
+.year-selector {
+
+  justify-content: flex-start;
+  top: -30px;
+  font-size: 18px;
+  text-align: center; 
+  font-family:  Helvetica;
+  width: 200px; 
+  display: flex;
+  align-items: center;
+}
+
+.year-selector p{
+  margin-right: 15px;
+
+}
+
+  .calendar {
+    flex-grow: 4;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto; 
+  }
+  
+  .calendar-item {
+    margin: 5px; 
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+  }
+  
+  .button {
+    min-width: 150px;
+    height: 45px;
+    cursor: pointer;
+  }
+  
+  .button-close {
+    background-color: white;
+    border: 1px solid #ff5770;
+    color: #ff5770;
+  }
+  
+  .button-update {
+    background-color: #0070ad;
+    color: white;
+  }
+  

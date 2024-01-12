@@ -1,1 +1,47 @@
-<p>holiday-edit works!</p>
+<div style="display: flex; flex-direction: column">
+  
+  <div class="flex justify-content-start">
+    <h3 class="p-0 m-0 mb-2">
+      Edit Public Holidays for {{centerName}}
+    </h3>
+  </div>
+  <!-- Selector de años -->
+  <div class="year-selector">
+    <p>Selected Year</p>
+
+  <p-dropdown [(ngModel)]="selectedYearAux" (onChange)="onChangeYear($event)" 
+    [options]="years"  optionLabel="name">
+  </p-dropdown>
+  </div>
+  
+  <!-- Calendario debajo de los elementos anteriores -->
+  <div class="calendar" style="max-width: 90%; max-height: 330px; margin: 0 auto;">
+    <div
+      id="calendarsDiv"
+      #calendarsDiv
+      style="
+        display: flex;
+        flex-direction: row;
+        flex-grow: 4;
+        flex-wrap: wrap;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0px;
+        margin: 0px;
+      "
+    >
+      <app-component-calendar
+        *ngFor="let month of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+        [year]="1 * this.selectedYearAux.code"
+        [month]="month"
+        [metadataDay]="selectedCalendar"
+        (clickEvent)="selectDate($event, month, metadataDay )"
+        class="calendar-item"
+      ></app-component-calendar>
+    </div>
+  </div>
+  <div class="button-container">
+    <button class="button button-close" style="margin-right: 10px;" (click)="close()">Close</button>
+    <button class="button button-update" (click)="update()">Update</button>
+  </div>  
+</div>
