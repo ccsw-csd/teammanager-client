@@ -17,6 +17,7 @@ export class HolidayEditComponent{
 
 
   @Output() clickEvent = new EventEmitter<MetadataDay>();
+
   //ATRIBUTOS
 
  
@@ -176,11 +177,10 @@ export class HolidayEditComponent{
       const isFestive = day.type.name === "Festivo";
       const newDate = new Date();
       newDate.setDate(day.day);
-      newDate.setMonth(day.month /*+1*/);
+      newDate.setMonth(day.month);
       newDate.setFullYear(day.year);
 
       if(isFestive){
-        //day.originalType = day.type;
         if(day.originalType == this.scheduleTypes.find(type => type.name === 'Fin de semana')){
           day.type = this.scheduleTypes.find(type => type.name === 'Fin de semana');
         }else{
@@ -200,7 +200,6 @@ export class HolidayEditComponent{
           }
         }
       }else{
-        //day.originalType = day.type;
         
         day.type = this.scheduleTypes.find(type => type.name === 'Festivo');
 
@@ -223,7 +222,7 @@ export class HolidayEditComponent{
   }
 
   close(){
-    this.ref.close();
+    this.ref.close({ toRefresh: false });
   }
 
   update():void{
@@ -246,7 +245,7 @@ export class HolidayEditComponent{
     }
 
     setTimeout(() => {
-      this.ref.close();
+      this.ref.close({ toRefresh: true });
     }, 100);
     
   }

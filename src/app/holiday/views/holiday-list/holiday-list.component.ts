@@ -54,7 +54,9 @@ export class HolidayListComponent implements OnInit {
         });
 
         dialogRef.onClose.subscribe((result: any) => {
-          this.getAllCenters();
+          if (result.toRefresh) {
+            this.getAllCenters();
+          }
         });
       },
     });
