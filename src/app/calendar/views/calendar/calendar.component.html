@@ -64,13 +64,9 @@
         [year]="1 * this.selectedYearAux.code"
         [month]="month"
         [metadataDay]="selectedCalendar"
-        (clickEvent)="selectDate($event, month, metadataDay )"
+        (clickEvent)="selectDate($event)"
         class="calendar-item"
       ></app-component-calendar>
     </div>
   </div>
-  <div class="button-container">
-    <button class="button button-close" style="margin-right: 10px;" (click)="close()">Close</button>
-    <button class="button button-update" (click)="update()">Update</button>
-  </div>  
 </div>
