@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
-import { environment } from 'src/environments/environment';
 import { Group } from './model/Group';
 import { Person } from './model/Person';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GroupService {
+export class ForecastService {
 
   constructor(private http:HttpClient) { }
 
