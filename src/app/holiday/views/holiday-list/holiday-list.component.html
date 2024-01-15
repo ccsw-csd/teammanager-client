@@ -6,36 +6,36 @@
     </div>
 </div>
 
-<p-table [style]="{'height':'calc(100vh - 200px)'}" [scrollable]="true" scrollHeight="calc(92vh - 190px)" selectionMode="single" 
+<p-table [style]="{'height':'calc(100vh - 175px)','width':tableWidth}" [scrollable]="true" scrollHeight="calc(92vh - 190px)" selectionMode="single" 
     [value]="centers"  styleClass="p-datatable-striped">
     <ng-template pTemplate="header">
         <tr>
-            <th class="flex flex-column" pSortableColumn="name" >
+            <th class="flex" pSortableColumn="name" >
                 Center Name
             </th>
-            <th class="fixed-column" pSortableColumn="current" >
+            <th class="flex-none w-7rem" pSortableColumn="current" >
                 Public Holidays current year
             </th>
-            <th class="fixed-column" pSortableColumn="next">
+            <th class="flex-none w-7rem" pSortableColumn="next">
                 Public Holidays next year
             </th>             
-            <th class="fixed-column">
+            <th class="flex-none w-5rem">
                 Actions
             </th>  
         </tr>
     </ng-template>
     <ng-template  pTemplate="body" let-center let-columns="columns">
         <tr [style]="{'height':'40px'}">
-            <td class="flex-1 text-center">
+            <td class="flex">
                 {{center.name}}
             </td>  
-            <td class="fixed-column">
+            <td class="flex-none w-7rem">
                {{center.festiveActualYear}}   
             </td>
-            <td class="fixed-column">
+            <td class="flex-none w-7rem">
                {{center.festiveNextYear}} 
             </td>
-            <td class="fixed-column">
+            <td class="flex-none w-5rem">
                 <div  class="flex-row">
                     <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="editCenter(center)"></button>
                 </div>

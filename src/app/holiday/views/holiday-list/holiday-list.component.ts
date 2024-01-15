@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
-import { CenterWithFestives } from 'src/app/holiday/model/CenterWithFestives';
-import { Festive } from 'src/app/holiday/model/Festive';
+import { CenterWithFestives } from '../../model/CenterWithFestives';
+import { Festive } from '../../model/Festive';
 import { HolidayService } from '../../holiday.service';
 import { HolidayEditComponent } from '../holiday-edit/holiday-edit.component';
+import { NavigatorService } from 'src/app/core/services/navigator.service';
 
 @Component({
   selector: 'app-holiday-list',
@@ -16,13 +17,19 @@ export class HolidayListComponent implements OnInit {
 
   centers: CenterWithFestives[];
   festives: Festive[];
+  tableWidth: string;
   constructor(
     private ref: DynamicDialogRef,
     private dialogService: DialogService,
     private holidayService: HolidayService,
+    private navigatorService: NavigatorService,
   ) { }
 
   ngOnInit(): void {
+    this.navigatorService.getNavivagorChangeEmitter().subscribe((menuVisible) => {
+      if (menuVisible) this.tableWidth = 'calc(100vw - 255px)';
+      else this.tableWidth = 'calc(100vw - 55px)';
+    }); 
     this.getAllCenters();
     
   }
