@@ -10,64 +10,104 @@
     
     <div class="flex items-center ml-auto">
         
-        <div class="flex items-center ml-2 mt-4 mb-4">
+        <div class="flex items-center ml-2 mt-4">
             <div class="small-input-switch">
                 <p-inputSwitch [(ngModel)]="adminView" (onChange)="clickAdminView($event)" label="Admin View"></p-inputSwitch>
             </div>
             <span style="margin-left: 0.5rem;">Admin View</span>
         </div>
     </div>
+
 </div>
 
-<p-table [style]="{'height': 'calc(100vh - 210px)', 'width': tableWidth}"   
-    [scrollable]="true"  selectionMode="single"  scrollHeight="flex"
-    [value]="groups" styleClass="p-datatable-striped" 
-    [(filters)]="defaultFilters" 
-     sortMode="single" 
-    [columns]="selectedColumnNames"
-    [reorderableColumns]="true" (onColReorder)="onColReorder($event)" 
-    (sortFunction)="customSort($event)" [customSort]="true">
-    <ng-template pTemplate="header" let-columns>
 
-        <tr>
 
-            <th *ngFor="let col of selectedColumnNames" class="{{col.field}} flex flex-column" pReorderableColumn>
-
-                <div class="flex flex-row w-full top-header" pSortableColumn="{{col.composeField}}">
-                    <span class="flex flex-1 justify-content-center">{{col.header}}</span>
-                    <p-sortIcon field="{{col.composeField}}"></p-sortIcon>
-                </div>
-
+<p-table [style]="{'height':'calc(100vh - 175px)','width':tableWidth}" [scrollable]="true" scrollHeight="flex" selectionMode="single" [value]="groups" 
+    [responsive]="true" styleClass="p-datatable-striped" [paginator]="true" [rows]="20" sortField="name" [sortOrder]="1">
+    <ng-template pTemplate="header">
+       <tr>
+            <th class="flex flex-column align-items-center justify-content-center" >
+                <div class="flex flex-row w-full top-header" pSortableColumn="name">
+                    <span class="flex flex-1 justify-content-center">Group Name</span>
+                    <p-sortIcon field="name"></p-sortIcon>
+                </div>                
                 <div class="w-full foot-header">
-
-                    <p-columnFilter *ngIf="col.filterType == 'input'" class="w-full" type="text" field="{{col.composeField}}" [showMenu]="false" [showClearButton]="false" matchMode="{{col.matchMode != null ? col.matchMode : 'contains-and-null'}}">
+                    <p-columnFilter class="w-full" type="text" field="name" matchMode="contains" [showMenu]="false" [showClearButton]="false">
                         <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                            <input tabindex="1" type="text" pInputText [ngModel]="value" (ngModelChange)="filter($event)" class="p-inputtext">
+                            <input type="text" pInputText [ngModel]="value" (ngModelChange)="filter($event)" class="p-inputtext">
                         </ng-template>
                     </p-columnFilter>
-
                 </div>
             </th>
 
-            <th class="buttons flex flex-column">
+            <th class="flex-none flex-column align-items-center justify-content-center" style="width: 800px">
+                <div class="flex flex-row w-full top-header" pSortableColumn="admin">
+                    <span class="flex flex-1 justify-content-center">Administrators</span>
+                    <p-sortIcon field="admin"></p-sortIcon>
+                </div >
+                <div class="w-full foot-header">
+                    <p-columnFilter class="w-full" type="text" field="admin" matchMode="contains" [showMenu]="false" [showClearButton]="false">
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <input type="text" pInputText [ngModel]="value" (ngModelChange)="filter($event)" class="p-inputtext">
+                        </ng-template>
+                    </p-columnFilter>
+                </div>
+            </th>
+
+            <th class="flex-none w-7rem flex-column align-items-center justify-content-center" >
+                <div class="flex flex-row w-full top-header" pSortableColumn="members">
+                    <span class="flex flex-1 justify-content-center"># Member</span>
+                    <p-sortIcon field="members"></p-sortIcon>
+                </div>                    
+                <div class="w-full foot-header">
+                    <p-columnFilter class="w-full" type="text" field="members" matchMode="contains" [showMenu]="false" [showClearButton]="false">
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <input type="text" pInputText [ngModel]="value" (ngModelChange)="filter($event)" class="p-inputtext">
+                        </ng-template>
+                    </p-columnFilter>
+                </div>
+            </th>
+
+            <th class="flex-none w-7rem flex-column align-items-center justify-content-center" >
+                <div  class="flex flex-row w-full top-header" pSortableColumn="subgroups">
+                    <span class="flex flex-1 justify-content-center"># Subgroup</span>
+                    <p-sortIcon field="subgroups"></p-sortIcon>
+                </div>                
+                <div class="w-full foot-header">
+                    <p-columnFilter class="w-full" type="text" field="subgroups" matchMode="contains" [showMenu]="false" [showClearButton]="false">
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <input type="text" pInputText [ngModel]="value" (ngModelChange)="filter($event)" class="p-inputtext">
+                        </ng-template>
+                    </p-columnFilter>
+                </div>
+            </th>     
+
+            <th class="buttons flex-none w-6rem flex-column">
                 <div class="flex flex-row w-full top-header"></div>
                 <div class="w-full foot-header"></div>
-            </th>
+            </th>  
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-group let-columns="columns">
-        <tr [pSelectableRow]="group">
-            <td *ngFor="let col of selectedColumnNames" class={{col.field}}>
-                <div class="white-space-nowrap overflow-hidden text-overflow-ellipsis" pTooltip="{{group[col.field]}}" tooltipPosition="top">
-                    {{group[col.field]}}
-                </div>
+        <tr>
+            <td class="flex">
+                {{group.name}}
             </td>
-            <td class="buttons ">
-                <div class="">
-                    <button pButton pRipple type="button" icon="pi pi-eye" class="p-button-rounded p-button-text w-2rem h-2rem" pTooltip="Visualizar" (click)="viewGroup(group)"></button> 
-                </div>
+            <td class="flex-none" style="width: 800px"><div class="white-space-nowrap overflow-hidden text-overflow-ellipsis">{{group.manager}}</div>
+                    
+            </td>
+            <td class="flex-none w-7rem justify-content-end">
+                <p class="ml-8">{{group.members}}</p>
+            </td>
+            <td class="flex-none w-7rem justify-content-end">
+                <p class="ml-8">{{group.subgroups}}</p>
+            </td>
+            <td class="flex-none w-8rem">
+                    <button pButton pRipple type="button" icon="pi pi-eye"
+                    class="p-button-rounded p-button-text" pTooltip="Visualizar" (click)="viewGroup(group,'visualizar')"></button>
             </td>
         </tr>
     </ng-template>
 </p-table>
-
+<p-toast position="top-center"></p-toast>
+<p-confirmDialog header="Confirmación" icon="pi pi-exclamation-triangle" #confirmDialog></p-confirmDialog>

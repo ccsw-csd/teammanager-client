@@ -37,19 +37,12 @@ export class ForecastListComponent implements OnInit {
   ngOnInit(): void {
     this.adminView = false;
     this.resizeTable();
+    
     this.navigatorService.getNavivagorChangeEmitter().subscribe((menuVisible) => {
       if (menuVisible) this.tableWidth = 'calc(100vw - 255px)';
       else this.tableWidth = 'calc(100vw - 55px)';
-    });
+    }); 
 
-    this.columnNames = [
-      { header: 'Group Name',     composeField: 'name',           field: 'name',            filterType: 'input' },
-      { header: 'Administrators', composeField: 'manager',        field: 'manager',  filterType: 'input' },
-      { header: 'Members',        composeField: 'members',        field: 'members',         filterType: 'input' },
-      { header: 'Subgroups',      composeField: 'subgroups',       field: 'subgroups',        filterType: 'input' },
-    ];
-
-    this.selectedColumnNames = this.loadSelected();
     this.loadData();
   }
 
@@ -57,9 +50,15 @@ export class ForecastListComponent implements OnInit {
     if (this.adminView) {
       this.getAllGroupsAdmin();
     } else {
-      this.getAllGroups(true);
+      this.getAllGroups();
     }
   }
+
+  clickAdminView(e) {
+    this.adminView = e.checked;
+    this.loadData();
+  }
+
   getAllGroupsAdmin() {
     this.groupService.getAllGroupsAdmin().subscribe({
       next: (res: Group[]) => {
@@ -68,31 +67,34 @@ export class ForecastListComponent implements OnInit {
     });
   }
 
-  getAllGroups(defaultFilters : boolean) {
+  getAllGroups() {
     this.groupService.getAllGroups().subscribe({
       next: (res: Group[]) => {
         this.groups = res;
-        this.totalGroups = this.groups.length;
-        if (defaultFilters) this.setDefaultFilters();
       },
     });
-    
   }
 
-  loadSelected(): any[] {
-    let selectedColumnNames: any = localStorage.getItem('forecastListColumns');
-    if (selectedColumnNames == null) return this.columnNames;
+  openModal(header: string, group: Group, mode: 'visualizar') {
 
-    selectedColumnNames = JSON.parse(selectedColumnNames);
-
-    let columns : any[] = [];
-    selectedColumnNames.forEach(item => {
-      let filterColumn = this.columnNames.filter(column => column.header == item);
-      columns = columns.concat(filterColumn);
+    this.ref = this.dialogService.open(ForecastDetailComponent, {
+      width: '90vw',
+      height: '90vh',
+      contentStyle: { overflow: 'auto' },
+      data: {
+        group: group,
+        mode: mode
+      },
+      closable: false,
+      header: header,
     });
 
-    return columns;
-  }  
+    this.onClose(); 
+  }
+
+  viewGroup(group: Group, mode: 'visualizar') {
+    this.openModal('Visualice Group', group, mode);
+  }
 
   resizeTable() {
     if (document.getElementById('p-slideMenu')) {
@@ -102,62 +104,12 @@ export class ForecastListComponent implements OnInit {
     }
   }
 
-  onColReorder(event): void {
-    this.saveSelected(this.selectedColumnNames);
-  }
-
-  saveSelected(selectedColumnNames: any[]) {
-    localStorage.setItem('forecastListColumns', JSON.stringify(selectedColumnNames.map(e => e.header)));
-  }
-
-  setDefaultFilters() {
-    this.defaultFilters = {};
-  
-    this.columnNames.forEach((column) => {
-      if (column.filterType === 'input') {
-        this.defaultFilters[column.composeField] = { value: '' };
+  onClose(): void {
+    this.ref.onClose.subscribe(
+      (results: any) => {
+        if (results)
+        this.loadData();
       }
-    });
+    )
   }
-  
-
-  customSort(event: SortEvent) {
-    event.data.sort((data1, data2) => {
-        let value1 = data1[event.field];
-        let value2 = data2[event.field];
-        let result = null;
-
-        if (value1 == null && value2 != null) result = -1;
-        else if (value1 != null && value2 == null) result = 1;
-        else if (value1 == null && value2 == null) result = 0;
-        else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
-        else if (Array.isArray(value1) && Array.isArray(value2)){
-          result = value1.sort((a, b) => a.name.localeCompare(b.name)).map((t) => t.name).join(', ').localeCompare(value2.sort((a, b) => a.name.localeCompare(b.name)).map((t) => t.name).join(', '));
-        } 
-        else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-
-        return event.order * result;
-    });
-  }
-
-  viewGroup(group:Group, header: string){
-    this.ref = this.dialogService.open(ForecastDetailComponent,{
-      width: '1000px',
-      height: '750px',
-      contentStyle: { overflow: 'auto' },
-      data: {
-        group: group,
-      },
-      closable: false,
-      header: header,
-    });
-  }
-
-  clickAdminView(e) {
-    this.adminView = e.checked;
-    this.loadData();
-  }
-
-  
-
 }
