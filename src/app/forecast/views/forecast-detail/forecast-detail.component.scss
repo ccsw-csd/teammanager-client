@@ -1,0 +1,24 @@
+.legend {
+    width: 24px;
+    height: 16px;
+    margin: 10px 3px 10px 10px;
+    border: 1px solid #bebebe;
+    font-family: Helvetica;
+    font-size: 10px;
+    :first-child{
+        margin-left: 3px;
+    }
+  }
+
+.center {
+    display: flex;
+    justify-content: center;
+    border: 1px solid #bebebe;
+    flex-direction: column;
+    align-items: flex-start;
+    position: absolute;
+}
+
+.textlegend {
+    margin: 10px 5px 10px 5px;
+}

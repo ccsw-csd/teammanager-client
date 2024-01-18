@@ -6,7 +6,7 @@ import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dy
 import { GroupService } from 'src/app/group/services/group.service';
 import { Table } from 'primeng/table';
 import { ForecastDetailComponent } from '../forecast-detail/forecast-detail.component';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forecast-list',
@@ -32,6 +32,7 @@ export class ForecastListComponent implements OnInit {
     private groupService: GroupService,
     private confirmationService: ConfirmationService,
     private navigatorService: NavigatorService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -76,20 +77,7 @@ export class ForecastListComponent implements OnInit {
   }
 
   openModal(header: string, group: Group, mode: 'visualizar') {
-
-    this.ref = this.dialogService.open(ForecastDetailComponent, {
-      width: '90vw',
-      height: '90vh',
-      contentStyle: { overflow: 'auto' },
-      data: {
-        group: group,
-        mode: mode
-      },
-      closable: false,
-      header: header,
-    });
-
-    this.onClose(); 
+    this.router.navigate(['../forecast-detail', { group: JSON.stringify(group) }]);
   }
 
   viewGroup(group: Group, mode: 'visualizar') {
