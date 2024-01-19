@@ -6,25 +6,37 @@
     </div>
 </div>
 
-<div class="center">
+<div style="display: flex; flex-direction: row;">
+  <div class="center">
     <div style="display: flex; flex-direction: row">
-        <div style="display: flex; flex-direction: row">
-          <div class="legend" style="background-color: #aae3ff"></div>
-          <div class="textlegend">Public Holidays</div>
-        </div>
-        <div style="display: flex; flex-direction: row">
-          <div class="legend" style="background-color: #ffffaa"></div>
-          <div class="textlegend">Vacation</div>
-        </div>
-        <div style="display: flex; flex-direction: row">
-          <div class="legend" style="background-color: #c2c2cc"></div>
-          <div class="textlegend">Weekend</div>
-        </div>
-        <div style="display: flex; flex-direction: row; margin-right: 10px;">
-          <div class="legend" style="background-color: #f7bd46"></div>
-          <div class="textlegend">Other</div>
-        </div>
+      <div style="display: flex; align-items: center; flex-direction: row">
+        <div class="legend" style="background-color: #aae3ff"></div>
+        <div class="textlegend">Public Holidays</div>
+      </div>
+      <div style="display: flex; align-items: center; flex-direction: row">
+        <div class="legend" style="background-color: #ffffaa"></div>
+        <div class="textlegend">Vacation</div>
+      </div>
+      <div style="display: flex; align-items: center; flex-direction: row">
+        <div class="legend" style="background-color: #c2c2cc"></div>
+        <div class="textlegend">Weekend</div>
+      </div>
+      <div style="display: flex; align-items: center; flex-direction: row; margin-right: 10px;">
+        <div class="legend" style="background-color: #f7bd46"></div>
+        <div class="textlegend">Other</div>
+      </div>
     </div>
+  </div>
+
+  <div class="month-selector" style="margin-left: auto; display: flex; align-items: center;">
+    <p style="margin-right: 5px;">Selected Month</p>
+    <button pButton pRipple type="button" icon="pi pi-angle-left"
+                    class="p-button-rounded p-button-text" (click)="previousMonth()" [disabled]="isPreviousMonthDisabled()"></button>
+    <p-dropdown [(ngModel)]="selectedMonth" (onChange)="onChangeMonth($event)" [options]="monthsList" optionLabel="name"></p-dropdown>
+    <button pButton pRipple type="button" icon="pi pi-angle-right"
+                    class="p-button-rounded p-button-text" (click)="nextMonth()" [disabled]="isNextMonthDisabled()"></button>
+  </div>
 </div>
+
 
 
