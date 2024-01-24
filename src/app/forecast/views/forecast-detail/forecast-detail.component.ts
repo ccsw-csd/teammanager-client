@@ -119,11 +119,17 @@ export class ForecastDetailComponent implements OnInit {
   }
 
   previousMonth():void{
-
+    const pos = this.monthsList.indexOf(this.selectedMonth);
+    this.selectedMonth = this.monthsList[pos-1];
+    this.monthDays = this.generateDays();
+    this.monthDaysList = Array.from(this.monthDays);
   }
 
   nextMonth():void{
-
+    const pos = this.monthsList.indexOf(this.selectedMonth);
+    this.selectedMonth = this.monthsList[pos+1];
+    this.monthDays = this.generateDays();
+    this.monthDaysList = Array.from(this.monthDays);
   }
 
   generateDays(): Map<String, MetadataDay>{
@@ -163,10 +169,18 @@ export class ForecastDetailComponent implements OnInit {
   }
 
   isPreviousMonthDisabled():boolean{
-    return true;
+    if (this.monthsList.indexOf(this.selectedMonth) === 0) {
+      return true
+    } else {
+      return false;
+    }
   }
 
   isNextMonthDisabled():boolean{
-    return true;
+    if (this.monthsList.indexOf(this.selectedMonth) === (this.monthsList.length -1)) {
+      return true
+    } else {
+      return false;
+    }
   }
 }

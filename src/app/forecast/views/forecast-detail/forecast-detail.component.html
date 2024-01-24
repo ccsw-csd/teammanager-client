@@ -7,7 +7,7 @@
 </div>
 
 <div style="display: flex; flex-direction: row;">
-  <div class="center">
+  <div style="text-align: center">
     <div style="display: flex; flex-direction: row">
       <div style="display: flex; align-items: center; flex-direction: row">
         <div class="legend" style="background-color: #aae3ff"></div>
@@ -22,7 +22,7 @@
         <div class="textlegend">Weekend</div>
       </div>
       <div style="display: flex; align-items: center; flex-direction: row; margin-right: 10px;">
-        <div class="legend" style="background-color: #f7bd46"></div>
+        <div class="legend" style="background-color: #f7bd46" ></div>
         <div class="textlegend">Other</div>
       </div>
     </div>
@@ -46,36 +46,38 @@
   <ng-template pTemplate="header">
     <tr style="border-bottom: 2px solid deepskyblue;">
       <th>
-        <div class="w-full top-header">
-          <span class="justify-content-center">Person</span>
+        <div class="w-full top-header" style="text-align: center;">
+          <span class="justify-content-center" style="text-align: center;">Person</span>
         </div>                
       </th>
 
-      <th class="w-3rem">
-        <div class="w-full top-header">
-          <span class="justify-content-center">Working Days</span>
+      <th class="flex-none w-5rem justify-content-end">
+        <div class="w-full top-header" style="text-align: center;">
+          <span class="justify-content-center" style="text-align: center;">Working Days</span>
         </div>
       </th>
 
-      <th class="w-3rem">
-        <div class="w-full top-header">
-          <span class="justify-content-center">Festives</span>
+      <th class="flex-none w-5rem justify-content-end">
+        <div class="w-full top-header" style="text-align: center;">
+          <span class="justify-content-center" style="text-align: center;">Festives</span>
         </div>                    
       </th>
 
-      <th class="w-3rem">
-        <div class="w-full top-header">
-          <span class="justify-content-center">Vacations</span>
+      <th class="flex-none w-5rem justify-content-end">
+        <div class="w-full top-header" style="text-align: center;">
+          <span class="justify-content-center" style="text-align: center;">Vacations</span>
         </div>                
       </th>  
       
-      <th class="w-3rem" style="border-right: 2px solid deepskyblue;">
+      <th class="flex-none w-5rem justify-content-end" style="border-right: 2px solid deepskyblue;">
         <div class="w-full top-header">
-          <span class="justify-content-center">Others</span>
+          <span class="justify-content-center" style="text-align: center;">Others</span>
         </div>                
       </th>
-      <th *ngFor="let day of monthDaysList" class="w-3rem" style="text-align: center;">
-        <p>{{day[1]?.day}}</p>
+      <th *ngFor="let day of monthDaysList" style="text-align: center; width: 5px;">
+        <div class="flex flex-row w-full top-header">
+          <span class="flex flex-1 justify-content-center">{{day[1].day}}</span>
+      </div> 
       </th>
     </tr>
   </ng-template>
@@ -85,20 +87,20 @@
       <td style="border-bottom: 2px solid deepskyblue;">
         {{ group.person.name }}
       </td>
-      <td class="w-3rem" style="border-bottom: 2px solid deepskyblue;">
+      <td class="flex-none w-5rem justify-content-end" style="border-bottom: 2px solid deepskyblue;">
         <p>{{ group.person.wk }}</p>
       </td>
-      <td class="w-3rem" style="border-bottom: 2px solid deepskyblue;">
+      <td class="flex-none w-5rem justify-content-end" style="border-bottom: 2px solid deepskyblue;">
         <p>{{ group.person.festives }}</p>
       </td>
-      <td class="w-3rem" style="border-bottom: 2px solid deepskyblue;">
+      <td class="flex-none w-5rem justify-content-end" style="border-bottom: 2px solid deepskyblue;">
         <p>{{ group.person.vacations }}</p>
       </td>
-      <td class="w-3rem" style="border-right: 2px solid deepskyblue; border-bottom: 2px solid deepskyblue;">
+      <td class="flex-none w-5rem justify-content-end" style="border-right: 2px solid deepskyblue; border-bottom: 2px solid deepskyblue;">
         <p>{{ group.person.others }}</p>
       </td>
-      <td *ngFor="let day of monthDaysList" class="w-3rem"
-      style="border-bottom: 2px solid deepskyblue; border-left: 1px solid lightgray;">
+      <td *ngFor="let day of monthDaysList" 
+      style="border-bottom: 2px solid deepskyblue; border-left: 1px solid lightgray; width: 5px; text-align: center;">
       <p>{{day[1]?.day}}</p>
       </td>
     </tr>
