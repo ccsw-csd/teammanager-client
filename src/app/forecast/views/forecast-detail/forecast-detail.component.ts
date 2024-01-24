@@ -44,15 +44,17 @@ export class ForecastDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.resizeTable();
     this.route.params.subscribe((params) => {
       this.group = JSON.parse(params['group']);
     });
 
     this.navigatorService.getNavivagorChangeEmitter().subscribe((menuVisible) => {
       if (menuVisible) this.tableWidth = 'calc(100vw - 255px)';
-      else this.tableWidth = 'calc(100vw - 55px)';
+      else this.tableWidth = 'calc(100vw - 100px)';
     }); 
 
+    //Datos de ejemplo
     this.groups = [
       { person: { name: 'John', wk: 20, festives: 5, vacations: 10, others: 2 }, manager: 'Manager A' },
       { person: { name: 'Alice', wk: 22, festives: 8, vacations: 12, others: 3 }, manager: 'Manager B' },
@@ -145,7 +147,7 @@ export class ForecastDetailComponent implements OnInit {
 
     for(let day = 1; day <= lastDay; day++){
 
-      const dateAux = new Date(year, month, day);
+      const dateAux = new Date(year, month-1, day);
       let type = normalDay;
       const isWeekend = dateAux.getDay() == 0 || dateAux.getDay() == 6;
       
@@ -160,6 +162,7 @@ export class ForecastDetailComponent implements OnInit {
         month: Number(this.selectedMonth.month),
         year: year,
         type: type,
+        
       });          
 
       const key = month + '_' + day;
@@ -183,4 +186,13 @@ export class ForecastDetailComponent implements OnInit {
       return false;
     }
   }
+
+  resizeTable() {
+    if (document.getElementById('p-slideMenu')) {
+      this.tableWidth = 'calc(100vw - 255px)';
+    } else {
+      this.tableWidth = 'calc(100vw - 55px)';
+    }
+  }
+
 }
