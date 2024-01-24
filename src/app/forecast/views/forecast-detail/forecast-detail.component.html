@@ -32,11 +32,75 @@
     <p style="margin-right: 5px;">Selected Month</p>
     <button pButton pRipple type="button" icon="pi pi-angle-left"
                     class="p-button-rounded p-button-text" (click)="previousMonth()" [disabled]="isPreviousMonthDisabled()"></button>
-    <p-dropdown [(ngModel)]="selectedMonth" (onChange)="onChangeMonth($event)" [options]="monthsList" optionLabel="name"></p-dropdown>
+    <p-dropdown [(ngModel)]="selectedMonth" (onChange)="onChangeMonth($event)" [options]="monthsList" optionLabel="code"></p-dropdown>
     <button pButton pRipple type="button" icon="pi pi-angle-right"
                     class="p-button-rounded p-button-text" (click)="nextMonth()" [disabled]="isNextMonthDisabled()"></button>
   </div>
 </div>
 
+<p-table [style]="{'height':'calc(100vh - 175px)','width':'calc(20vh-175px)'}" 
+         [scrollable]="true" scrollHeight="flex" selectionMode="single" 
+         [value]="groups" [responsive]="true" styleClass="p-datatable-striped" 
+         [paginator]="true" [rows]="20" sortField="name" [sortOrder]="1">
 
+  <ng-template pTemplate="header">
+    <tr style="border-bottom: 2px solid deepskyblue;">
+      <th>
+        <div class="w-full top-header">
+          <span class="justify-content-center">Person</span>
+        </div>                
+      </th>
 
+      <th>
+        <div class="w-full top-header">
+          <span class="justify-content-center">Working Days</span>
+        </div>
+      </th>
+
+      <th class="w-7rem">
+        <div class="w-full top-header">
+          <span class="justify-content-center">Festives</span>
+        </div>                    
+      </th>
+
+      <th class="w-7rem">
+        <div class="w-full top-header">
+          <span class="justify-content-center">Vacations</span>
+        </div>                
+      </th>  
+      
+      <th class="w-7rem" style="border-right: 2px solid deepskyblue;">
+        <div class="w-full top-header">
+          <span class="justify-content-center">Others</span>
+        </div>                
+      </th>
+      <th *ngFor="let day of monthDaysList">
+        <p>{{day?.day}}</p>
+      </th>
+    </tr>
+  </ng-template>
+  
+  <ng-template pTemplate="body" let-group let-columns="columns">
+    <tr>
+      <td style="border-bottom: 2px solid deepskyblue;">
+        {{ group.person.name }}
+      </td>
+      <td class="w-7rem" style="border-bottom: 2px solid deepskyblue;">
+        <p>{{ group.person.wk }}</p>
+      </td>
+      <td class="w-7rem" style="border-bottom: 2px solid deepskyblue;">
+        <p>{{ group.person.festives }}</p>
+      </td>
+      <td class="w-7rem" style="border-bottom: 2px solid deepskyblue;">
+        <p>{{ group.person.vacations }}</p>
+      </td>
+      <td class="w-7rem" style="border-right: 2px solid deepskyblue; border-bottom: 2px solid deepskyblue;">
+        <p>{{ group.person.others }}</p>
+      </td>
+      <td *ngFor="let day of monthDaysList"
+      style="border-bottom: 2px solid deepskyblue; border-left: 1px solid lightgray;">
+      </td>
+    </tr>
+  </ng-template>
+  
+</p-table>
