@@ -111,15 +111,11 @@ export class ForecastDetailComponent implements OnInit {
 
     this.monthDays = this.generateDays();
     this.monthDaysList = Array.from(this.monthDays);
-
-    //TODO: Mostrar dias en la columna
-    console.log(this.monthDaysList);
   }
 
   onChangeMonth(event): void {
     this.monthDays = this.generateDays();
     this.monthDaysList = Array.from(this.monthDays);  
-    console.log(this.monthDays);
   }
 
   previousMonth():void{

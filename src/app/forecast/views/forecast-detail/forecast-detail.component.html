@@ -38,7 +38,7 @@
   </div>
 </div>
 
-<p-table [style]="{'height':'calc(100vh - 175px)','width':'calc(20vh-175px)'}" 
+<p-table [style]="{'height':'calc(90vh - 175px)','width':tableWidth}" 
          [scrollable]="true" scrollHeight="flex" selectionMode="single" 
          [value]="groups" [responsive]="true" styleClass="p-datatable-striped" 
          [paginator]="true" [rows]="20" sortField="name" [sortOrder]="1">
@@ -51,31 +51,31 @@
         </div>                
       </th>
 
-      <th>
+      <th class="w-3rem">
         <div class="w-full top-header">
           <span class="justify-content-center">Working Days</span>
         </div>
       </th>
 
-      <th class="w-7rem">
+      <th class="w-3rem">
         <div class="w-full top-header">
           <span class="justify-content-center">Festives</span>
         </div>                    
       </th>
 
-      <th class="w-7rem">
+      <th class="w-3rem">
         <div class="w-full top-header">
           <span class="justify-content-center">Vacations</span>
         </div>                
       </th>  
       
-      <th class="w-7rem" style="border-right: 2px solid deepskyblue;">
+      <th class="w-3rem" style="border-right: 2px solid deepskyblue;">
         <div class="w-full top-header">
           <span class="justify-content-center">Others</span>
         </div>                
       </th>
-      <th *ngFor="let day of monthDaysList">
-        <p>{{day?.day}}</p>
+      <th *ngFor="let day of monthDaysList" class="w-3rem" style="text-align: center;">
+        <p>{{day[1]?.day}}</p>
       </th>
     </tr>
   </ng-template>
@@ -85,20 +85,21 @@
       <td style="border-bottom: 2px solid deepskyblue;">
         {{ group.person.name }}
       </td>
-      <td class="w-7rem" style="border-bottom: 2px solid deepskyblue;">
+      <td class="w-3rem" style="border-bottom: 2px solid deepskyblue;">
         <p>{{ group.person.wk }}</p>
       </td>
-      <td class="w-7rem" style="border-bottom: 2px solid deepskyblue;">
+      <td class="w-3rem" style="border-bottom: 2px solid deepskyblue;">
         <p>{{ group.person.festives }}</p>
       </td>
-      <td class="w-7rem" style="border-bottom: 2px solid deepskyblue;">
+      <td class="w-3rem" style="border-bottom: 2px solid deepskyblue;">
         <p>{{ group.person.vacations }}</p>
       </td>
-      <td class="w-7rem" style="border-right: 2px solid deepskyblue; border-bottom: 2px solid deepskyblue;">
+      <td class="w-3rem" style="border-right: 2px solid deepskyblue; border-bottom: 2px solid deepskyblue;">
         <p>{{ group.person.others }}</p>
       </td>
-      <td *ngFor="let day of monthDaysList"
+      <td *ngFor="let day of monthDaysList" class="w-3rem"
       style="border-bottom: 2px solid deepskyblue; border-left: 1px solid lightgray;">
+      <p>{{day[1]?.day}}</p>
       </td>
     </tr>
   </ng-template>
