@@ -38,7 +38,7 @@
   </div>
 </div>
 
-<p-table [style]="{'height':'calc(90vh - 175px)','width':tableWidth}"  
+<p-table [style]="{'height':'calc(100vh - 175px)','width':tableWidth}"  
          [scrollable]="true" scrollHeight="flex" selectionMode="single" 
          [value]="groups" [responsive]="true" styleClass="p-datatable-striped" 
          [paginator]="true" [rows]="20" sortField="name" [sortOrder]="1">
@@ -46,37 +46,37 @@
          <ng-template pTemplate="header">
           <tr style="border-bottom: 2px solid deepskyblue;">
             <th class="flex flex-column align-items-center justify-content-center">
-              <div class="w-full top-header">
-                <span class="justify-content-center">Person</span>
+              <div class="flex flex-row w-full top-header">
+                <span class="flex flex-1 justify-content-center">Person</span>
               </div>
             </th>
         
             <th class="flex-none w-7rem flex-column align-items-center justify-content-center">
-              <div class="w-full top-header">
-                <span class="flex flex-1 align-items-center justify-content-center">Working Days</span>
+              <div class="flex flex-row w-full top-header">
+                <span class="flex flex-1 justify-content-center">Working Days</span>
               </div>
             </th>
         
             <th class="flex-none w-7rem flex-column align-items-center justify-content-center">
-              <div class="w-full top-header">
-                <span class="flex flex-1 align-items-center justify-content-center">Festives</span>
+              <div class="flex flex-row w-full top-header">
+                <span class="flex flex-1 justify-content-center">Festives</span>
               </div>
             </th>
 
             <th class="flex-none w-7rem flex-column align-items-center justify-content-center">
-              <div class="w-full top-header">
-                <span class="flex flex-1 align-items-center justify-content-center">Vacations</span>
+              <div class="flex flex-row w-full top-header">
+                <span class="flex flex-1 justify-content-center">Vacations</span>
               </div>
             </th>
         
             <th class="flex-none w-7rem flex-column align-items-center justify-content-center" style="border-right: 2px solid deepskyblue;">
-              <div class="w-full top-header">
-                <span class="flex flex-1 align-items-center justify-content-center">Others</span>
+              <div class="flex flex-row w-full top-header">
+                <span class="flex flex-1 justify-content-center">Others</span>
               </div>
             </th>
             <th *ngFor="let day of monthDaysList" style="text-align: center; width: 1rem; border-left: 1px solid lightgray;">
               <div class="flex flex-row w-full top-header">
-                <span class="flex flex-1 align-items-center justify-content-center">{{day[1].day}}</span>
+                <span class="flex flex-1 justify-content-center">{{day[1].day}}</span>
               </div>
             </th>
           </tr>
@@ -86,7 +86,7 @@
   
         <ng-template pTemplate="body" let-group let-columns="columns">
           <tr>
-            <td class="flex flex-column align-items-center justify-content-center" style="border-bottom: 2px solid deepskyblue;">
+            <td class="flex" style="border-bottom: 2px solid deepskyblue;">
               {{ group.person.name }}
             </td>
             <td class="flex-none w-7rem flex-column align-items-center justify-content-center" style="border-bottom: 2px solid deepskyblue;">

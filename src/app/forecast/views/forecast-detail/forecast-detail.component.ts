@@ -56,8 +56,8 @@ export class ForecastDetailComponent implements OnInit {
 
     //Datos de ejemplo
     this.groups = [
-      { person: { name: 'John', wk: 20, festives: 5, vacations: 10, others: 2 }, manager: 'Manager A' },
-      { person: { name: 'Alice', wk: 22, festives: 8, vacations: 12, others: 3 }, manager: 'Manager B' },
+      { person: { name: 'John', wk: 20, festives: 5, vacations: 10, others: 2 }},
+      { person: { name: 'Alice', wk: 22, festives: 8, vacations: 12, others: 3 }},
     ];
 
     this.scheduleTypes = [
