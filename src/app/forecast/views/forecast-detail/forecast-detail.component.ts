@@ -50,13 +50,13 @@ export class ForecastDetailComponent implements OnInit {
     });
 
     this.navigatorService.getNavivagorChangeEmitter().subscribe((menuVisible) => {
-      if (menuVisible) this.tableWidth = 'calc(100vw - 255px)';
-      else this.tableWidth = 'calc(100vw - 100px)';
-    }); 
+      if (menuVisible) this.tableWidth = 'calc(100vw - 250px)';
+      else this.tableWidth = 'calc(100vw - 50px)';
+    });
 
     //Datos de ejemplo
     this.groups = [
-      { person: { name: 'John', wk: 20, festives: 5, vacations: 10, others: 2 }},
+      { person: { name: 'John arestdytdytdtydytdytdytdyd', wk: 20, festives: 5, vacations: 10, others: 2 }},
       { person: { name: 'Alice', wk: 22, festives: 8, vacations: 12, others: 3 }},
     ];
 
