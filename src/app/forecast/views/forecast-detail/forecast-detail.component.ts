@@ -8,6 +8,7 @@ import { ScheduleType } from '../../model/schedule-type';
 import { GroupMember } from '../../model/GroupMember';
 import { ForecastService } from '../../forecast.service';
 import { Person } from '../../model/Person';
+import { Detail } from '../../model/Detail';
 
 @Component({
   selector: 'app-forecast-detail',
@@ -37,11 +38,9 @@ export class ForecastDetailComponent implements OnInit {
   group: Group;
   selectedMonth: DropdownEntry;
   monthsList: DropdownEntry[] = [];
-  groups: any[];
   monthDays: Map<String, MetadataDay>;
   monthDaysList: any[];
-  groupMembers: GroupMember[];
-  membersName: String[] = [];
+  details: Detail[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -53,6 +52,7 @@ export class ForecastDetailComponent implements OnInit {
     this.resizeTable();
     this.route.params.subscribe((params) => {
       this.group = JSON.parse(params['group']);
+      this.details = JSON.parse(params['details']);
     });
 
     this.navigatorService.getNavivagorChangeEmitter().subscribe((menuVisible) => {
@@ -61,12 +61,7 @@ export class ForecastDetailComponent implements OnInit {
     });
 
 
-    this.loadGroupMembers();
-    //Datos de ejemplo
-    this.groups = [
-      { person: { name: 'John', wk: 20, festives: 5, vacations: 10, others: 2 }},
-      { person: { name: 'Alice', wk: 22, festives: 8, vacations: 12, others: 3 }},
-    ];
+    //this.loadGroupMembers();
 
     this.scheduleTypes = [
       new ScheduleType({
@@ -201,30 +196,6 @@ export class ForecastDetailComponent implements OnInit {
     } else {
       this.tableWidth = 'calc(100vw - 55px)';
     }
-  }
-
-  loadGroupMembers():void{
-    let id = this.group.id.toString();
-    this.forecastService.getGroupMembers(id).subscribe({
-      next: (res: GroupMember[]) => {
-        this.groupMembers = res;
-        this.getPersonData(); 
-
-      },
-    });   
-  }
-
-  getPersonData():void{
-
-    this.groupMembers.forEach(member => {
-      this.forecastService.getPersonData(member.person_id).subscribe(
-        (person: Person) => {
-        this.membersName.push(person.name + " " + person.lastname);
-
-      });
-    });
-
-
   }
 
 }

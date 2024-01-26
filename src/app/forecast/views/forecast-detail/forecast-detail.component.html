@@ -40,7 +40,7 @@
 
 <p-table [style]="{'height':'calc(100vh - 175px)','width':tableWidth}"  
        [scrollable]="true" scrollHeight="flex" selectionMode="single" 
-       [value]="groups" [responsive]="true" styleClass="p-datatable-striped" 
+       [value]="details" [responsive]="true" styleClass="p-datatable-striped" 
        [paginator]="true" [rows]="20" sortField="name" [sortOrder]="1">
 
        <ng-template pTemplate="header">
@@ -72,22 +72,22 @@
       
       
 
-      <ng-template pTemplate="body" let-group let-columns="columns">
+      <ng-template pTemplate="body" let-detail let-columns="columns">
         <tr class="border-bottom-1 border-gray-300">
           <td class="flex flex-1 w-12rem border-none">
-            {{ group.person.name }}
+            {{ detail.fullName }}
           </td>
           <td class="flex-none w-6rem flex-column justify-content-center border-none">
-            <p>{{ group.person.wk }}</p>
+            <p>{{ detail.workingDays }}</p>
           </td>
           <td class="flex-none w-6rem flex-column justify-content-center border-none">
-            <p>{{ group.person.festives }}</p>
+            <p>{{ detail.festives }}</p>
           </td>
           <td class="flex-none w-6rem flex-column justify-content-center border-none">
-            <p>{{ group.person.vacations }}</p>
+            <p>{{ detail.vacations }}</p>
           </td>
           <td class="flex-none w-6rem flex-column justify-content-center border-none">
-            <p>{{ group.person.others }}</p>
+            <p>{{ detail.others }}</p>
           </td>
           <td *ngFor="let day of monthDaysList" [ngStyle]="{ 'background-color': day[1]?.type.color }" class="flex-none w-2rem justify-content-center border-none border-left-1 border-gray-300">
           </td>
