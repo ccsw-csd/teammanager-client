@@ -5,6 +5,9 @@ import { DropdownEntry } from '../../model/dropdown-entry';
 import { NavigatorService } from 'src/app/core/services/navigator.service';
 import { MetadataDay } from '../../model/metadata-day';
 import { ScheduleType } from '../../model/schedule-type';
+import { GroupMember } from '../../model/GroupMember';
+import { ForecastService } from '../../forecast.service';
+import { Person } from '../../model/Person';
 
 @Component({
   selector: 'app-forecast-detail',
@@ -37,10 +40,13 @@ export class ForecastDetailComponent implements OnInit {
   groups: any[];
   monthDays: Map<String, MetadataDay>;
   monthDaysList: any[];
+  groupMembers: GroupMember[];
+  membersName: String[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private navigatorService: NavigatorService,
+    private forecastService: ForecastService,
   ) { }
 
   ngOnInit(): void {
@@ -54,9 +60,11 @@ export class ForecastDetailComponent implements OnInit {
       else this.tableWidth = 'calc(100vw - 50px)';
     });
 
+
+    this.loadGroupMembers();
     //Datos de ejemplo
     this.groups = [
-      { person: { name: 'John arestdytdytdtydytdytdytdyd', wk: 20, festives: 5, vacations: 10, others: 2 }},
+      { person: { name: 'John', wk: 20, festives: 5, vacations: 10, others: 2 }},
       { person: { name: 'Alice', wk: 22, festives: 8, vacations: 12, others: 3 }},
     ];
 
@@ -193,6 +201,30 @@ export class ForecastDetailComponent implements OnInit {
     } else {
       this.tableWidth = 'calc(100vw - 55px)';
     }
+  }
+
+  loadGroupMembers():void{
+    let id = this.group.id.toString();
+    this.forecastService.getGroupMembers(id).subscribe({
+      next: (res: GroupMember[]) => {
+        this.groupMembers = res;
+        this.getPersonData(); 
+
+      },
+    });   
+  }
+
+  getPersonData():void{
+
+    this.groupMembers.forEach(member => {
+      this.forecastService.getPersonData(member.person_id).subscribe(
+        (person: Person) => {
+        this.membersName.push(person.name + " " + person.lastname);
+
+      });
+    });
+
+
   }
 
 }

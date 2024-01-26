@@ -32,6 +32,12 @@ export class ForecastService {
   getGroupMembers(filterGroup: string): Observable<GroupMember[]> {
     const url = `${environment.server}/v_group_members_all/?group_id=${filterGroup}`;
     return this.http.get<GroupMember[]>(url);
+    
+  }
+
+  getPersonData(personId: number): Observable<Person> {
+    const url = `${environment.server}/person/?id=${personId}`;
+    return this.http.get<Person>(url);
   }
 
 }

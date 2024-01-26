@@ -1,5 +1,5 @@
 export class GroupMember{
     id:string;
-    groupId:number;
-    personId:number;
+    group_id:number;
+    person_id:number;
 }
