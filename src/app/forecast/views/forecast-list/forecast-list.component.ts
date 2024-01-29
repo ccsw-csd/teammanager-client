@@ -12,6 +12,7 @@ import { ForecastService } from '../../forecast.service';
 import { GroupMember } from '../../model/GroupMember';
 import { Person } from '../../model/Person';
 import { forkJoin } from 'rxjs';
+import { PersonAbsence } from '../../model/PersonAbsence';
 
 @Component({
   selector: 'app-forecast-list',
@@ -31,6 +32,7 @@ export class ForecastListComponent implements OnInit {
   totalGroups: number;
   groupMembers: GroupMember[];
   details: Detail[] = [];
+  absences: PersonAbsence[] = [];
 
   constructor(
     
@@ -132,12 +134,21 @@ export class ForecastListComponent implements OnInit {
     forkJoin(observables).subscribe(
       (people: Person[]) => {
         people.forEach(person => {
+/*
+          this.forecastService.getPersonAbsences(person.id).subscribe({
+            next: (res: PersonAbsence[]) => {
+              this.absences = res;
+            },
+          }); 
+*/
+   //       console.log(this.absences);
+          const numberOfDays: number[] = this.calculateAbsenceType();
           const detail: Detail = {
             person: person,
-            workingDays: 60,
-            festives: 2,
-            vacations: 3,
-            others: 4,
+            workingDays: numberOfDays[0],
+            festives: numberOfDays[1],
+            vacations: numberOfDays[2],
+            others: numberOfDays[3],
             fullName: person.name + " " + person.lastname,
           };
           this.details.push(detail);
@@ -153,5 +164,13 @@ export class ForecastListComponent implements OnInit {
   
   dataLoaded(group: Group): void {
     this.openModal('Visualice Group', group, 'visualizar');
+  }
+
+  calculateAbsenceType(): number[]{
+    //Pos0: Working Days; Pos1: Festives; Pos2: Vacations; Pos3: Others
+    let res = [0,0,0,0];
+
+
+    return res;
   }
 }
