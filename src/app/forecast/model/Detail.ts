@@ -1,5 +1,6 @@
 import { MetadataDay } from "src/app/holiday/model/metadata-day";
 import { Person } from "./Person";
+import { PersonAbsence } from "./PersonAbsence";
 
 export class Detail{
     person: Person;
@@ -7,5 +8,6 @@ export class Detail{
     festives: number;
     vacations: number;
     others: number;
-    fullName: string;
+    absences: PersonAbsence;
+    fullname: string;
 }

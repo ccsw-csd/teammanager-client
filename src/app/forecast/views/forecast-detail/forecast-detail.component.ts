@@ -63,7 +63,7 @@ export class ForecastDetailComponent implements OnInit {
     });
 
 
-    this.loadGroupMembers();
+    this.loadMembersDetails();
 
     this.scheduleTypes = [
       new ScheduleType({
@@ -200,47 +200,13 @@ export class ForecastDetailComponent implements OnInit {
     }
   }
 
-  loadGroupMembers():void{
+  loadMembersDetails():void{
     let id = this.group.id.toString();
-    this.forecastService.getGroupMembers(id).subscribe({
-      next: (res: GroupMember[]) => {
-        this.groupMembers = res;
-        this.getPersonData(); 
+    this.forecastService.getMembersDetails(id).subscribe({
+      next: (res: Detail[]) => {
+        this.details = res;
       },
     });   
-  }
-
-  getPersonData(): void {
-    this.groupMembers.forEach(member => {
-      this.forecastService.getPersonData(member.person_id).subscribe(
-        (person: Person) => {
-          this.loadAbsences(person);
-          const numberOfDays: number[] = this.calculateAbsenceType();
-          const detail: Detail = {
-            person: person,
-            workingDays: numberOfDays[0],
-            festives: numberOfDays[1],
-            vacations: numberOfDays[2],
-            others: numberOfDays[3],
-            fullName: person.name + " " + person.lastname,
-          };
-          this.details.push(detail);
-        }
-      );
-    });
-
-    console.log(this.details);
-
-  }
-
-  loadAbsences(person: Person){
-    const actualDate = new Date();
-    this.forecastService.getPersonAbsences(person.id, actualDate.getFullYear(), actualDate.getMonth()).subscribe({
-      next: (res: PersonAbsence[]) => {
-        this.absences = res; 
-        console.log("Absences: ", this.absences);
-      },
-    });
   }
 
   calculateAbsenceType(): number[]{

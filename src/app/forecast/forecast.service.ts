@@ -6,6 +6,7 @@ import { Person } from './model/Person';
 import { GroupMember } from './model/GroupMember';
 import { environment } from 'src/environments/environment';
 import { PersonAbsence } from './model/PersonAbsence';
+import { Detail } from './model/Detail';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,12 @@ export class ForecastService {
   getPersonAbsences(id:number, year: number, month: number): Observable<PersonAbsence[]>{
     const url = `${environment.server}/v_person_absence/?person_id=${id}&year=${year}&month=${month+1}`;
     return this.http.get<PersonAbsence[]>(url);
+  }
+
+  getMembersDetails(filterGroup: string): Observable<Detail[]> {
+    const url = `${environment.server}/v_group_members_all/?group_id=${filterGroup}`;
+    return this.http.get<Detail[]>(url);
+    
   }
 
 }
