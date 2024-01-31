@@ -9,6 +9,7 @@ import { GroupMember } from '../../model/GroupMember';
 import { ForecastService } from '../../forecast.service';
 import { Person } from '../../model/Person';
 import { Detail } from '../../model/Detail';
+import { PersonAbsence } from '../../model/PersonAbsence';
 
 @Component({
   selector: 'app-forecast-detail',
@@ -41,6 +42,8 @@ export class ForecastDetailComponent implements OnInit {
   monthDays: Map<String, MetadataDay>;
   monthDaysList: any[];
   details: Detail[] = [];
+  absences: PersonAbsence[] = [];
+  groupMembers: GroupMember[];
 
   constructor(
     private route: ActivatedRoute,
@@ -52,7 +55,6 @@ export class ForecastDetailComponent implements OnInit {
     this.resizeTable();
     this.route.params.subscribe((params) => {
       this.group = JSON.parse(params['group']);
-      this.details = JSON.parse(params['details']);
     });
 
     this.navigatorService.getNavivagorChangeEmitter().subscribe((menuVisible) => {
@@ -61,7 +63,7 @@ export class ForecastDetailComponent implements OnInit {
     });
 
 
-    //this.loadGroupMembers();
+    this.loadGroupMembers();
 
     this.scheduleTypes = [
       new ScheduleType({
@@ -176,7 +178,7 @@ export class ForecastDetailComponent implements OnInit {
 
   isPreviousMonthDisabled():boolean{
     if (this.monthsList.indexOf(this.selectedMonth) === 0) {
-      return true
+      return true;
     } else {
       return false;
     }
@@ -184,7 +186,7 @@ export class ForecastDetailComponent implements OnInit {
 
   isNextMonthDisabled():boolean{
     if (this.monthsList.indexOf(this.selectedMonth) === (this.monthsList.length -1)) {
-      return true
+      return true;
     } else {
       return false;
     }
@@ -196,6 +198,57 @@ export class ForecastDetailComponent implements OnInit {
     } else {
       this.tableWidth = 'calc(100vw - 55px)';
     }
+  }
+
+  loadGroupMembers():void{
+    let id = this.group.id.toString();
+    this.forecastService.getGroupMembers(id).subscribe({
+      next: (res: GroupMember[]) => {
+        this.groupMembers = res;
+        this.getPersonData(); 
+      },
+    });   
+  }
+
+  getPersonData(): void {
+    this.groupMembers.forEach(member => {
+      this.forecastService.getPersonData(member.person_id).subscribe(
+        (person: Person) => {
+          this.loadAbsences(person);
+          const numberOfDays: number[] = this.calculateAbsenceType();
+          const detail: Detail = {
+            person: person,
+            workingDays: numberOfDays[0],
+            festives: numberOfDays[1],
+            vacations: numberOfDays[2],
+            others: numberOfDays[3],
+            fullName: person.name + " " + person.lastname,
+          };
+          this.details.push(detail);
+        }
+      );
+    });
+
+    console.log(this.details);
+
+  }
+
+  loadAbsences(person: Person){
+    const actualDate = new Date();
+    this.forecastService.getPersonAbsences(person.id, actualDate.getFullYear(), actualDate.getMonth()).subscribe({
+      next: (res: PersonAbsence[]) => {
+        this.absences = res; 
+        console.log("Absences: ", this.absences);
+      },
+    });
+  }
+
+  calculateAbsenceType(): number[]{
+    //Pos0: Working Days; Pos1: Festives; Pos2: Vacations; Pos3: Others
+    let res = [0,0,0,0];
+
+
+    return res;
   }
 
 }

@@ -1,6 +1,8 @@
+import { Person } from "./Person";
+
 export class PersonAbsence{
     id: string;
-    person_id: number;  
+    person: Person;  
     year: number;   
     month: number;   
     date: Date;

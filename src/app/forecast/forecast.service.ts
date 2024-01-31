@@ -41,8 +41,8 @@ export class ForecastService {
     return this.http.get<Person>(url);
   }
 
-  getPersonAbsences(id: number): Observable<PersonAbsence[]>{
-    const url = `${environment.server}/v_person_absence/?person_id=${id}`
+  getPersonAbsences(id:number, year: number, month: number): Observable<PersonAbsence[]>{
+    const url = `${environment.server}/v_person_absence/?person_id=${id}&year=${year}&month=${month+1}`;
     return this.http.get<PersonAbsence[]>(url);
   }
 

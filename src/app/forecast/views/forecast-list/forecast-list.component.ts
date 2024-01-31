@@ -11,7 +11,6 @@ import { Detail } from '../../model/Detail';
 import { ForecastService } from '../../forecast.service';
 import { GroupMember } from '../../model/GroupMember';
 import { Person } from '../../model/Person';
-import { forkJoin } from 'rxjs';
 import { PersonAbsence } from '../../model/PersonAbsence';
 
 @Component({
@@ -30,9 +29,6 @@ export class ForecastListComponent implements OnInit {
   columnNames: any[];
   selectedColumnNames : any[];
   totalGroups: number;
-  groupMembers: GroupMember[];
-  details: Detail[] = [];
-  absences: PersonAbsence[] = [];
 
   constructor(
     
@@ -55,7 +51,9 @@ export class ForecastListComponent implements OnInit {
     }); 
 
     this.loadData();
+    
   }
+
 
   loadData() : void {
     if (this.adminView) {
@@ -88,13 +86,12 @@ export class ForecastListComponent implements OnInit {
 
   openModal(header: string, group: Group, mode: 'visualizar') {
     this.router.navigate(['../forecast-detail', { 
-      group: JSON.stringify(group),
-      details: JSON.stringify(this.details)
+      group: JSON.stringify(group)
      }]);
   }
 
   viewGroup(group: Group, mode: 'visualizar') {
-    this.loadGroupMembers(group);
+    this.openModal('Visualice Group', group, mode);
   }
 
   resizeTable() {
@@ -112,65 +109,5 @@ export class ForecastListComponent implements OnInit {
         this.loadData();
       }
     )
-  }
-
-  loadGroupMembers(group: Group):void{
-    let id = group.id.toString();
-    this.forecastService.getGroupMembers(id).subscribe({
-      next: (res: GroupMember[]) => {
-        this.groupMembers = res;
-        this.getPersonData(group); 
-
-      },
-    });   
-  }
-
-  getPersonData(group: Group): void {
-    const observables = this.groupMembers.map(member => {
-      return this.forecastService.getPersonData(member.person_id);
-    });
-  
-    //TODO: Recoger valores de dias festivos y demás
-    forkJoin(observables).subscribe(
-      (people: Person[]) => {
-        people.forEach(person => {
-/*
-          this.forecastService.getPersonAbsences(person.id).subscribe({
-            next: (res: PersonAbsence[]) => {
-              this.absences = res;
-            },
-          }); 
-*/
-   //       console.log(this.absences);
-          const numberOfDays: number[] = this.calculateAbsenceType();
-          const detail: Detail = {
-            person: person,
-            workingDays: numberOfDays[0],
-            festives: numberOfDays[1],
-            vacations: numberOfDays[2],
-            others: numberOfDays[3],
-            fullName: person.name + " " + person.lastname,
-          };
-          this.details.push(detail);
-        });
-
-        this.dataLoaded(group);
-      },
-      error => {
-        console.error("Error recogiendo datos", error);
-      }
-    );
-  }
-  
-  dataLoaded(group: Group): void {
-    this.openModal('Visualice Group', group, 'visualizar');
-  }
-
-  calculateAbsenceType(): number[]{
-    //Pos0: Working Days; Pos1: Festives; Pos2: Vacations; Pos3: Others
-    let res = [0,0,0,0];
-
-
-    return res;
   }
 }
