@@ -205,9 +205,9 @@ export class ForecastDetailComponent implements OnInit {
     let startDate = this.monthDaysList[0];
     let endDate = this.monthDaysList[this.monthDaysList.length -1];
 
-    const firstDay = new Date(startDate[1].year, startDate[1].month, startDate[1].day);
-    const lastDay = new Date(endDate[1].year, endDate[1].month, endDate[1].day);
-
+    const firstDay = new Date(Date.UTC(startDate[1].year, startDate[1].month, startDate[1].day));
+    const lastDay = new Date(Date.UTC(endDate[1].year, endDate[1].month, endDate[1].day));
+    
     this.forecastService.getMembersDetails(id, firstDay, lastDay).subscribe({
       next: (res: Detail[]) => {
         this.details = res;

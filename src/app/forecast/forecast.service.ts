@@ -48,16 +48,8 @@ export class ForecastService {
   }
 
   getMembersDetails(filterGroup: string, startDate: Date, endDate: Date): Observable<Detail[]> {
-    const requestBody = {
-      group_id: filterGroup,
-      startDate: startDate,
-      endDate: endDate,
-    };
-    const url = `${environment.server}/v_group_members_all/?group_id=${filterGroup}`;
-    //const url = `${environment.server}/v_group_members_all/`;
-    return this.http.get<Detail[]>(url);
-    //return this.http.post<Detail[]>(url, requestBody);
-    
+    const url = `${environment.server}/v_group_members_all/?group_id=${filterGroup}&start_date=${startDate.toISOString()}&end_date=${endDate.toISOString()}`;
+    return this.http.get<Detail[]>(url);  
   }
 
 }
