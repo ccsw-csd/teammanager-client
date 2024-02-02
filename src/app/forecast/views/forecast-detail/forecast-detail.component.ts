@@ -62,9 +62,6 @@ export class ForecastDetailComponent implements OnInit {
       else this.tableWidth = 'calc(100vw - 50px)';
     });
 
-
-    this.loadMembersDetails();
-
     this.scheduleTypes = [
       new ScheduleType({
         id: 1,
@@ -118,6 +115,8 @@ export class ForecastDetailComponent implements OnInit {
 
     this.monthDays = this.generateDays();
     this.monthDaysList = Array.from(this.monthDays);
+
+    this.loadMembersDetails();
   }
 
   onChangeMonth(event): void {
@@ -202,19 +201,18 @@ export class ForecastDetailComponent implements OnInit {
 
   loadMembersDetails():void{
     let id = this.group.id.toString();
-    this.forecastService.getMembersDetails(id).subscribe({
+    
+    let startDate = this.monthDaysList[0];
+    let endDate = this.monthDaysList[this.monthDaysList.length -1];
+
+    const firstDay = new Date(startDate[1].year, startDate[1].month, startDate[1].day);
+    const lastDay = new Date(endDate[1].year, endDate[1].month, endDate[1].day);
+
+    this.forecastService.getMembersDetails(id, firstDay, lastDay).subscribe({
       next: (res: Detail[]) => {
         this.details = res;
       },
     });   
-  }
-
-  calculateAbsenceType(): number[]{
-    //Pos0: Working Days; Pos1: Festives; Pos2: Vacations; Pos3: Others
-    let res = [0,0,0,0];
-
-
-    return res;
   }
 
 }

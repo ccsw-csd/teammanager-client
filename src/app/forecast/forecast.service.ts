@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from "rxjs";
+import { Observable, filter } from "rxjs";
 import { Group } from './model/Group';
 import { Person } from './model/Person';
 import { GroupMember } from './model/GroupMember';
@@ -47,9 +47,16 @@ export class ForecastService {
     return this.http.get<PersonAbsence[]>(url);
   }
 
-  getMembersDetails(filterGroup: string): Observable<Detail[]> {
+  getMembersDetails(filterGroup: string, startDate: Date, endDate: Date): Observable<Detail[]> {
+    const requestBody = {
+      group_id: filterGroup,
+      startDate: startDate,
+      endDate: endDate,
+    };
     const url = `${environment.server}/v_group_members_all/?group_id=${filterGroup}`;
+    //const url = `${environment.server}/v_group_members_all/`;
     return this.http.get<Detail[]>(url);
+    //return this.http.post<Detail[]>(url, requestBody);
     
   }
 
