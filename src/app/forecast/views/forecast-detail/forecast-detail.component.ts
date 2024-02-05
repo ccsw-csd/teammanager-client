@@ -122,6 +122,8 @@ export class ForecastDetailComponent implements OnInit {
   onChangeMonth(event): void {
     this.monthDays = this.generateDays();
     this.monthDaysList = Array.from(this.monthDays);  
+
+    this.loadMembersDetails();
   }
 
   previousMonth():void{
@@ -129,6 +131,8 @@ export class ForecastDetailComponent implements OnInit {
     this.selectedMonth = this.monthsList[pos-1];
     this.monthDays = this.generateDays();
     this.monthDaysList = Array.from(this.monthDays);
+
+    this.loadMembersDetails();
   }
 
   nextMonth():void{
@@ -136,6 +140,8 @@ export class ForecastDetailComponent implements OnInit {
     this.selectedMonth = this.monthsList[pos+1];
     this.monthDays = this.generateDays();
     this.monthDaysList = Array.from(this.monthDays);
+
+    this.loadMembersDetails();
   }
 
   generateDays(): Map<String, MetadataDay>{
