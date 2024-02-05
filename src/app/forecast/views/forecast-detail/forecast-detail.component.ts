@@ -10,6 +10,7 @@ import { ForecastService } from '../../forecast.service';
 import { Person } from '../../model/Person';
 import { Detail } from '../../model/Detail';
 import { PersonAbsence } from '../../model/PersonAbsence';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-forecast-detail',
@@ -44,6 +45,7 @@ export class ForecastDetailComponent implements OnInit {
   details: Detail[] = [];
   absences: PersonAbsence[] = [];
   groupMembers: GroupMember[];
+  memberDays: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -91,6 +93,18 @@ export class ForecastDetailComponent implements OnInit {
         color: '#c2c2cc',
         id: 9,
       }),
+      new ScheduleType({
+        name: 'Vacation',
+        absence: true,
+        color: '#ffffaa',
+        id: 4,
+      }),
+      new ScheduleType({
+        name: 'Other',
+        absence: true,
+        color: '#f7bd46',
+        id: 4,
+      })
     ];
 
     const actualYear = new Date().getFullYear();
@@ -214,11 +228,89 @@ export class ForecastDetailComponent implements OnInit {
     const firstDay = new Date(Date.UTC(startDate[1].year, startDate[1].month, startDate[1].day));
     const lastDay = new Date(Date.UTC(endDate[1].year, endDate[1].month, endDate[1].day));
     
-    this.forecastService.getMembersDetails(id, firstDay, lastDay).subscribe({
+    this.forecastService.getMembersDetails(id, firstDay, lastDay).pipe(
+      finalize(() => {
+        for (let i = 0; i < this.details.length; i++) {
+          this.memberDays.push([]);
+        }
+        this.generateMemberDays();
+      })
+      ).subscribe({
       next: (res: Detail[]) => {
         this.details = res;
       },
     });   
+  }
+
+  generateMemberDays(){
+   
+    let month = Number(this.selectedMonth.month) +1;
+    let year = Number(this.selectedMonth.year)
+    let date = new Date(year,month, 0);
+    let lastDay = date.getDate();
+
+    const normalDay = this.scheduleTypes[1];
+    
+
+    for(let day = 1; day <= lastDay; day++){
+
+      const dateAux = new Date(year, month-1, day);
+      let type = normalDay;
+      const isWeekend = dateAux.getDay() == 0 || dateAux.getDay() == 6;
+      
+      if (isWeekend) {
+        type = this.scheduleTypes.find(
+          (type) => type.name === 'Fin de semana'
+        );
+      }
+
+      const metadata = new MetadataDay({
+        day: day,
+        month: Number(this.selectedMonth.month),
+        year: year,
+        type: type,
+        
+      });
+
+
+      for(const detail of this.details){
+        for(const absence of detail.absences){
+          const day = new Date(absence.date);
+
+          if(absence.year === metadata.year &&
+             absence.month === (metadata.month+1) &&
+             day.getDate() === metadata.day){
+                switch (absence.type) {
+                  case "VAC":
+                    type = this.scheduleTypes.find(
+                      (type) => type.name === 'Vacation'
+                    );
+                    metadata.type = type;
+                    break;
+                  case "OTH":
+                    type = this.scheduleTypes.find(
+                      (type) => type.name === 'Other'
+                    );
+                    metadata.type = type;
+                    break;
+                  default:
+                    type = this.scheduleTypes.find(
+                      (type) => type.name === 'Festivo'
+                    );
+                    metadata.type = type;
+                    break;
+                }
+          }
+          
+        }
+
+        this.memberDays[this.details.indexOf(detail)].push(metadata);
+      }
+      
+
+      const key = month + '_' + day;
+    }
+
   }
 
 }

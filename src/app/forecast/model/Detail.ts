@@ -8,6 +8,6 @@ export class Detail{
     festives: number;
     vacations: number;
     others: number;
-    absences: PersonAbsence;
+    absences: PersonAbsence[];
     fullname: string;
 }

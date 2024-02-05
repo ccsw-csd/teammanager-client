@@ -70,9 +70,7 @@
         </tr>
       </ng-template>
       
-      
-
-      <ng-template pTemplate="body" let-detail let-columns="columns">
+      <ng-template pTemplate="body" let-detail>
         <tr class="border-bottom-1 border-gray-300">
           <td class="flex flex-1 w-12rem border-none">
             {{ detail.fullName }}
@@ -90,10 +88,9 @@
             <p>{{ detail.others }}</p>
           </td>
           <td *ngFor="let day of monthDaysList" [ngStyle]="{ 'background-color': day[1]?.type.color }" class="flex-none w-2rem justify-content-center border-none border-left-1 border-gray-300">
+            <p>{{ details.indexOf(detail) }}</p>
           </td>
         </tr>
       </ng-template>
-      
-      
 
 </p-table>
