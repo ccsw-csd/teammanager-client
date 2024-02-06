@@ -9,5 +9,5 @@ export class Detail{
     vacations: number;
     others: number;
     absences: PersonAbsence[];
-    fullname: string;
+    fullName: string;
 }

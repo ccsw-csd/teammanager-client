@@ -186,6 +186,7 @@ export class ForecastDetailComponent implements OnInit {
         month: Number(this.selectedMonth.month),
         year: year,
         type: type,
+        originalType: type,
         
       });          
 
@@ -269,9 +270,9 @@ export class ForecastDetailComponent implements OnInit {
         month: Number(this.selectedMonth.month),
         year: year,
         type: type,
+        originalType: type,
         
       });
-
 
       for(const detail of this.details){
         for(const absence of detail.absences){
@@ -300,6 +301,8 @@ export class ForecastDetailComponent implements OnInit {
                     metadata.type = type;
                     break;
                 }
+
+                break;
           }
           
         }
@@ -307,7 +310,7 @@ export class ForecastDetailComponent implements OnInit {
         this.memberDays[this.details.indexOf(detail)].push(metadata);
       }
       
-
+      
       const key = month + '_' + day;
     }
 

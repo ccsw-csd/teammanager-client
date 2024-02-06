@@ -87,7 +87,7 @@
           <td class="flex-none w-6rem flex-column justify-content-center border-none">
             <p>{{ detail.others }}</p>
           </td>
-          <td *ngFor="let day of monthDaysList" [ngStyle]="{ 'background-color': day[1]?.type.color }" class="flex-none w-2rem justify-content-center border-none border-left-1 border-gray-300">
+          <td *ngFor="let day of monthDaysList; let j = index" [ngStyle]="{ 'background-color': memberDays[details.indexOf(detail)][j]?.type.color }" class="flex-none w-2rem justify-content-center border-none border-left-1 border-gray-300">
             <p>{{ details.indexOf(detail) }}</p>
           </td>
         </tr>
