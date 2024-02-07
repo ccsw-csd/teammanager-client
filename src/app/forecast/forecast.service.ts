@@ -31,24 +31,8 @@ export class ForecastService {
     return this.http.get<Person[]>(environment.server + "/person/find/"+filterName);
   }
 
-  getGroupMembers(filterGroup: string): Observable<GroupMember[]> {
-    const url = `${environment.server}/v_group_members_all/?group_id=${filterGroup}`;
-    return this.http.get<GroupMember[]>(url);
-    
-  }
-
-  getPersonData(personId: number): Observable<Person> {
-    const url = `${environment.server}/person/?id=${personId}`;
-    return this.http.get<Person>(url);
-  }
-
-  getPersonAbsences(id:number, year: number, month: number): Observable<PersonAbsence[]>{
-    const url = `${environment.server}/v_person_absence/?person_id=${id}&year=${year}&month=${month+1}`;
-    return this.http.get<PersonAbsence[]>(url);
-  }
-
   getMembersDetails(filterGroup: string, startDate: Date, endDate: Date): Observable<Detail[]> {
-    const url = `${environment.server}/v_group_members_all/?group_id=${filterGroup}&start_date=${startDate.toISOString()}&end_date=${endDate.toISOString()}`;
+    const url = `${environment.server}/group_members/?group_id=${filterGroup}&start_date=${startDate.toISOString()}&end_date=${endDate.toISOString()}`;
     return this.http.get<Detail[]>(url);  
   }
 
