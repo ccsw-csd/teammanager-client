@@ -231,6 +231,7 @@ export class ForecastDetailComponent implements OnInit {
     
     this.forecastService.getMembersDetails(id, firstDay, lastDay).pipe(
       finalize(() => {
+        this.memberDays = [];
         for (let i = 0; i < this.details.length; i++) {
           this.memberDays.push([]);
         }
@@ -265,53 +266,46 @@ export class ForecastDetailComponent implements OnInit {
         );
       }
 
-      const metadata = new MetadataDay({
-        day: day,
-        month: Number(this.selectedMonth.month),
-        year: year,
-        type: type,
-        originalType: type,
-        
-      });
-
       for(const detail of this.details){
+        const metadata = new MetadataDay({
+          day: day,
+          month: Number(this.selectedMonth.month),
+          year: year,
+          type: type,
+          originalType: type,
+        });
         for(const absence of detail.absences){
           const day = new Date(absence.date);
 
           if(absence.year === metadata.year &&
              absence.month === (metadata.month+1) &&
              day.getDate() === metadata.day){
-                switch (absence.type) {
+
+                switch (absence.absence_type) {
                   case "VAC":
-                    type = this.scheduleTypes.find(
+                    metadata.type = this.scheduleTypes.find(
                       (type) => type.name === 'Vacation'
                     );
-                    metadata.type = type;
                     break;
                   case "OTH":
-                    type = this.scheduleTypes.find(
+                    metadata.type = this.scheduleTypes.find(
                       (type) => type.name === 'Other'
                     );
-                    metadata.type = type;
                     break;
                   default:
-                    type = this.scheduleTypes.find(
+                    metadata.type = this.scheduleTypes.find(
                       (type) => type.name === 'Festivo'
                     );
-                    metadata.type = type;
                     break;
                 }
 
-                break;
           }
           
         }
 
         this.memberDays[this.details.indexOf(detail)].push(metadata);
       }
-      
-      
-      const key = month + '_' + day;
+
     }
 
   }

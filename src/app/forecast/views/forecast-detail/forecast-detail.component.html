@@ -88,7 +88,6 @@
             <p>{{ detail.others }}</p>
           </td>
           <td *ngFor="let day of monthDaysList; let j = index" [ngStyle]="{ 'background-color': memberDays[details.indexOf(detail)][j]?.type.color }" class="flex-none w-2rem justify-content-center border-none border-left-1 border-gray-300">
-            <p>{{ details.indexOf(detail) }}</p>
           </td>
         </tr>
       </ng-template>
