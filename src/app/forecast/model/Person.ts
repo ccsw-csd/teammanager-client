@@ -7,4 +7,11 @@ export class Person{
     lastname:string;   
     centerId:number;  
     businesscode:string; 
+    active: number;
+    withAbsence: number;
+    withPon: boolean;
+    grade: string;
+    createdByLdap: boolean;
+    globalId: string;
+
 }
