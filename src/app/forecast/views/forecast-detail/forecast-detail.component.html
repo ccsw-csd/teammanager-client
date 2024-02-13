@@ -34,7 +34,13 @@
                   class="p-button-rounded p-button-text" (click)="previousMonth()" [disabled]="isPreviousMonthDisabled()"></button>
   <p-dropdown [(ngModel)]="selectedMonth" (onChange)="onChangeMonth($event)" [options]="monthsList" optionLabel="code"></p-dropdown>
   <button pButton pRipple type="button" icon="pi pi-angle-right"
-                  class="p-button-rounded p-button-text" (click)="nextMonth()" [disabled]="isNextMonthDisabled()"></button>
+    class="p-button-rounded p-button-text" (click)="nextMonth()" [disabled]="isNextMonthDisabled()"></button>
+
+    <p-button label="Create Date Range" (click)="showCalendar()"></p-button>
+
+    <div *ngIf="isCalendarVisible">
+      <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" (onSelect)="handleRangeSelection($event)"></p-calendar>
+    </div>
 </div>
 </div>
 
@@ -50,7 +56,7 @@
           </th>
           <ng-container *ngFor="let day of monthDaysList; let i = index">
             <ng-container *ngIf="i === 14">
-              <th class="w-70rem top-header">
+              <th class="w-38rem top-header">
                 {{ month[day[1].month] }}
               </th>
             </ng-container>

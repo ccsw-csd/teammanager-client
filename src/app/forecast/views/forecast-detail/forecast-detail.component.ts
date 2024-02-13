@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Group } from 'src/app/group/models/Group';
 import { DropdownEntry } from '../../model/dropdown-entry';
@@ -7,7 +7,6 @@ import { MetadataDay } from '../../model/metadata-day';
 import { ScheduleType } from '../../model/schedule-type';
 import { GroupMember } from '../../model/GroupMember';
 import { ForecastService } from '../../forecast.service';
-import { Person } from '../../model/Person';
 import { Detail } from '../../model/Detail';
 import { PersonAbsence } from '../../model/PersonAbsence';
 import { finalize } from 'rxjs';
@@ -34,7 +33,7 @@ export class ForecastDetailComponent implements OnInit {
     'September', 
     'October', 
     'November', 
-    'December'
+    'December',
   ];
 
   group: Group;
@@ -46,6 +45,8 @@ export class ForecastDetailComponent implements OnInit {
   absences: PersonAbsence[] = [];
   groupMembers: GroupMember[];
   memberDays: any[] = [];
+  rangeDates: Date[] = [];
+  isCalendarVisible: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -113,13 +114,25 @@ export class ForecastDetailComponent implements OnInit {
     let name;
     let year;
     let month;
+    let monthAux;
     for (let i = 0; i < 13; i++) {
       
       year = actualYear + Math.floor((actualMonth + i) / 12);
       month = (actualMonth+i) % 12;
+      monthAux = month + 1;
       name = this.month[month] + " " + year;
+      let date = new Date(year,monthAux, 0);
+
       this.monthsList.push(
-        new DropdownEntry({ code: name, name: name, year: year, month: month })
+        new DropdownEntry({ 
+          code: name, 
+          name: name, 
+          year1: year, 
+          year2: year, 
+          month1: month, 
+          month2: month,
+          day1: '1',
+          day2: date.getDate().toString() })
       );
 
       
@@ -161,38 +174,90 @@ export class ForecastDetailComponent implements OnInit {
   generateDays(): Map<String, MetadataDay>{
 
     const metadataDay = new Map<String, MetadataDay>();
-    let month = Number(this.selectedMonth.month) +1;
-    let year = Number(this.selectedMonth.year)
-    let date = new Date(year,month, 0);
-    let lastDay = date.getDate();
-
+    //TODO: Adaptar código para el mes 13
+    let month = 0;
+    let year = 0;
+    let lastDay = 0;
+    let firstDay = 1;
     const normalDay = this.scheduleTypes[1];
     
+    if(this.selectedMonth.month1 == this.selectedMonth.month2){
+      month = Number(this.selectedMonth.month1) +1;
+      year = Number(this.selectedMonth.year1);
+      firstDay = parseInt(this.selectedMonth.day1);
+      lastDay = parseInt(this.selectedMonth.day2);
 
-    for(let day = 1; day <= lastDay; day++){
 
-      const dateAux = new Date(year, month-1, day);
-      let type = normalDay;
-      const isWeekend = dateAux.getDay() == 0 || dateAux.getDay() == 6;
-      
-      if (isWeekend) {
-        type = this.scheduleTypes.find(
-          (type) => type.name === 'Fin de semana'
-        );
+      for(let day = firstDay; day <= lastDay; day++){
+
+        const dateAux = new Date(year, month-1, day);
+        let type = normalDay;
+        const isWeekend = dateAux.getDay() == 0 || dateAux.getDay() == 6;
+        
+        if (isWeekend) {
+          type = this.scheduleTypes.find(
+            (type) => type.name === 'Fin de semana'
+          );
+        }
+  
+        const metadata = new MetadataDay({
+          day: day,
+          month: Number(this.selectedMonth.month1),
+          year: year,
+          type: type,
+          originalType: type,
+          
+        });          
+  
+        const key = month + '_' + day;
+        metadataDay.set(key, metadata);
+      }
+    
+    }else{
+      let firstdate = new Date(
+        parseInt(this.selectedMonth.year1),
+        parseInt(this.selectedMonth.month1), 
+        parseInt(this.selectedMonth.day1)
+      );
+
+      let lastDate = new Date(
+        parseInt(this.selectedMonth.year2),
+        parseInt(this.selectedMonth.month2), 
+        parseInt(this.selectedMonth.day2)
+      );
+
+      const dif = Math.abs(lastDate.getTime() - firstdate.getTime());
+      const daysBetween = Math.ceil(dif / (1000 * 3600 * 24));
+      let dateAux = new Date(firstdate.getFullYear(), firstdate.getMonth(), firstdate.getDate());
+      dateAux.setDate(dateAux.getDate() -1);
+
+      for(let i = 0; i <= daysBetween; i++){
+
+        dateAux.setDate(dateAux.getDate() + 1);
+        let type = normalDay;
+        const isWeekend = dateAux.getDay() == 0 || dateAux.getDay() == 6;
+        
+        if (isWeekend) {
+          type = this.scheduleTypes.find(
+            (type) => type.name === 'Fin de semana'
+          );
+        }
+
+        const metadata = new MetadataDay({
+          day: dateAux.getDate(),
+          month: dateAux.getMonth(),
+          year: dateAux.getFullYear(),
+          type: type,
+          originalType: type,
+          
+        });          
+  
+        const key = (dateAux.getMonth() +1) + '_' + dateAux.getDate();
+        metadataDay.set(key, metadata);
       }
 
-      const metadata = new MetadataDay({
-        day: day,
-        month: Number(this.selectedMonth.month),
-        year: year,
-        type: type,
-        originalType: type,
-        
-      });          
-
-      const key = month + '_' + day;
-      metadataDay.set(key, metadata);
     }
+
     return metadataDay;
   }
 
@@ -246,8 +311,9 @@ export class ForecastDetailComponent implements OnInit {
 
   generateMemberDays(){
    
-    let month = Number(this.selectedMonth.month) +1;
-    let year = Number(this.selectedMonth.year)
+    //TODO: Adaptar código para el mes 13
+    let month = Number(this.selectedMonth.month1) +1;
+    let year = Number(this.selectedMonth.year1)
     let date = new Date(year,month, 0);
     let lastDay = date.getDate();
 
@@ -269,7 +335,8 @@ export class ForecastDetailComponent implements OnInit {
       for(const detail of this.details){
         const metadata = new MetadataDay({
           day: day,
-          month: Number(this.selectedMonth.month),
+          //TODO: Adaptar código para el mes 13
+          month: Number(this.selectedMonth.month1),
           year: year,
           type: type,
           originalType: type,
@@ -309,5 +376,51 @@ export class ForecastDetailComponent implements OnInit {
     }
 
   }
+
+  showCalendar(){
+    this.isCalendarVisible = true;
+  }
+
+  handleRangeSelection(event) {
+    if(this.rangeDates[1]!= null){
+      this.addRangeToDropdown();
+    }
+    
+  }
+
+  addRangeToDropdown() {
+    let startDate = this.rangeDates[0];
+    let endDate = this.rangeDates[1];
+
+    let formattedStartDate = this.formatDate(startDate);
+    let formattedEndDate = this.formatDate(endDate);
+    let name = formattedStartDate + " - " + formattedEndDate;
+
+    this.monthsList.push(
+
+      new DropdownEntry({ 
+        code: name, 
+        name: name, 
+        year1: this.rangeDates[0].getFullYear().toString(),
+        year2: this.rangeDates[1].getFullYear().toString(),  
+        month1: this.rangeDates[0].getMonth().toString(),
+        month2: this.rangeDates[1].getMonth().toString(),
+        day1: this.rangeDates[0].getDate().toString(),
+        day2: this.rangeDates[1].getDate().toString()
+       })
+    );
+    this.isCalendarVisible = false;
+  }
+
+  formatDate(date: Date): string {
+    let day = date.getDate();
+    let month = date.getMonth() + 1; 
+    let year = date.getFullYear();
+
+    let formattedDay = (day < 10) ? '0' + day : day.toString();
+    let formattedMonth = (month < 10) ? '0' + month : month.toString();
+
+    return formattedDay + '/' + formattedMonth + '/' + year;
+}
 
 }
