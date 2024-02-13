@@ -46,7 +46,7 @@ export class ForecastDetailComponent implements OnInit {
   groupMembers: GroupMember[];
   memberDays: any[] = [];
   rangeDates: Date[] = [];
-  isCalendarVisible: boolean = false;
+  checked: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -174,7 +174,6 @@ export class ForecastDetailComponent implements OnInit {
   generateDays(): Map<String, MetadataDay>{
 
     const metadataDay = new Map<String, MetadataDay>();
-    //TODO: Adaptar código para el mes 13
     let month = 0;
     let year = 0;
     let lastDay = 0;
@@ -312,73 +311,146 @@ export class ForecastDetailComponent implements OnInit {
   generateMemberDays(){
    
     //TODO: Adaptar código para el mes 13
-    let month = Number(this.selectedMonth.month1) +1;
-    let year = Number(this.selectedMonth.year1)
-    let date = new Date(year,month, 0);
-    let lastDay = date.getDate();
 
+    let month = 0;
+    let year = 0;
+    let lastDay = 0;
+    let firstDay = 1;
     const normalDay = this.scheduleTypes[1];
-    
 
-    for(let day = 1; day <= lastDay; day++){
+    if(this.selectedMonth.month1 == this.selectedMonth.month2){
+      month = Number(this.selectedMonth.month1) +1;
+      year = Number(this.selectedMonth.year1);
+      firstDay = parseInt(this.selectedMonth.day1);
+      lastDay = parseInt(this.selectedMonth.day2);
 
-      const dateAux = new Date(year, month-1, day);
-      let type = normalDay;
-      const isWeekend = dateAux.getDay() == 0 || dateAux.getDay() == 6;
-      
-      if (isWeekend) {
-        type = this.scheduleTypes.find(
-          (type) => type.name === 'Fin de semana'
-        );
-      }
 
-      for(const detail of this.details){
-        const metadata = new MetadataDay({
-          day: day,
-          //TODO: Adaptar código para el mes 13
-          month: Number(this.selectedMonth.month1),
-          year: year,
-          type: type,
-          originalType: type,
-        });
-        for(const absence of detail.absences){
-          const day = new Date(absence.date);
+      for(let day = firstDay; day <= lastDay; day++){
 
-          if(absence.year === metadata.year &&
-             absence.month === (metadata.month+1) &&
-             day.getDate() === metadata.day){
-
-                switch (absence.absence_type) {
-                  case "VAC":
-                    metadata.type = this.scheduleTypes.find(
-                      (type) => type.name === 'Vacation'
-                    );
-                    break;
-                  case "OTH":
-                    metadata.type = this.scheduleTypes.find(
-                      (type) => type.name === 'Other'
-                    );
-                    break;
-                  default:
-                    metadata.type = this.scheduleTypes.find(
-                      (type) => type.name === 'Festivo'
-                    );
-                    break;
-                }
-
-          }
-          
+        const dateAux = new Date(year, month-1, day);
+        let type = normalDay;
+        const isWeekend = dateAux.getDay() == 0 || dateAux.getDay() == 6;
+        
+        if (isWeekend) {
+          type = this.scheduleTypes.find(
+            (type) => type.name === 'Fin de semana'
+          );
         }
+    
+        for(const detail of this.details){
+          const metadata = new MetadataDay({
+            day: day,
+            month: Number(this.selectedMonth.month1),
+            year: year,
+            type: type,
+            originalType: type,
+          });
+          for(const absence of detail.absences){
+            const day = new Date(absence.date);
+  
+            if(absence.year === metadata.year &&
+               absence.month === (metadata.month+1) &&
+               day.getDate() === metadata.day){
+  
+                  switch (absence.absence_type) {
+                    case "VAC":
+                      metadata.type = this.scheduleTypes.find(
+                        (type) => type.name === 'Vacation'
+                      );
+                      break;
+                    case "OTH":
+                      metadata.type = this.scheduleTypes.find(
+                        (type) => type.name === 'Other'
+                      );
+                      break;
+                    default:
+                      metadata.type = this.scheduleTypes.find(
+                        (type) => type.name === 'Festivo'
+                      );
+                      break;
+                  }
+  
+            }
+            
+          }
+  
+          this.memberDays[this.details.indexOf(detail)].push(metadata);
+        }
+      }
+    
+    }else{
+      let firstdate = new Date(
+        parseInt(this.selectedMonth.year1),
+        parseInt(this.selectedMonth.month1), 
+        parseInt(this.selectedMonth.day1)
+      );
 
-        this.memberDays[this.details.indexOf(detail)].push(metadata);
+      let lastDate = new Date(
+        parseInt(this.selectedMonth.year2),
+        parseInt(this.selectedMonth.month2), 
+        parseInt(this.selectedMonth.day2)
+      );
+
+      const dif = Math.abs(lastDate.getTime() - firstdate.getTime());
+      const daysBetween = Math.ceil(dif / (1000 * 3600 * 24));
+      let dateAux = new Date(firstdate.getFullYear(), firstdate.getMonth(), firstdate.getDate());
+      dateAux.setDate(dateAux.getDate() -1);
+
+      for(let i = 0; i <= daysBetween; i++){
+
+        dateAux.setDate(dateAux.getDate() + 1);
+        let type = normalDay;
+        const isWeekend = dateAux.getDay() == 0 || dateAux.getDay() == 6;
+        
+        if (isWeekend) {
+          type = this.scheduleTypes.find(
+            (type) => type.name === 'Fin de semana'
+          );
+        }
+    
+        for(const detail of this.details){
+          const metadata = new MetadataDay({
+            day: dateAux.getDate(),
+            month: dateAux.getMonth(),
+            year: dateAux.getFullYear(),
+            type: type,
+            originalType: type,
+          });
+          for(const absence of detail.absences){
+            const day = new Date(absence.date);
+  
+            if(absence.year === metadata.year &&
+               absence.month === (metadata.month+1) &&
+               day.getDate() === metadata.day){
+  
+                  switch (absence.absence_type) {
+                    case "VAC":
+                      metadata.type = this.scheduleTypes.find(
+                        (type) => type.name === 'Vacation'
+                      );
+                      break;
+                    case "OTH":
+                      metadata.type = this.scheduleTypes.find(
+                        (type) => type.name === 'Other'
+                      );
+                      break;
+                    default:
+                      metadata.type = this.scheduleTypes.find(
+                        (type) => type.name === 'Festivo'
+                      );
+                      break;
+                  }
+  
+            }
+            
+          }
+  
+          this.memberDays[this.details.indexOf(detail)].push(metadata);
+        }
       }
 
     }
 
-  }
-
-  showCalendar(){
-    this.isCalendarVisible = true;
   }
 
   handleRangeSelection(event) {
@@ -409,7 +481,6 @@ export class ForecastDetailComponent implements OnInit {
         day2: this.rangeDates[1].getDate().toString()
        })
     );
-    this.isCalendarVisible = false;
   }
 
   formatDate(date: Date): string {
