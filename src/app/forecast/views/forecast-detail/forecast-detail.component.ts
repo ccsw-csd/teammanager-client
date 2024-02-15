@@ -345,6 +345,11 @@ export class ForecastDetailComponent implements OnInit {
             type: type,
             originalType: type,
           });
+
+          if(isWeekend){
+            detail.workingDays = detail.workingDays -1;
+          }
+          
           for(const absence of detail.absences){
             const day = new Date(absence.date);
   
@@ -451,6 +456,12 @@ export class ForecastDetailComponent implements OnInit {
 
     }
 
+
+    if(this.monthsList.length >= 13){
+      this.selectedMonth = this.monthsList[0];
+      this.monthsList.pop();
+    }
+
   }
 
   handleRangeSelection(event) {
@@ -481,6 +492,12 @@ export class ForecastDetailComponent implements OnInit {
         day2: this.rangeDates[1].getDate().toString()
        })
     );
+
+    this.selectedMonth = this.monthsList[this.monthsList.length -1];
+    this.monthDays = this.generateDays();
+    this.monthDaysList = Array.from(this.monthDays);  
+
+    this.loadMembersDetails();
   }
 
   formatDate(date: Date): string {
