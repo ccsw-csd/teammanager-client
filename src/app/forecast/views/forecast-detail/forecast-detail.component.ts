@@ -309,8 +309,6 @@ export class ForecastDetailComponent implements OnInit {
   }
 
   generateMemberDays(){
-   
-    //TODO: Adaptar código para el mes 13
 
     let month = 0;
     let year = 0;
