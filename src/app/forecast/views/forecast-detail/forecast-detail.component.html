@@ -46,8 +46,8 @@
 
 <p-table [style]="{'height':'calc(100vh - 175px)','width':tableWidth}"  
        [scrollable]="true" scrollHeight="flex" selectionMode="single" 
-       [value]="details" [responsive]="true" styleClass="p-datatable-striped" 
-       [rows]="20" sortField="name" [sortOrder]="1">
+       [value]="details" [responsive]="true" 
+       [rows]="details.length" sortField="name" [sortOrder]="1">
 
        <ng-template pTemplate="header">
         <tr>
@@ -56,12 +56,12 @@
           </th>
           <ng-container *ngFor="let day of monthDaysList; let i = index">
             <ng-container *ngIf="i === 0">
-              <th class="w-60rem align-items-center justify-content-center top-header">
+              <th [style.min-width]="calculateWidth(day[1])" class="align-items-center justify-content-center top-header">
                 {{ month[day[1].month] }}
               </th>
             </ng-container>
             <ng-container *ngIf="i != 0 && day[1].day === 1">
-              <th class="w-60rem align-items-center justify-content-center top-header">
+              <th [style.min-width]="calculateWidth(day[1])" class="align-items-center justify-content-center top-header">
                 {{ month[day[1].month] }}
               </th>
             </ng-container>

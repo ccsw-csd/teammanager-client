@@ -509,6 +509,14 @@ export class ForecastDetailComponent implements OnInit {
     let formattedMonth = (month < 10) ? '0' + month : month.toString();
 
     return formattedDay + '/' + formattedMonth + '/' + year;
-}
+  }
+
+  calculateWidth(day: MetadataDay): string{
+    const month = day.month;
+    const numberOfDays = this.monthDaysList.filter(d => d[1].month === month);
+    const calc = numberOfDays.length * 2;
+    const tam = calc.toString()+'rem';
+    return tam;
+  }
 
 }
