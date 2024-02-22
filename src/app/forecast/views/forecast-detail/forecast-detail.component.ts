@@ -131,8 +131,8 @@ export class ForecastDetailComponent implements OnInit {
           year2: year, 
           month1: month, 
           month2: month,
-          day1: '1',
-          day2: date.getDate().toString() })
+          day1: 1,
+          day2: date.getDate() })
       );
 
       
@@ -183,8 +183,8 @@ export class ForecastDetailComponent implements OnInit {
     if(this.selectedMonth.month1 == this.selectedMonth.month2){
       month = Number(this.selectedMonth.month1) +1;
       year = Number(this.selectedMonth.year1);
-      firstDay = parseInt(this.selectedMonth.day1);
-      lastDay = parseInt(this.selectedMonth.day2);
+      firstDay = this.selectedMonth.day1;
+      lastDay = this.selectedMonth.day2;
 
 
       for(let day = firstDay; day <= lastDay; day++){
@@ -214,15 +214,15 @@ export class ForecastDetailComponent implements OnInit {
     
     }else{
       let firstdate = new Date(
-        parseInt(this.selectedMonth.year1),
-        parseInt(this.selectedMonth.month1), 
-        parseInt(this.selectedMonth.day1)
+        this.selectedMonth.year1,
+        this.selectedMonth.month1, 
+        this.selectedMonth.day1
       );
 
       let lastDate = new Date(
-        parseInt(this.selectedMonth.year2),
-        parseInt(this.selectedMonth.month2), 
-        parseInt(this.selectedMonth.day2)
+        this.selectedMonth.year2,
+        this.selectedMonth.month2, 
+        this.selectedMonth.day2
       );
 
       const dif = Math.abs(lastDate.getTime() - firstdate.getTime());
@@ -319,8 +319,8 @@ export class ForecastDetailComponent implements OnInit {
     if(this.selectedMonth.month1 == this.selectedMonth.month2){
       month = Number(this.selectedMonth.month1) +1;
       year = Number(this.selectedMonth.year1);
-      firstDay = parseInt(this.selectedMonth.day1);
-      lastDay = parseInt(this.selectedMonth.day2);
+      firstDay = this.selectedMonth.day1;
+      lastDay = this.selectedMonth.day2;
 
 
       for(let day = firstDay; day <= lastDay; day++){
@@ -383,15 +383,15 @@ export class ForecastDetailComponent implements OnInit {
     
     }else{
       let firstdate = new Date(
-        parseInt(this.selectedMonth.year1),
-        parseInt(this.selectedMonth.month1), 
-        parseInt(this.selectedMonth.day1)
+        this.selectedMonth.year1,
+        this.selectedMonth.month1, 
+        this.selectedMonth.day1
       );
 
       let lastDate = new Date(
-        parseInt(this.selectedMonth.year2),
-        parseInt(this.selectedMonth.month2), 
-        parseInt(this.selectedMonth.day2)
+        this.selectedMonth.year2,
+        this.selectedMonth.month2, 
+        this.selectedMonth.day2
       );
 
       const dif = Math.abs(lastDate.getTime() - firstdate.getTime());
@@ -482,12 +482,12 @@ export class ForecastDetailComponent implements OnInit {
       new DropdownEntry({ 
         code: name, 
         name: name, 
-        year1: this.rangeDates[0].getFullYear().toString(),
-        year2: this.rangeDates[1].getFullYear().toString(),  
-        month1: this.rangeDates[0].getMonth().toString(),
-        month2: this.rangeDates[1].getMonth().toString(),
-        day1: this.rangeDates[0].getDate().toString(),
-        day2: this.rangeDates[1].getDate().toString()
+        year1: this.rangeDates[0].getFullYear(),
+        year2: this.rangeDates[1].getFullYear(),  
+        month1: this.rangeDates[0].getMonth(),
+        month2: this.rangeDates[1].getMonth(),
+        day1: this.rangeDates[0].getDate(),
+        day2: this.rangeDates[1].getDate()
        })
     );
 
