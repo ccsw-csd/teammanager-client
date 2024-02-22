@@ -5,6 +5,9 @@ import { DropdownEntry } from '../model/dropdown-entry';
 
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ConfirmationService } from 'primeng/api';
+import { AuthService } from 'src/app/core/services/auth.service';
+
+
 
 @Component({
   selector: 'app-edit-calendar',
@@ -23,15 +26,19 @@ export class CalendarComponent {
   selectedYear: DropdownEntry;
   selectedYearAux: DropdownEntry;
   selectedCalendar: Map<String, MetadataDay>;
+  activeUser: string;
+  isPon: boolean;
 
   years: DropdownEntry[] = [];
   calendars: Map<String, Map<String, MetadataDay>>;
 
-  constructor() {
+  constructor(private authService: AuthService) {
     this.calendars = new Map();
 
-    const actualYear = new Date().getFullYear() + 1;
-    for (let i = actualYear + 1; i >= 2022; i--) {
+    this.activeUser = authService.getUserInfo().username;
+    //Necesario conseguir PON
+    const actualYear = new Date().getFullYear() ;
+    for (let i = actualYear; i <= actualYear + 1; i++) {
       this.years.push(
         new DropdownEntry({ code: i.toString(), name: i.toString() })
       );
@@ -76,7 +83,8 @@ export class CalendarComponent {
     this.selectedType = this.scheduleTypes[0];
     this.selectedCalendar = this.generateDefaultCalendar();
   }
-  onChangeYear(): void {
+
+  onChangeYear(event): void {
     this.selectedCalendar = this.generateDefaultCalendar();
   }
 

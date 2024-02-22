@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column; /* Asegura el alineamiento vertical */
+  flex-direction: column;
 }
 .year-selector {
   padding: 10px;
@@ -12,7 +12,7 @@
   font-size: 18px;
   text-align: center; 
   font-family:  Helvetica;
-  width: 200px; /* Ajusta el ancho si es necesario */
+  width: 200px;
 }
 
 .legend {
@@ -31,6 +31,17 @@
   font-style: italic;
 }
 
-.calendar-item {
-  margin: 5px; /* Esto agrega un espacio de 5 píxeles alrededor de cada calendario */
+.year-selector p{
+  margin-right: 15px;
+
 }
+
+  .calendar {
+    flex-grow: 4;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto; 
+  }
+  
+  .calendar-item {
+    margin: 5px; 
+  }

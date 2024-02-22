@@ -32,19 +32,18 @@
       </div>
     </div>
   </div>
-
-  <!-- Selector de años centrado -->
+  
+  <!-- Selector de años -->
   <div class="year-selector">
     <p>Selected Year</p>
-    <select [(ngModel)]="selectedYearAux.code" (change)="onChangeYear()">
-      <option *ngFor="let year of years" [value]="year.code">
-        {{ year.name }}
-      </option>
-    </select>
-  </div>
 
+  <p-dropdown [(ngModel)]="selectedYearAux" (onChange)="onChangeYear($event)" 
+    [options]="years"  optionLabel="name">
+  </p-dropdown>
+  </div>
+  
   <!-- Calendario debajo de los elementos anteriores -->
-  <div class="calendar">
+  <div class="calendar" style="max-width: 90%; height:'calc(90vh - 220px)'; margin: 0 auto;">
     <div
       id="calendarsDiv"
       #calendarsDiv
@@ -64,7 +63,7 @@
         [year]="1 * this.selectedYearAux.code"
         [month]="month"
         [metadataDay]="selectedCalendar"
-        (clickEvent)="selectDate($event)"
+        (clickEvent)="selectDate($event, month, metadataDay )"
         class="calendar-item"
       ></app-component-calendar>
     </div>
