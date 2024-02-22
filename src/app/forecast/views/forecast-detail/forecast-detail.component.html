@@ -28,40 +28,63 @@
   </div>
 </div>
 
-<div class="month-selector" style="margin-left: auto; display: flex; align-items: center;">
-  <p style="margin-right: 5px;">Selected Month</p>
-  <button pButton pRipple type="button" icon="pi pi-angle-left"
-                  class="p-button-rounded p-button-text" (click)="previousMonth()" [disabled]="isPreviousMonthDisabled()"></button>
-  <p-dropdown [(ngModel)]="selectedMonth" (onChange)="onChangeMonth($event)" [options]="monthsList" optionLabel="code"></p-dropdown>
-  <button pButton pRipple type="button" icon="pi pi-angle-right"
-                  class="p-button-rounded p-button-text" (click)="nextMonth()" [disabled]="isNextMonthDisabled()"></button>
-</div>
+  <div *ngIf="!checked" class="month-selector" style="margin-left: auto; margin-bottom: 10px; display: flex; align-items: center;">
+    <button pButton pRipple type="button" icon="pi pi-angle-left"
+                    class="p-button-rounded p-button-text" (click)="previousMonth()" [disabled]="isPreviousMonthDisabled()"></button>
+    <p-dropdown [(ngModel)]="selectedMonth" (onChange)="onChangeMonth($event)" [options]="monthsList" optionLabel="code"></p-dropdown>
+    <button pButton pRipple type="button" icon="pi pi-angle-right"
+      class="p-button-rounded p-button-text" (click)="nextMonth()" [disabled]="isNextMonthDisabled()"></button>
+  </div>
+
+  <div *ngIf="checked" style="margin-left: auto; margin-right: 10px; margin-bottom: 10px; display: flex; align-items: center;">
+    <p-calendar [showIcon]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" (onSelect)="handleRangeSelection($event)"></p-calendar>
+  </div>
+
+  <p-toggleButton [style]="{'margin-bottom':'10px'}" [(ngModel)]="checked" onLabel="Select month" offLabel="Select interval"></p-toggleButton>  
+
 </div>
 
 <p-table [style]="{'height':'calc(100vh - 175px)','width':tableWidth}"  
        [scrollable]="true" scrollHeight="flex" selectionMode="single" 
-       [value]="details" [responsive]="true" styleClass="p-datatable-striped" 
-       [paginator]="true" [rows]="20" sortField="name" [sortOrder]="1">
+       [value]="details" [responsive]="true" 
+       [rows]="details.length" sortField="name" [sortOrder]="1">
 
        <ng-template pTemplate="header">
         <tr>
-          <th class="flex flex-1 w-12rem align-items-center justify-content-center top-header">
+          <th pFrozenColumn style="min-width: 38rem;" class="flex-none w-38rem align-items-center justify-content-center top-header">
+            <span>Detail</span>
+          </th>
+          <ng-container *ngFor="let day of monthDaysList; let i = index">
+            <ng-container *ngIf="i === 0">
+              <th [style.min-width]="calculateWidth(day[1])" class="align-items-center justify-content-center top-header">
+                {{ month[day[1].month] }}
+              </th>
+            </ng-container>
+            <ng-container *ngIf="i != 0 && day[1].day === 1">
+              <th [style.min-width]="calculateWidth(day[1])" class="align-items-center justify-content-center top-header">
+                {{ month[day[1].month] }}
+              </th>
+            </ng-container>
+          </ng-container>
+        </tr>
+        <tr>
+          <th pFrozenColumn class="flex-none w-12rem align-items-center justify-content-center top-header">
               <span>Person</span>
           </th>
       
-          <th class="flex-none w-6rem align-items-center justify-content-center top-header">
+          <th pFrozenColumn class="flex-none w-8rem align-items-center justify-content-center top-header">
               <span>Working Days</span>
           </th>
       
-          <th class="flex-none w-6rem align-items-center justify-content-center top-header">
+          <th pFrozenColumn class="flex-none w-6rem align-items-center justify-content-center top-header">
               <span>Festives</span>
           </th>
 
-          <th class="flex-none w-6rem align-items-center justify-content-center top-header">
+          <th pFrozenColumn class="flex-none w-6rem align-items-center justify-content-center top-header">
               <span>Vacations</span>
           </th>
       
-          <th class="flex-none w-6rem align-items-center justify-content-center top-header">
+          <th pFrozenColumn class="flex-none w-6rem align-items-center justify-content-center top-header">
               <span>Others</span>
           </th>
           <th *ngFor="let day of monthDaysList" class="flex-none w-2rem justify-content-center top-header border-left-1 border-gray-400">
@@ -72,19 +95,19 @@
       
       <ng-template pTemplate="body" let-detail>
         <tr class="border-bottom-1 border-gray-300">
-          <td class="flex flex-1 w-12rem border-none">
+          <td pFrozenColumn class="flex-none w-12rem border-none">
             {{ detail.fullName }}
           </td>
-          <td class="flex-none w-6rem flex-column justify-content-center border-none">
+          <td pFrozenColumn class="flex-none w-8rem flex-column justify-content-center border-none">
             <p>{{ detail.workingDays }}</p>
           </td>
-          <td class="flex-none w-6rem flex-column justify-content-center border-none">
+          <td pFrozenColumn class="flex-none w-6rem flex-column justify-content-center border-none">
             <p>{{ detail.festives }}</p>
           </td>
-          <td class="flex-none w-6rem flex-column justify-content-center border-none">
+          <td pFrozenColumn class="flex-none w-6rem flex-column justify-content-center border-none">
             <p>{{ detail.vacations }}</p>
           </td>
-          <td class="flex-none w-6rem flex-column justify-content-center border-none">
+          <td pFrozenColumn class="flex-none w-6rem flex-column justify-content-center border-none">
             <p>{{ detail.others }}</p>
           </td>
           <td *ngFor="let day of monthDaysList; let j = index" [ngStyle]="{ 'background-color': memberDays[details.indexOf(detail)][j]?.type.color }" class="flex-none w-2rem justify-content-center border-none border-left-1 border-gray-300">

@@ -15,6 +15,8 @@ import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
+import { CalendarModule } from 'primeng/calendar';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 
 
@@ -40,6 +42,8 @@ import { TooltipModule } from 'primeng/tooltip';
     TabViewModule,
     InputSwitchModule,
     ScrollPanelModule,
+    CalendarModule,
+    ToggleButtonModule
   ]
 })
 export class ForecastModule { }
