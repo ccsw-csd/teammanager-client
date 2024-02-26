@@ -19,6 +19,7 @@ export class EditCalendarComponent implements OnChanges {
   @Input() year: number;
   @Input() month: number;
   @Input() metadataDay: Map<String, MetadataDay>;
+  @Input() workingDaysPerMonth: Number[];
 
   @Output() clickEvent = new EventEmitter<MetadataDay>();
 
@@ -48,7 +49,6 @@ export class EditCalendarComponent implements OnChanges {
     if (dayOfWeek < 0) dayOfWeek += 7;
     
     date.setDate(-dayOfWeek + 1);
-    
     
     let monthComplete = false;
 
@@ -82,11 +82,9 @@ export class EditCalendarComponent implements OnChanges {
 
       if (date.getMonth() != this.month) monthComplete = true;
     }
+
   }
-/* isWeekend(day:number): boolean{
-  console.log(day);
-  return day === 0 || day === 6;
- }*/
+
   clickDate(day: CalendarDay): void {
     this.clickEvent.emit(day?.metadata);
   }
