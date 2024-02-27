@@ -11,8 +11,8 @@ export class CalendarService {
 
   constructor(private http:HttpClient) { }
 
-  getUserDetails(username: string, year: string):Observable<Detail>{
-    const url = `${environment.server}/person/?username=${username}&year=${year}`;
+  getUserDetails(year: string):Observable<Detail>{
+    const url = `${environment.server}/person/?year=${year}`;
     return this.http.get<Detail>(url);
   }
 }

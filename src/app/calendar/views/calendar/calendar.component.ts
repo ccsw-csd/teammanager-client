@@ -30,7 +30,6 @@ export class CalendarComponent {
   selectedYear: DropdownEntry;
   selectedYearAux: DropdownEntry;
   selectedCalendar: Map<String, MetadataDay>;
-  activeUser: string;
   detail: Detail;
 
   years: DropdownEntry[] = [];
@@ -41,8 +40,6 @@ export class CalendarComponent {
     private calendarService: CalendarService,
     ) {
     this.calendars = new Map();
-
-    this.activeUser = authService.getUserInfo().username;
     
     const actualYear = new Date().getFullYear() ;
     for (let i = actualYear; i <= actualYear + 1; i++) {
@@ -240,7 +237,7 @@ export class CalendarComponent {
   }
 
   loadUserDetails(){
-    this.calendarService.getUserDetails(this.activeUser, this.selectedYearAux.code).pipe(
+    this.calendarService.getUserDetails(this.selectedYearAux.code).pipe(
       finalize(() => {
         this.selectedCalendar = this.generateDefaultCalendar();
       })
