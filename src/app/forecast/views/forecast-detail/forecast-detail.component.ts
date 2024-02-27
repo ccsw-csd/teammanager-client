@@ -104,7 +104,7 @@ export class ForecastDetailComponent implements OnInit {
         name: 'Other',
         absence: true,
         color: '#f7bd46',
-        id: 4,
+        id: 5,
       })
     ];
 

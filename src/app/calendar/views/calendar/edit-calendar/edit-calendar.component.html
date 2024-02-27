@@ -1,20 +1,20 @@
 <div
   style="
-    width: 382px;
+    width: 286px;
     display: flex;
     flex-direction: column;
     border: 1px solid #e5e5e5;
     border-radius: 4px;
-    padding: 15px 8px;
     background: #ffffff;
   "
 >
   <div style="padding: 1rem">
     <span class="title">{{ MONTH_NAMES[month] }} {{ year }}</span>
+    <span style="float: right;">( {{ workingDaysPerMonth[month] }} )</span>
   </div>
   <div
     style="
-      width: 364px;
+      width: 268px;
       display: flex;
       flex-direction: row;
       justify-content: space-evenly;
@@ -32,13 +32,13 @@
   <div
     *ngFor="let week of data"
     style="
-      width: 364px;
+      width: 268px;
       display: flex;
       flex-direction: row;
       justify-content: space-evenly;
     "
   >
-    <div *ngFor="let day of week" style="padding: 8px;">
+    <div *ngFor="let day of week" >
       <div
         [ngClass]="{
           day: day.actualMonth, 
