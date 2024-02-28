@@ -1,7 +1,10 @@
 <div style="display: flex; flex-direction: column">
   <!-- Mensaje en la esquina superior derecha -->
-  <div style="align-self: flex-end; text-align: right">
+  <div *ngIf="withPon" style="align-self: flex-end; text-align: right">
     <i>* Inactivities are read from PON every 3 hours.</i>
+  </div>
+  <div *ngIf="!withPon" style="align-self: flex-end; text-align: right">
+    <p-button label="Save" [disabled]="isButtonDisabled()" (onClick)="save()"></p-button>
   </div>
 
   <!-- Leyendas en la esquina superior izquierda -->
@@ -64,7 +67,8 @@
         [month]="month"
         [metadataDay]="selectedCalendar"
         [workingDaysPerMonth]="workingDaysPerMonth"
-        (clickEvent)="selectDate($event, month, metadataDay )"
+        [withPon]="withPon"
+        (clickEvent)="selectDate($event, metadataDay )"
         class="calendar-item"
       ></app-component-calendar>
     </div>
