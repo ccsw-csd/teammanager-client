@@ -17,12 +17,12 @@ export class CalendarService {
     return this.http.get<Detail>(url);
   }
 
-  save(vacations: PersonAbsence[]):Observable<PersonAbsence[]>{
-    return this.http.put<PersonAbsence[]>(environment.server + "/person_absence/",vacations);  
+  save(vacations: PersonAbsence[]):Observable<void>{
+    return this.http.put<void>(environment.server + "/absence/",vacations);  
   }
 
-  delete(idVacation: string):Observable<void>{
-    const url = `${environment.server}/person_absence/${idVacation}`;
+  delete(vacationsToDelete: PersonAbsence[]):Observable<void>{
+    const url = `${environment.server}/absence/${vacationsToDelete}`;
     return this.http.delete<void>(url);
   }
 }

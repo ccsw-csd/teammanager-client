@@ -193,23 +193,18 @@ export class CalendarComponent {
 
           if (isVacation) {
             type = this.scheduleTypes.find(type => type.name === 'Vacation');
-            originalType = type;
-              
             
-            if (isWeekend) {
-              originalType = weekendDay;
-            }else{
+            if (!isWeekend) {
               workingDays--; 
             }
+            
           }
 
           if (isOther) {
             type = this.scheduleTypes.find(type => type.name === 'Other');
             originalType = type;
   
-            if (isWeekend) {
-              originalType = weekendDay;
-            }else{
+            if (!isWeekend) {
               workingDays--; 
             }
           }
@@ -218,9 +213,7 @@ export class CalendarComponent {
             type = this.scheduleTypes.find(type => type.name === 'Festivo');
             originalType = type;
  
-            if (isWeekend) {
-              originalType = weekendDay;
-            }else{
+            if (!isWeekend) {
               workingDays--; 
             }
           }
@@ -229,7 +222,7 @@ export class CalendarComponent {
             day: day,
             month: month+1,
             year: parseInt(this.selectedYearAux.code),
-            originalType: type,
+            originalType: originalType,
             type: type,
             id: parseInt(idAbsence)
           });
@@ -281,20 +274,21 @@ export class CalendarComponent {
       const isVacation = day.type.name === "Vacation";
       const newDate = new Date();
       newDate.setDate(day.day);
-      newDate.setMonth(day.month);
+      newDate.setMonth(day.month-1);
       newDate.setFullYear(day.year);
 
       if(isVacation){
-        if(day.originalType == this.scheduleTypes.find(type => type.name === 'Fin de semana')){
-          day.type = this.scheduleTypes.find(type => type.name === 'Fin de semana');
-        }else{
-          day.type = this.scheduleTypes.find(type => type.name === 'Jornada normal (8h 25min)');
-        }
-        
+        day.type = day.originalType;
+
         if(this.detail.absences.some(vacation => this.isSameDate(vacation, newDate)) &&
           !this.oldVacations.includes(day)
         ){
-          this.oldVacations.push(day);
+          if(day.originalType.name === 'Festivo' || day.originalType.name === 'Other'){
+            let index = this.newVacations.indexOf(day);
+            this.newVacations.splice(index,1);
+          }else{
+            this.oldVacations.push(day);
+          }
         }else{
           //Comprobar que el nuevo dia de vacaciones no esté en el array de nuevos dias de vacaciones
           //Si lo está, se elimina
@@ -326,10 +320,10 @@ export class CalendarComponent {
   }
 
   save():void{
-    if(this.newVacations.length > 0){
-      const vacation = new PersonAbsence();
+    if(this.newVacations.length > 0){     
       let vacations: PersonAbsence[] = [];
       for (const md of this.newVacations) {
+        const vacation = new PersonAbsence();
         vacation.id = '_P_' + this.detail.person.id.toString();
         vacation.person = this.detail.person;
         vacation.year = md.year;
@@ -341,13 +335,22 @@ export class CalendarComponent {
       }
 
       this.calendarService.save(vacations).subscribe();
+      this.newVacations = [];
+
+
     }
 
     if(this.oldVacations.length > 0){
+      let vacationsToDelete: PersonAbsence[] = [];
       for (const md of this.oldVacations) {
-        let id = this.formatDate(md).toString() + '_P_' + this.detail.person.id.toString();
-        this.calendarService.delete(id).subscribe();
+        const vacationToDelete = new PersonAbsence();
+        vacationToDelete.date = this.formatDate(md);
+        vacationToDelete.person = this.detail.person;
+        vacationsToDelete.push(vacationToDelete);      
       }
+
+      this.calendarService.delete(vacationsToDelete).subscribe();
+      this.oldVacations = [];
     }
 
     setTimeout(() => {
@@ -358,14 +361,14 @@ export class CalendarComponent {
 
   formatDate(metadataDay:MetadataDay):Date{
     let date: Date;
-    date = new Date(""+metadataDay.year+"-"+(metadataDay.month+1)+"-"+metadataDay.day);
+    date = new Date(""+metadataDay.year+"-"+(metadataDay.month)+"-"+metadataDay.day);
     return date;
   }
 
   private isSameDate(absence: PersonAbsence, newDate: Date): boolean {
-    let date = String(absence.date).slice(-2);
+    let date = String(absence.date).slice(8,10);
     let vacationDay = parseInt(date, 10);
-
+ 
     if (absence.year === newDate.getFullYear() &&
         absence.month -1 === newDate.getMonth() &&
         vacationDay === newDate.getDate() ){              
