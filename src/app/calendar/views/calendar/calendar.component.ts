@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { ScheduleType } from '../model/schedule-type';
 import { MetadataDay } from '../model/metadata-day';
 import { DropdownEntry } from '../model/dropdown-entry';
@@ -11,7 +11,7 @@ import { CalendarService } from '../../calendar.service';
 import { finalize } from 'rxjs';
 import { Detail } from '../model/Detail';
 import { PersonAbsence } from '../model/PersonAbsence';
-import { Person } from '../model/Person';
+import { AbsencesToUpdate } from '../model/AbsencesToUpdate';
 
 
 
@@ -191,15 +191,15 @@ export class CalendarComponent {
             originalType = type;
           }
 
-          if (isVacation) {
-            type = this.scheduleTypes.find(type => type.name === 'Vacation');
-            
+          if (isFestive) {
+            type = this.scheduleTypes.find(type => type.name === 'Festivo');
+            originalType = type;
+ 
             if (!isWeekend) {
               workingDays--; 
             }
-            
           }
-
+ 
           if (isOther) {
             type = this.scheduleTypes.find(type => type.name === 'Other');
             originalType = type;
@@ -209,13 +209,13 @@ export class CalendarComponent {
             }
           }
 
-          if (isFestive) {
-            type = this.scheduleTypes.find(type => type.name === 'Festivo');
-            originalType = type;
- 
+          if (isVacation) {
+            type = this.scheduleTypes.find(type => type.name === 'Vacation');
+            
             if (!isWeekend) {
               workingDays--; 
             }
+            
           }
 
           const metadata = new MetadataDay({
@@ -320,42 +320,46 @@ export class CalendarComponent {
   }
 
   save():void{
+    let vacations: PersonAbsence[] = [];
+    let vacationsToDelete: PersonAbsence[] = [];
+
     if(this.newVacations.length > 0){     
-      let vacations: PersonAbsence[] = [];
       for (const md of this.newVacations) {
         const vacation = new PersonAbsence();
         vacation.id = '_P_' + this.detail.person.id.toString();
         vacation.person = this.detail.person;
         vacation.year = md.year;
-        vacation.month = md.month;
+        vacation.month = md.month -1;
         vacation.date = this.formatDate(md);
         vacation.type = 'P';
         vacation.absence_type = 'VAC';
         vacations.push(vacation);    
       }
-
-      this.calendarService.save(vacations).subscribe();
-      this.newVacations = [];
-
-
     }
 
     if(this.oldVacations.length > 0){
-      let vacationsToDelete: PersonAbsence[] = [];
       for (const md of this.oldVacations) {
         const vacationToDelete = new PersonAbsence();
         vacationToDelete.date = this.formatDate(md);
         vacationToDelete.person = this.detail.person;
         vacationsToDelete.push(vacationToDelete);      
       }
-
-      this.calendarService.delete(vacationsToDelete).subscribe();
-      this.oldVacations = [];
     }
 
-    setTimeout(() => {
-      this.loadUserDetails();
-    }, 100);
+    let updateAbsences: AbsencesToUpdate = new AbsencesToUpdate();
+    updateAbsences.vacations = vacations;
+    updateAbsences.vacationsToDelete = vacationsToDelete;
+    this.calendarService.update(updateAbsences).pipe(
+      finalize(() => {
+        this.oldVacations = [];
+        this.newVacations = [];
+    
+        setTimeout(() => {
+          this.loadUserDetails();
+        }, 100);
+      })
+    ).subscribe();
+   
     
   }
 
@@ -368,10 +372,10 @@ export class CalendarComponent {
   private isSameDate(absence: PersonAbsence, newDate: Date): boolean {
     let date = String(absence.date).slice(8,10);
     let vacationDay = parseInt(date, 10);
- 
+
     if (absence.year === newDate.getFullYear() &&
         absence.month -1 === newDate.getMonth() &&
-        vacationDay === newDate.getDate() ){              
+        vacationDay +1 === newDate.getDate() ){              
           return true;
     }
 

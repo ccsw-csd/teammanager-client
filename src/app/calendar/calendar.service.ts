@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Detail } from '../forecast/model/Detail';
 import { environment } from 'src/environments/environment';
-import { PersonAbsence } from './views/model/PersonAbsence';
+import { AbsencesToUpdate } from './views/model/AbsencesToUpdate';
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +17,8 @@ export class CalendarService {
     return this.http.get<Detail>(url);
   }
 
-  save(vacations: PersonAbsence[]):Observable<void>{
-    return this.http.put<void>(environment.server + "/absence/",vacations);  
-  }
+  update(updateAbsences: AbsencesToUpdate):Observable<boolean>{
 
-  delete(vacationsToDelete: PersonAbsence[]):Observable<void>{
-    const url = `${environment.server}/absence/${vacationsToDelete}`;
-    return this.http.delete<void>(url);
+    return this.http.put<boolean>(environment.server + "/absence",updateAbsences);
   }
 }
