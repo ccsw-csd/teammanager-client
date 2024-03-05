@@ -20,6 +20,8 @@ export class EditCalendarComponent implements OnChanges {
   @Input() month: number;
   @Input() metadataDay: Map<String, MetadataDay>;
   @Input() workingDaysPerMonth: Number[];
+  @Input() withPon: boolean;
+
 
   @Output() clickEvent = new EventEmitter<MetadataDay>();
 

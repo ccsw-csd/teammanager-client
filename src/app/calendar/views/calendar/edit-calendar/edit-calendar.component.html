@@ -46,7 +46,7 @@
           
         }"
         
-        (click)="clickDate(day)"
+        (click)="!withPon && clickDate(day)"
         [ngStyle]="{ 'background-color': day.metadata?.type?.color }"
         
       >

@@ -9,7 +9,7 @@ export class Person{
     businesscode:string; 
     active: number;
     withAbsence: number;
-    withPon: boolean;
+    withPON: boolean;
     grade: string;
     createdByLdap: boolean;
     globalId: string;

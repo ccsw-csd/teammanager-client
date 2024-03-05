@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { ScheduleType } from '../model/schedule-type';
 import { MetadataDay } from '../model/metadata-day';
 import { DropdownEntry } from '../model/dropdown-entry';
@@ -10,6 +10,8 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { CalendarService } from '../../calendar.service';
 import { finalize } from 'rxjs';
 import { Detail } from '../model/Detail';
+import { PersonAbsence } from '../model/PersonAbsence';
+import { AbsencesToUpdate } from '../model/AbsencesToUpdate';
 
 
 
@@ -22,6 +24,8 @@ import { Detail } from '../model/Detail';
 export class CalendarComponent {
   @ViewChild('calendarsDiv') calendarsDiv: ElementRef;
 
+  @Output() clickEvent = new EventEmitter<MetadataDay>();
+
   //ATRIBUTOS
 
  
@@ -31,10 +35,14 @@ export class CalendarComponent {
   selectedYearAux: DropdownEntry;
   selectedCalendar: Map<String, MetadataDay>;
   detail: Detail;
+  withPon: boolean;
 
   years: DropdownEntry[] = [];
   workingDaysPerMonth: Number[] = [];
   calendars: Map<String, Map<String, MetadataDay>>;
+
+  oldVacations: MetadataDay[] = [];
+  newVacations: MetadataDay[] = [];
 
   constructor(private authService: AuthService,
     private calendarService: CalendarService,
@@ -183,45 +191,38 @@ export class CalendarComponent {
             originalType = type;
           }
 
-          if (isVacation) {
-            type = this.scheduleTypes.find(type => type.name === 'Vacation');
-            originalType = type;
-              
-            
-            if (isWeekend) {
-              originalType = weekendDay;
-            }else{
-              workingDays--; 
-            }
-          }
-
-          if (isOther) {
-            type = this.scheduleTypes.find(type => type.name === 'Other');
-            originalType = type;
-  
-            if (isWeekend) {
-              originalType = weekendDay;
-            }else{
-              workingDays--; 
-            }
-          }
-
           if (isFestive) {
             type = this.scheduleTypes.find(type => type.name === 'Festivo');
             originalType = type;
  
-            if (isWeekend) {
-              originalType = weekendDay;
-            }else{
+            if (!isWeekend) {
               workingDays--; 
             }
+          }
+ 
+          if (isOther) {
+            type = this.scheduleTypes.find(type => type.name === 'Other');
+            originalType = type;
+  
+            if (!isWeekend) {
+              workingDays--; 
+            }
+          }
+
+          if (isVacation) {
+            type = this.scheduleTypes.find(type => type.name === 'Vacation');
+            
+            if (!isWeekend) {
+              workingDays--; 
+            }
+            
           }
 
           const metadata = new MetadataDay({
             day: day,
             month: month+1,
             year: parseInt(this.selectedYearAux.code),
-            originalType: type,
+            originalType: originalType,
             type: type,
             id: parseInt(idAbsence)
           });
@@ -239,12 +240,145 @@ export class CalendarComponent {
   loadUserDetails(){
     this.calendarService.getUserDetails(this.selectedYearAux.code).pipe(
       finalize(() => {
+        this.withPon = this.detail.person.withPON;
         this.selectedCalendar = this.generateDefaultCalendar();
       })
       ).subscribe({
       next: (res: Detail) => {
-        this.detail = res;
+        this.detail = res;     
       },
     });   
+  }
+
+  isButtonDisabled(): boolean{
+    let buttonDisabled = true;
+
+    if((this.oldVacations.length != 0) || (this.newVacations.length != 0)){
+      buttonDisabled = false;
+    }
+    return buttonDisabled;
+  }
+
+  isWithPonActive(): boolean{
+    let active = true;
+
+    if(this.withPon == false){
+      active = false;
+    }
+    return active;
+  }
+
+  selectDate(day:MetadataDay){
+
+    if(day){
+      const isVacation = day.type.name === "Vacation";
+      const newDate = new Date();
+      newDate.setDate(day.day);
+      newDate.setMonth(day.month-1);
+      newDate.setFullYear(day.year);
+
+      if(isVacation){
+        day.type = day.originalType;
+
+        if(this.detail.absences.some(vacation => this.isSameDate(vacation, newDate)) &&
+          !this.oldVacations.includes(day)
+        ){
+          if(day.originalType.name === 'Festivo' || day.originalType.name === 'Other'){
+            let index = this.newVacations.indexOf(day);
+            this.newVacations.splice(index,1);
+          }else{
+            this.oldVacations.push(day);
+          }
+        }else{
+          //Comprobar que el nuevo dia de vacaciones no esté en el array de nuevos dias de vacaciones
+          //Si lo está, se elimina
+          if(this.newVacations.includes(day)){
+            const index = this.newVacations.indexOf(day);
+            this.newVacations.splice(index,1);
+          }
+        }
+      }else{
+        
+        day.type = this.scheduleTypes.find(type => type.name === 'Vacation');
+
+        //Comprobar si es un dia de vacaciones que ya existia pero se habia puesto en la cola de eliminación
+        if(this.detail.absences.some(vacation => this.isSameDate(vacation, newDate)) &&
+          this.oldVacations.includes(day)
+        ){
+          //Quitar del array de eliminación el dia que ya estaba dado de alta en la BD
+          const index = this.oldVacations.indexOf(day);
+          this.oldVacations.splice(index,1);
+        }else{
+          if(!this.newVacations.includes(day)){
+            this.newVacations.push(day);
+          }
+        }
+      }
+
+      this.clickEvent.emit(day);
+    }
+  }
+
+  save():void{
+    let vacations: PersonAbsence[] = [];
+    let vacationsToDelete: PersonAbsence[] = [];
+
+    if(this.newVacations.length > 0){     
+      for (const md of this.newVacations) {
+        const vacation = new PersonAbsence();
+        vacation.id = '_P_' + this.detail.person.id.toString();
+        vacation.person = this.detail.person;
+        vacation.year = md.year;
+        vacation.month = md.month -1;
+        vacation.date = this.formatDate(md);
+        vacation.type = 'P';
+        vacation.absence_type = 'VAC';
+        vacations.push(vacation);    
+      }
+    }
+
+    if(this.oldVacations.length > 0){
+      for (const md of this.oldVacations) {
+        const vacationToDelete = new PersonAbsence();
+        vacationToDelete.date = this.formatDate(md);
+        vacationToDelete.person = this.detail.person;
+        vacationsToDelete.push(vacationToDelete);      
+      }
+    }
+
+    let updateAbsences: AbsencesToUpdate = new AbsencesToUpdate();
+    updateAbsences.vacations = vacations;
+    updateAbsences.vacationsToDelete = vacationsToDelete;
+    this.calendarService.update(updateAbsences).pipe(
+      finalize(() => {
+        this.oldVacations = [];
+        this.newVacations = [];
+    
+        setTimeout(() => {
+          this.loadUserDetails();
+        }, 100);
+      })
+    ).subscribe();
+   
+    
+  }
+
+  formatDate(metadataDay:MetadataDay):Date{
+    let date: Date;
+    date = new Date(""+metadataDay.year+"-"+(metadataDay.month)+"-"+metadataDay.day);
+    return date;
+  }
+
+  private isSameDate(absence: PersonAbsence, newDate: Date): boolean {
+    let date = String(absence.date).slice(8,10);
+    let vacationDay = parseInt(date, 10);
+
+    if (absence.year === newDate.getFullYear() &&
+        absence.month -1 === newDate.getMonth() &&
+        vacationDay +1 === newDate.getDate() ){              
+          return true;
+    }
+
+    return false;
   }
 }
