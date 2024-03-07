@@ -10,6 +10,9 @@ import { ForecastService } from '../../forecast.service';
 import { Detail } from '../../model/Detail';
 import { PersonAbsence } from '../../model/PersonAbsence';
 import { finalize } from 'rxjs';
+import * as XLSX from 'xlsx-js-style';
+
+
 
 @Component({
   selector: 'app-forecast-detail',
@@ -47,6 +50,9 @@ export class ForecastDetailComponent implements OnInit {
   memberDays: any[] = [];
   rangeDates: Date[] = [];
   checked: boolean = false;
+  visible: boolean = false;
+  mode: string = null;
+  letra: string[] = Array.from({length: 26}, (_, i) => String.fromCharCode('A'.charCodeAt(0) + i));
 
   constructor(
     private route: ActivatedRoute,
@@ -515,6 +521,120 @@ export class ForecastDetailComponent implements OnInit {
     const calc = numberOfDays.length * 2;
     const tam = calc.toString()+'rem';
     return tam;
+  }
+
+  showDialog(){
+    this.visible = true;
+  }
+
+  checkData(): boolean{
+    if((this.monthDaysList[0][1].month == this.monthDaysList[this.monthDaysList.length -1][1].month)
+    && (this.monthDaysList[0][1].year == this.monthDaysList[this.monthDaysList.length -1][1].year)
+    ){
+      return false;
+    }else{
+      return true;
+    }
+ 
+  }
+
+  exportToExcel(){
+    if(this.mode == 'PerMonth'){
+      this.exportPerMonth();
+    }else{
+      this.exportAllInOne();
+    }
+    this.visible = false;
+    this.mode = null;
+  }
+
+  closeDialog(){
+    this.mode = null;
+    this.visible = false;
+  }
+
+  exportPerMonth(){
+    const wb = XLSX.utils.book_new();
+  }
+
+  exportAllInOne(){
+
+    const wb = XLSX.utils.book_new();
+
+    let i = 0;
+    var wscols = [
+      {width: 40, alignment: 'center'},
+      {width: 15, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+    ];
+
+    let head = ['Detail', '', '', '', '', this.monthDaysList[0][1].month];
+    let header = ['Person', 'Working Days', 'Festives', 'Vacations', 'Others'];
+
+    this.monthDaysList.forEach(day => {
+      wscols.push({width: 5, alignment: 'center'});
+      header.push(day[1].day);
+    });
+    const wsData = [head];
+    wsData.push(header);
+    this.details.map(detail => {
+      const rowData = [detail.fullName, detail.workingDays.toString(), detail.festives.toString(), detail.vacations.toString(), detail.others.toString()];
+      this.monthDaysList.forEach(day => {     
+        rowData.push('');
+        i++;
+      });
+      i = 0;
+      wsData.push(rowData);
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    
+    ws["!cols"] = wscols;
+    ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 4 } }];
+
+    ws['A1'].s = { alignment: { horizontal: 'center' } };
+
+    i = 0;
+    let j = 2;
+    let z = 0;
+    let indexAux = 0;
+    this.details.map(detail => {
+      indexAux = 0;
+      this.monthDaysList.forEach(day => {
+        let color = '00FFFFFF';
+        if(this.memberDays[this.details.indexOf(detail)][i]?.type.color != "transparent"){
+          color = this.memberDays[this.details.indexOf(detail)][i]?.type.color.substring(1);
+        }
+        
+        let style = {
+          fill: {
+            fgColor: {rgb: color},
+          },
+        };
+        let cell ='';
+        if(i < 21){
+          cell = this.letra[i+5] + j;
+        }else{
+          if ((i - 42) % 21 === 0 && i > 40) {
+            z++;
+            indexAux = 0;
+          }
+          cell = this.letra[z] + this.letra[indexAux] + j; 
+          indexAux++;   
+        }
+        ws[cell].s = style;
+        i++;
+        
+      });
+      j++;
+      i = 0;
+    });
+    XLSX.utils.book_append_sheet(wb, ws, 'AllData');
+
+    XLSX.writeFile(wb, 'export.xlsx');
+
   }
 
 }

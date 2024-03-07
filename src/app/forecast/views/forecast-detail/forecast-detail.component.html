@@ -40,11 +40,46 @@
     <p-calendar [showIcon]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" (onSelect)="handleRangeSelection($event)"></p-calendar>
   </div>
 
-  <p-toggleButton [style]="{'margin-bottom':'10px'}" [(ngModel)]="checked" onLabel="Select month" offLabel="Select interval"></p-toggleButton>  
+  <p-toggleButton [style]="{'margin-bottom':'10px', 'margin-right':'10px'}" [(ngModel)]="checked" onLabel="Select month" offLabel="Select interval"></p-toggleButton>  
 
+  <button type="button"
+                            pButton pRipple
+                            icon="pi pi-file-excel"
+                            (click)="showDialog()"
+                            class="p-button-outlined p-button-success"
+                            class="p-button-success "
+                            pTooltip="XLS"
+                            label="Export"
+                            tooltipPosition="bottom">
+  </button>
+  <p-dialog header="Excel Type" [closable]="false" [(visible)]="visible" [draggable]="false" [resizable]="false" [style]="{width: '50vw'}">
+    <div *ngIf="checkData()">
+      <p>
+        The selected date range contains multiple months. How do you want to group the export data?
+      </p>
+      <div>
+        <p-radioButton name="mode" value="PerMonth" [(ngModel)]="mode" inputId="option1"></p-radioButton>
+        <label for="option1" class="ml-2">Sheet per month</label>
+      </div>
+      <div style="margin-top: 10px;">
+        <p-radioButton name="mode" value="AllInOne" [(ngModel)]="mode" inputId="option2"></p-radioButton>
+        <label for="option2" class="ml-2">All in one</label>
+      </div>
+    </div>
+    
+    <p *ngIf="!checkData()">
+      Export the selected month to .XLS
+    </p>
+
+    <div style="text-align: right;">
+      <p-button label="Close" style="margin-right: 10px;" (click)="closeDialog()" styleClass="p-button-primary p-button-outlined" class="bg-white"></p-button>
+      <p-button *ngIf="checkData()" [disabled]="mode == null" label="Export" (click)="exportToExcel()" styleClass="w-auto btn btn-primary btn-sm"></p-button>
+      <p-button *ngIf="!checkData()" label="Export" (click)="exportToExcel()" styleClass="w-auto btn btn-primary btn-sm"></p-button>
+    </div>
+  </p-dialog>
 </div>
 
-<p-table [style]="{'height':'calc(100vh - 175px)','width':tableWidth}"  
+<p-table id="DataTable" [style]="{'height':'calc(100vh - 175px)','width':tableWidth}"  
        [scrollable]="true" scrollHeight="flex" selectionMode="single" 
        [value]="details" [responsive]="true" 
        [rows]="details.length" sortField="name" [sortOrder]="1">
