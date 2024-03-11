@@ -39,6 +39,13 @@ export class ForecastDetailComponent implements OnInit {
     'December',
   ];
 
+  absenceTypes: string[][] = [
+    ['Public Holidays', 'aae3ff'],
+    ['Vacation', 'ffffaa'],
+    ['Weekend', 'c2c2cc' ],
+    ['Other', 'f7bd46']
+  ]
+
   group: Group;
   selectedMonth: DropdownEntry;
   monthsList: DropdownEntry[] = [];
@@ -600,6 +607,15 @@ export class ForecastDetailComponent implements OnInit {
       wsData.push(rowData);
     });
 
+    wsData.push([]);
+    wsData.push([]);
+
+    //Generar leyenda de colores
+    this.absenceTypes.forEach(([type, color]) => {
+      const rowData = ['',type,''];
+      wsData.push(rowData);
+    });
+
     const ws = XLSX.utils.aoa_to_sheet(wsData);
     
     // Formato de celdas
@@ -715,6 +731,24 @@ export class ForecastDetailComponent implements OnInit {
 
       j++;
     }
+
+    j = j+2;
+
+
+    //Color de la leyenda
+    this.absenceTypes.forEach(([type, color]) => {
+      let style = {
+        fill: {
+          fgColor: { rgb: color },
+        },
+      };
+      let cell = 'C'+j;
+      ws[cell].s = style;
+      j++;
+
+    });
+
+
     XLSX.utils.book_append_sheet(wb, ws, 'AllData');
 
     XLSX.writeFile(wb, 'export.xlsx');
