@@ -565,6 +565,11 @@ export class ForecastDetailComponent implements OnInit {
 
   exportPerMonth(){
     const wb = XLSX.utils.book_new();
+
+    let ws = this.generateSummary();
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Summary');
+
     let lastMonth = this.monthDaysList[this.monthDaysList.length -1][1].month;
     let lastYear = this.monthDaysList[this.monthDaysList.length -1][1].year;
 
@@ -585,6 +590,71 @@ export class ForecastDetailComponent implements OnInit {
     }
 
     XLSX.writeFile(wb, 'exportPerMonth.xlsx');
+  }
+
+  generateSummary(): XLSX.WorkSheet{
+    var wscols = [
+      {width: 40, alignment: 'center'},
+      {width: 15, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+    ];
+
+    let head = ['Detail', '', '', '', ''];
+    let header = ['Person', 'Working Days', 'Festives', 'Vacations', 'Others'];
+
+    const wsData = [head];
+    wsData.push(header);
+    this.details.map(detail => {
+      const rowData = [detail.fullName, detail.workingDays.toString(), detail.festives.toString(), detail.vacations.toString(), detail.others.toString()];
+      wsData.push(rowData);
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+    ws["!cols"] = wscols;
+    ws['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 4 } },
+      { s: { r: 0, c: 5 }, e: { r: 0, c: 6 } } 
+    ];
+
+    ws['A1'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+    ws['A2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['B2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['C2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['D2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['E2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    return ws;
   }
 
   generateMonth(daysMonth: any[], memberDaysPerMonth: any[]): XLSX.WorkSheet{
