@@ -679,14 +679,46 @@ export class ForecastDetailComponent implements OnInit {
 
     const wsData = [head];
     wsData.push(header);
+
+    let indexPerson = 0;
     this.details.map(detail => {
-      const rowData = [detail.fullName, detail.workingDays.toString(), detail.festives.toString(), detail.vacations.toString(), detail.others.toString()];
+      let others = 0;
+      let festives = 0;
+      let vacations = 0;
+      let workingDaysAux = daysMonth.length;
+      memberDaysPerMonth[indexPerson].forEach(day => {
+        switch(day.type.name){
+          case 'Other':
+            workingDaysAux--;
+            others++
+            break;
+          
+          case 'Fin de semana':
+            workingDaysAux--;
+            break;
+        
+          case 'Festivo':
+            workingDaysAux--;
+            festives++;
+            break;
+  
+          case 'Vacation':
+            workingDaysAux--;
+            vacations++;
+  
+          default:
+            break;
+  
+        }
+      });
+      const rowData = [detail.fullName, workingDaysAux.toString(), festives.toString(), vacations.toString(), others.toString()];
       daysMonth.forEach(day => {   
         rowData.push('');
         i++;
       });
       i = 0;
       wsData.push(rowData);
+      indexPerson++;
     });
 
     wsData.push([]);
