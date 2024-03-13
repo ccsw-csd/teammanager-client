@@ -17,6 +17,8 @@ import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { CalendarModule } from 'primeng/calendar';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { DialogModule } from 'primeng/dialog';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 
 
@@ -43,7 +45,9 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     InputSwitchModule,
     ScrollPanelModule,
     CalendarModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    DialogModule,
+    RadioButtonModule
   ]
 })
 export class ForecastModule { }

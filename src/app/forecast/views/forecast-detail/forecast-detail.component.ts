@@ -10,6 +10,9 @@ import { ForecastService } from '../../forecast.service';
 import { Detail } from '../../model/Detail';
 import { PersonAbsence } from '../../model/PersonAbsence';
 import { finalize } from 'rxjs';
+import * as XLSX from 'xlsx-js-style';
+
+
 
 @Component({
   selector: 'app-forecast-detail',
@@ -36,6 +39,13 @@ export class ForecastDetailComponent implements OnInit {
     'December',
   ];
 
+  absenceTypes: string[][] = [
+    ['Public Holidays', 'aae3ff'],
+    ['Vacation', 'ffffaa'],
+    ['Weekend', 'c2c2cc' ],
+    ['Other', 'f7bd46']
+  ]
+
   group: Group;
   selectedMonth: DropdownEntry;
   monthsList: DropdownEntry[] = [];
@@ -47,6 +57,9 @@ export class ForecastDetailComponent implements OnInit {
   memberDays: any[] = [];
   rangeDates: Date[] = [];
   checked: boolean = false;
+  visible: boolean = false;
+  mode: string = null;
+  letra: string[] = Array.from({length: 26}, (_, i) => String.fromCharCode('A'.charCodeAt(0) + i));
 
   constructor(
     private route: ActivatedRoute,
@@ -419,6 +432,10 @@ export class ForecastDetailComponent implements OnInit {
             type: type,
             originalType: type,
           });
+
+          if(isWeekend){
+            detail.workingDays = detail.workingDays -1;
+          }
           for(const absence of detail.absences){
             const day = new Date(absence.date);
   
@@ -494,7 +511,6 @@ export class ForecastDetailComponent implements OnInit {
     this.selectedMonth = this.monthsList[this.monthsList.length -1];
     this.monthDays = this.generateDays();
     this.monthDaysList = Array.from(this.monthDays);  
-
     this.loadMembersDetails();
   }
 
@@ -515,6 +531,526 @@ export class ForecastDetailComponent implements OnInit {
     const calc = numberOfDays.length * 2;
     const tam = calc.toString()+'rem';
     return tam;
+  }
+
+  showDialog(){
+    this.visible = true;
+  }
+
+  checkData(): boolean{
+    if((this.monthDaysList[0][1].month == this.monthDaysList[this.monthDaysList.length -1][1].month)
+    && (this.monthDaysList[0][1].year == this.monthDaysList[this.monthDaysList.length -1][1].year)
+    ){
+      return false;
+    }else{
+      return true;
+    }
+ 
+  }
+
+  exportToExcel(){
+    if(this.mode == 'PerMonth'){
+      this.exportPerMonth();
+    }else{
+      this.exportAllInOne();
+    }
+    this.visible = false;
+    this.mode = null;
+  }
+
+  closeDialog(){
+    this.mode = null;
+    this.visible = false;
+  }
+
+  exportPerMonth(){
+    const wb = XLSX.utils.book_new();
+
+    let ws = this.generateSummary();
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Summary');
+
+    let lastMonth = this.monthDaysList[this.monthDaysList.length -1][1].month;
+    let lastYear = this.monthDaysList[this.monthDaysList.length -1][1].year;
+
+    for(let year = this.monthDaysList[0][1].year; year <= lastYear; year++){
+      for (let month = this.monthDaysList[0][1].month; month <= lastMonth; month++){
+        let daysMonth = this.monthDaysList.filter(([key, day]) => day.month === month && day.year === year);
+        let memberDaysPerMonth = [];
+        let memberDaysPerMonthAux = [];
+        for(let i = 0; i < this.memberDays.length; i++){
+          memberDaysPerMonthAux = this.memberDays[i].filter(day => {
+            return day.month === month && day.year === year;
+          });
+          memberDaysPerMonth.push(memberDaysPerMonthAux);
+        }
+        let ws = this.generateMonth(daysMonth, memberDaysPerMonth);
+        XLSX.utils.book_append_sheet(wb, ws, this.month[month] + " " + year);
+      }
+    }
+
+    XLSX.writeFile(wb, 'exportPerMonth.xlsx');
+  }
+
+  generateSummary(): XLSX.WorkSheet{
+    var wscols = [
+      {width: 40, alignment: 'center'},
+      {width: 15, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+    ];
+
+    let head = ['Detail', '', '', '', ''];
+    let header = ['Person', 'Working Days', 'Festives', 'Vacations', 'Others'];
+
+    const wsData = [head];
+    wsData.push(header);
+    this.details.map(detail => {
+      const rowData = [detail.fullName, detail.workingDays.toString(), detail.festives.toString(), detail.vacations.toString(), detail.others.toString()];
+      wsData.push(rowData);
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+    ws["!cols"] = wscols;
+    ws['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 4 } },
+      { s: { r: 0, c: 5 }, e: { r: 0, c: 6 } } 
+    ];
+
+    ws['A1'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+    ws['A2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['B2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['C2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['D2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['E2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    return ws;
+  }
+
+  generateMonth(daysMonth: any[], memberDaysPerMonth: any[]): XLSX.WorkSheet{
+    let i = 0;
+    var wscols = [
+      {width: 40, alignment: 'center'},
+      {width: 15, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+    ];
+
+    let currentMonth = this.month[daysMonth[0][1].month];
+    let head = ['Detail', '', '', '', '', currentMonth];
+    let header = ['Person', 'Working Days', 'Festives', 'Vacations', 'Others'];
+
+    daysMonth.forEach(day => {
+      wscols.push({width: 5, alignment: 'center'});
+      header.push(day[1].day);
+      head.push('');
+    });
+
+    const wsData = [head];
+    wsData.push(header);
+
+    let indexPerson = 0;
+    this.details.map(detail => {
+      let others = 0;
+      let festives = 0;
+      let vacations = 0;
+      let workingDaysAux = daysMonth.length;
+      memberDaysPerMonth[indexPerson].forEach(day => {
+        switch(day.type.name){
+          case 'Other':
+            workingDaysAux--;
+            others++
+            break;
+          
+          case 'Fin de semana':
+            workingDaysAux--;
+            break;
+        
+          case 'Festivo':
+            workingDaysAux--;
+            festives++;
+            break;
+  
+          case 'Vacation':
+            workingDaysAux--;
+            vacations++;
+  
+          default:
+            break;
+  
+        }
+      });
+      const rowData = [detail.fullName, workingDaysAux.toString(), festives.toString(), vacations.toString(), others.toString()];
+      daysMonth.forEach(day => {   
+        rowData.push('');
+        i++;
+      });
+      i = 0;
+      wsData.push(rowData);
+      indexPerson++;
+    });
+
+    wsData.push([]);
+    wsData.push([]);
+
+    //Generar leyenda de colores
+    this.absenceTypes.forEach(([type, color]) => {
+      const rowData = ['',type,''];
+      wsData.push(rowData);
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    
+    // Formato de celdas
+
+    ws["!cols"] = wscols;
+    ws['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 4 } },
+      { s: { r: 0, c: 5 }, e: { r: 0, c: 6 } } 
+    ];
+
+    ws['A1'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+    ws['A2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['B2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['C2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['D2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['E2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    //Formato para las ausencias de cada persona
+
+    let j = 3;
+    let z = 0;
+
+    for (let detailIndex = 0; detailIndex < this.details.length; detailIndex++) {
+      let indexAux = 0;
+      z = 0;
+      for (let i = 0; i < daysMonth.length; i++) {
+        let color = '00FFFFFF';
+
+        if (memberDaysPerMonth[detailIndex][i]?.type.color !== "transparent") {
+          color = memberDaysPerMonth[detailIndex][i]?.type.color.substring(1);
+        }
+
+        let style = {
+          fill: {
+            fgColor: { rgb: color },
+          },
+        };
+
+        let cell = '';
+        let headerCell = '';
+        
+        if (i < 21) {
+          cell = this.letra[i + 5] + j;
+          //Formato cabecera día y mes
+          if( j == 3){
+            headerCell = this.letra[i + 5] + (j - 1);
+            ws[headerCell].s = {
+              font: { bold: true },
+              fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+              alignment: { horizontal: 'center' }
+            };
+            headerCell = this.letra[i + 5] + (j - 2);
+            ws[headerCell].s = {
+              font: { bold: true },
+              fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+              alignment: { horizontal: 'center' }
+            };
+          }         
+        } else {
+          if ((i - 47) % 26 === 0 && i > 46) {
+            z++;
+            indexAux = 0;
+          }
+          cell = this.letra[z] + this.letra[indexAux] + j;
+          //Formato cabecera día
+          if( j == 3){
+            headerCell = this.letra[z] + this.letra[indexAux] + (j - 1);
+            ws[headerCell].s = {
+              font: { bold: true },
+              fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+              alignment: { horizontal: 'center' }
+            };
+            headerCell = this.letra[z] + this.letra[indexAux] + (j - 2);
+            ws[headerCell].s = {
+              font: { bold: true },
+              fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+              alignment: { horizontal: 'center' }
+            };
+          }  
+          indexAux++;
+        }
+
+        ws[cell].s = style;
+      }
+
+      j++;
+    }
+
+    j = j+2;
+
+
+    //Color de la leyenda
+    this.absenceTypes.forEach(([type, color]) => {
+      let style = {
+        fill: {
+          fgColor: { rgb: color },
+        },
+      };
+      let cell = 'C'+j;
+      ws[cell].s = style;
+      j++;
+
+    });
+    
+    return ws;
+  }
+
+  exportAllInOne(){
+
+    const wb = XLSX.utils.book_new();
+
+    let i = 0;
+    var wscols = [
+      {width: 40, alignment: 'center'},
+      {width: 15, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+      {width: 10, alignment: 'center'},
+    ];
+
+    let currentMonth = this.month[this.monthDaysList[0][1].month];
+    let head = ['Detail', '', '', '', '', currentMonth];
+    let header = ['Person', 'Working Days', 'Festives', 'Vacations', 'Others'];
+
+    this.monthDaysList.forEach(day => {
+      wscols.push({width: 5, alignment: 'center'});
+      header.push(day[1].day);
+      if(this.month[day[1].month] != currentMonth){
+        currentMonth = this.month[day[1].month];
+        head.push(currentMonth);
+      }else{
+        head.push('');
+      }  
+    });
+
+    const wsData = [head];
+    wsData.push(header);
+    this.details.map(detail => {
+      const rowData = [detail.fullName, detail.workingDays.toString(), detail.festives.toString(), detail.vacations.toString(), detail.others.toString()];
+      this.monthDaysList.forEach(day => {   
+        rowData.push('');
+        i++;
+      });
+      i = 0;
+      wsData.push(rowData);
+    });
+
+    wsData.push([]);
+    wsData.push([]);
+
+    //Generar leyenda de colores
+    this.absenceTypes.forEach(([type, color]) => {
+      const rowData = ['',type,''];
+      wsData.push(rowData);
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    
+    // Formato de celdas
+
+    ws["!cols"] = wscols;
+    ws['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 4 } },
+      { s: { r: 0, c: 5 }, e: { r: 0, c: 6 } } 
+    ];
+
+    ws['A1'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+    ws['A2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['B2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['C2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['D2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    ws['E2'].s = {
+      font: { bold: true },
+      fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+      alignment: { horizontal: 'center' }
+    };
+
+    //Formato para las ausencias de cada persona
+
+    let j = 3;
+    let z = 0;
+
+    for (let detailIndex = 0; detailIndex < this.details.length; detailIndex++) {
+      let indexAux = 0;
+      z = 0;
+      for (let i = 0; i < this.monthDaysList.length; i++) {
+        let color = '00FFFFFF';
+
+        if (this.memberDays[detailIndex][i]?.type.color !== "transparent") {
+          color = this.memberDays[detailIndex][i]?.type.color.substring(1);
+        }
+
+        let style = {
+          fill: {
+            fgColor: { rgb: color },
+          },
+        };
+
+        let cell = '';
+        let headerCell = '';
+        
+        if (i < 21) {
+          cell = this.letra[i + 5] + j;
+          //Formato cabecera día y mes
+          if( j == 3){
+            headerCell = this.letra[i + 5] + (j - 1);
+            ws[headerCell].s = {
+              font: { bold: true },
+              fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+              alignment: { horizontal: 'center' }
+            };
+            headerCell = this.letra[i + 5] + (j - 2);
+            ws[headerCell].s = {
+              font: { bold: true },
+              fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+              alignment: { horizontal: 'center' }
+            };
+          }         
+        } else {
+          if ((i - 47) % 26 === 0 && i > 46) {
+            z++;
+            indexAux = 0;
+          }
+          cell = this.letra[z] + this.letra[indexAux] + j;
+          //Formato cabecera día
+          if( j == 3){
+            headerCell = this.letra[z] + this.letra[indexAux] + (j - 1);
+            ws[headerCell].s = {
+              font: { bold: true },
+              fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+              alignment: { horizontal: 'center' }
+            };
+            headerCell = this.letra[z] + this.letra[indexAux] + (j - 2);
+            ws[headerCell].s = {
+              font: { bold: true },
+              fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: "00EEEEEE" } },
+              alignment: { horizontal: 'center' }
+            };
+          }  
+          indexAux++;
+        }
+
+        ws[cell].s = style;
+      }
+
+      j++;
+    }
+
+    j = j+2;
+
+
+    //Color de la leyenda
+    this.absenceTypes.forEach(([type, color]) => {
+      let style = {
+        fill: {
+          fgColor: { rgb: color },
+        },
+      };
+      let cell = 'C'+j;
+      ws[cell].s = style;
+      j++;
+
+    });
+
+
+    XLSX.utils.book_append_sheet(wb, ws, 'AllData');
+
+    XLSX.writeFile(wb, 'export.xlsx');
+
   }
 
 }
